@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NTSH Art Gallery</title>
+
+  <!-- In <head> -->
 <link rel="stylesheet" href="./assets/css/gallery.css">
+
+<!-- Before closing </body> -->
+<script src="./assets/js/gallery.js" defer></script>
+
 </head>
 <body>
 <header class="hero">
@@ -12,6 +18,24 @@
 <p>Nothing To See Here – Only Art That Speaks</p>
 </header>
 
+<!-- Fullscreen Slideshow -->
+<section class="slideshow">
+  <img src="./assets/images/image1.jpg" alt="Art 1" class="active">
+  <img src="./assets/images/image2.jpg" alt="Art 2">
+  <img src="./assets/images/image3.jpg" alt="Art 3">
+</section>
+
+<!-- Horizontal Carousel -->
+<section class="carousel">
+  <img src="./assets/images/image1.jpg" alt="Art 1">
+  <img src="./assets/images/image2.jpg" alt="Art 2">
+  <img src="./assets/images/image3.jpg" alt="Art 3">
+</section>
+
+<!-- Lightbox Modal -->
+<div class="lightbox">
+  <img src="" alt="Enlarged Art">
+</div>
 
 <!-- Slideshow with fade effect (Style 1) -->
 <section class="slideshow-container">
