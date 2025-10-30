@@ -1,40 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NTSH Art Gallery</title>
-  <link rel="stylesheet" href="./assets/css/gallery.css" />
-  <script src="./assets/js/gallery.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NTSH</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="gallery.js"></script>
 </head>
 <body>
-  <header class="hero">
+  <header class="site-header">
     <h1>NTSH</h1>
-    <p>Nothing To See Here – Only Art That Speaks</p>
+    <p>Nothing To See Here — Only Art That Speaks</p>
   </header>
 
-  <main class="gallery-container">
-    <aside class="sidebar">
-      <button onclick="showImage(0)">Art 1</button>
-      <button onclick="showImage(1)">Art 2</button>
-      <button onclick="showImage(2)">Art 3</button>
-      <!-- Add more buttons as needed -->
+  <main class="wrap">
+    <!-- HOVER-REVEAL SIDEBAR -->
+    <aside class="sidebar" aria-label="Art navigation">
+      <div class="handle" aria-hidden="true"></div>
+      <h3>Art</h3>
+      <div class="art-list" id="artList">
+        <!-- buttons injected by JS -->
+      </div>
     </aside>
 
-    <section class="image-viewer">
-      <img id="mainImage" src="./assets/images/art1.jpg" alt="NTSH Art" onclick="openLightbox()" />
+    <!-- CONTENT -->
+    <section class="content">
+      <!-- CATEGORY TABS -->
+      <nav class="tabs" role="tablist" aria-label="Categories">
+        <button class="tab" role="tab" aria-selected="true" data-cat="pencil">Pencil</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="pen">Pen</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="paint">Paint</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="photo">Photography</button>
+      </nav>
+
+      <!-- VIEWER -->
+      <div class="viewer" id="viewer">
+        <img id="display" alt="NTSH Art" />
+        <div class="caption" id="caption">Select an item</div>
+      </div>
     </section>
   </main>
-
-  <!-- Lightbox Modal -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <img id="lightboxImg" src="" alt="Enlarged artwork" />
-  </div>
-
-  <footer class="footer">
-    <p>&copy; 2025 NTSH. All rights reserved.</p>
-    <a href="https://www.instagram.com/ntsh" target="_blank">Instagram</a> |
-    <a href="https://www.tiktok.com/@ntsh" target="_blank">TikTok</a>
-  </footer>
 </body>
 </html>
