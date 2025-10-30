@@ -1,77 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NTSH Art Gallery</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NTSH Art Gallery</title>
 
-  <!-- In <head> -->
-<link rel="stylesheet" href="./assets/css/gallery.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="./assets/css/gallery.css">
 
-<!-- Before closing </body> -->
-<script src="./assets/js/gallery.js" defer></script>
-
+  <!-- Scripts -->
+  <script src="./assets/js/gallery.js" defer></script>
 </head>
 <body>
-<header class="hero">
-<h1>NTSH Gallery</h1>
-<p>Nothing To See Here – Only Art That Speaks</p>
-</header>
 
-<!-- Fullscreen Slideshow -->
-<section class="slideshow">
-  <img src="./assets/images/image1.jpg" alt="Art 1" class="active">
-  <img src="./assets/images/image2.jpg" alt="Art 2">
-  <img src="./assets/images/image3.jpg" alt="Art 3">
-</section>
+  <!-- Hero Header -->
+  <header class="hero">
+    <h1>NTSH Gallery</h1>
+    <p>Nothing To See Here – Only Art That Speaks</p>
+  </header>
 
-<!-- Horizontal Carousel -->
-<section class="carousel">
-  <img src="./assets/images/image1.jpg" alt="Art 1">
-  <img src="./assets/images/image2.jpg" alt="Art 2">
-  <img src="./assets/images/image3.jpg" alt="Art 3">
-</section>
+  <!-- Fullscreen Slideshow (Style 1) -->
+  <section class="slideshow">
+    <img src="./assets/images/image1.jpg" alt="Art 1" class="active">
+    <img src="./assets/images/image2.jpg" alt="Art 2">
+    <img src="./assets/images/image3.jpg" alt="Art 3">
+  </section>
 
-<!-- Lightbox Modal -->
-<div class="lightbox">
-  <img src="" alt="Enlarged Art">
-</div>
+  <!-- Horizontal Carousel with Lightbox -->
+  <section class="carousel">
+    <img src="./assets/images/image1.jpg" alt="Art 1">
+    <img src="./assets/images/image2.jpg" alt="Art 2">
+    <img src="./assets/images/image3.jpg" alt="Art 3">
+  </section>
 
-<!-- Slideshow with fade effect (Style 1) -->
-<section class="slideshow-container">
-<div class="slide fade">
-<img src="./assets/images/art1.jpg" alt="Artwork 1">
-</div>
-<div class="slide fade">
-<img src="./assets/images/art2.jpg" alt="Artwork 2">
-</div>
-<div class="slide fade">
-<img src="./assets/images/art3.jpg" alt="Artwork 3">
-</div>
-<!-- Optional Nav Buttons -->
-<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-<a class="next" onclick="plusSlides(1)">&#10095;</a>
-</section>
+  <!-- Lightbox Modal -->
+  <div class="lightbox">
+    <img src="" alt="Enlarged Art">
+  </div>
 
+  <!-- Optional Secondary Slideshow (Style 1 Fade Controls) -->
+  <section class="slideshow-container">
+    <div class="slide fade">
+      <img src="./assets/images/art1.jpg" alt="Artwork 1">
+    </div>
+    <div class="slide fade">
+      <img src="./assets/images/art2.jpg" alt="Artwork 2">
+    </div>
+    <div class="slide fade">
+      <img src="./assets/images/art3.jpg" alt="Artwork 3">
+    </div>
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </section>
 
-<!-- Horizontal Scrollable Coverflow Carousel (Style 3-inspired) -->
-<section class="coverflow-gallery">
-<div class="gallery-wrapper">
-<img src="./assets/images/art4.jpg" alt="Gallery Art 1">
-<img src="./assets/images/art5.jpg" alt="Gallery Art 2">
-<img src="./assets/images/art6.jpg" alt="Gallery Art 3">
-<img src="./assets/images/art7.jpg" alt="Gallery Art 4">
-</div>
-</section>
+  <!-- Coverflow-style Scrollable Gallery (Style 3) -->
+  <section class="coverflow-gallery">
+    <div class="gallery-wrapper">
+      <img src="./assets/images/art4.jpg" alt="Gallery Art 1">
+      <img src="./assets/images/art5.jpg" alt="Gallery Art 2">
+      <img src="./assets/images/art6.jpg" alt="Gallery Art 3">
+      <img src="./assets/images/art7.jpg" alt="Gallery Art 4">
+    </div>
+  </section>
 
+  <!-- Footer with Socials -->
+  <footer class="footer">
+    <p>&copy; 2025 NTSH. All rights reserved.</p>
+    <a href="https://www.instagram.com/ntsh" target="_blank">Instagram</a> |
+    <a href="https://www.tiktok.com/@ntsh" target="_blank">TikTok</a>
+  </footer>
 
-<footer class="footer">
-<p>&copy; 2025 NTSH. All rights reserved.</p>
-<a href="https://www.instagram.com/ntsh" target="_blank">Instagram</a> |
-<a href="https://www.tiktok.com/@ntsh" target="_blank">TikTok</a>
-</footer>
-
-
-<script src="./assets/js/gallery.js"></script>
 </body>
 </html>
