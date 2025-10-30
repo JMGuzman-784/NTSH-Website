@@ -198,3 +198,37 @@ body {
   transform: scale(1.05);
 }
 
+.upload-section {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
+
+.upload-box {
+  width: 80%;
+  max-width: 500px;
+  padding: 2rem;
+  border: 2px dashed #555;
+  text-align: center;
+  border-radius: 10px;
+  color: #999;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.upload-box.highlight {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: #00e0ff;
+  color: #00e0ff;
+}
+
+.upload-box p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.upload-box .browse-btn {
+  text-decoration: underline;
+  color: #fff;
+  font-weight: bold;
+}
