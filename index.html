@@ -4,39 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NTSH Art Showcase</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
   <header>
-    <img src="./assets/images/Offical NTSH LOGO_D2_TransparentBG.png" alt="NTSH Logo" />
+    <img src="./assets/images/ntsh-footer-logo.png" alt="NTSH Logo" class="logo" />
   </header>
 
-  <main class="gallery-container">
-    <div class="upload-section">
-      <label for="imageUpload" class="upload-btn">+ Add Image</label>
-      <input type="file" id="imageUpload" accept="image/*" hidden />
-      <p class="upload-instruction">or drag & drop images here</p>
+  <main>
+    <div class="upload-container">
+      <p>Drag and drop images here or click to upload</p>
+      <input type="file" id="imageUpload" multiple accept="image/*" />
     </div>
+
     <div class="gallery" id="gallery"></div>
   </main>
 
-  <footer class="footer">
-    <div class="footer-content">
-      <p>&copy; 2025 NTSH | Nothing To See Here</p>
-      <a href="https://theofficialntsh.com" target="_blank">
-        <img src="./assets/images/ntsh-footer-logo.png" alt="NTSH Footer Logo" class="ntsh-footer-logo" />
-      </a>
-    </div>
-  </footer>
-
-  <!-- Lightbox Modal -->
-  <div id="lightbox" class="lightbox">
+  <div class="lightbox" id="lightbox">
     <span class="close">&times;</span>
-    <img class="lightbox-content" id="lightbox-img" />
+    <img class="lightbox-image" id="lightbox-image" />
   </div>
+
+  <footer>
+    <div class="socials">
+      <p>Follow me:</p>
+      <a href="https://instagram.com/raidtheofficial" target="_blank">Instagram</a>
+      <a href="https://tiktok.com/@raidtheofficial" target="_blank">TikTok</a>
+    </div>
+    <p>&copy; 2025 NTSH | Nothing To See Here</p>
+  </footer>
 
   <script src="./js/gallery.js"></script>
 </body>
