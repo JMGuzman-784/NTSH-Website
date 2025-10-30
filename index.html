@@ -1,98 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NTSH Art Gallery</title>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="./assets/css/gallery.css">
-
-  <!-- Scripts -->
+  <link rel="stylesheet" href="./assets/css/gallery.css" />
   <script src="./assets/js/gallery.js" defer></script>
 </head>
 <body>
-
-  <!-- Hero Header -->
   <header class="hero">
-    <h1>NTSH Gallery</h1>
+    <h1>NTSH</h1>
     <p>Nothing To See Here – Only Art That Speaks</p>
   </header>
 
-  <!-- Fullscreen Slideshow (Style 1) -->
-  <section class="slideshow">
-    <img src="./assets/images/image1.jpg" alt="Art 1" class="active">
-    <img src="./assets/images/image2.jpg" alt="Art 2">
-    <img src="./assets/images/image3.jpg" alt="Art 3">
-  </section>
+  <main class="gallery-container">
+    <aside class="sidebar">
+      <button onclick="showImage(0)">Art 1</button>
+      <button onclick="showImage(1)">Art 2</button>
+      <button onclick="showImage(2)">Art 3</button>
+      <!-- Add more buttons as needed -->
+    </aside>
 
-  <!-- Horizontal Carousel with Lightbox -->
-  <section class="carousel">
-    <img src="./assets/images/image1.jpg" alt="Art 1">
-    <img src="./assets/images/image2.jpg" alt="Art 2">
-    <img src="./assets/images/image3.jpg" alt="Art 3">
-  </section>
+    <section class="image-viewer">
+      <img id="mainImage" src="./assets/images/art1.jpg" alt="NTSH Art" onclick="openLightbox()" />
+    </section>
+  </main>
 
   <!-- Lightbox Modal -->
-  <div class="lightbox">
-    <img src="" alt="Enlarged Art">
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Enlarged artwork" />
   </div>
 
-  <!-- Optional Secondary Slideshow (Style 1 Fade Controls) -->
-  <section class="slideshow-container">
-    <div class="slide fade">
-      <img src="./assets/images/art1.jpg" alt="Artwork 1">
-    </div>
-    <div class="slide fade">
-      <img src="./assets/images/art2.jpg" alt="Artwork 2">
-    </div>
-    <div class="slide fade">
-      <img src="./assets/images/art3.jpg" alt="Artwork 3">
-    </div>
-    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-  </section>
-
-<!-- Upload Section -->
-<section class="upload-section">
-  <div id="drop-zone" class="upload-box">
-    <p>📁 Drag & drop your art here or <span class="browse-btn">browse</span></p>
-    <input type="file" id="file-input" accept="image/*" multiple hidden>
-  </div>
-</section>
-
-  
-  <!-- Coverflow-style Scrollable Gallery (Style 3) -->
-  <section class="coverflow-gallery">
-    <div class="gallery-wrapper">
-      <img src="./assets/images/art4.jpg" alt="Gallery Art 1">
-      <img src="./assets/images/art5.jpg" alt="Gallery Art 2">
-      <img src="./assets/images/art6.jpg" alt="Gallery Art 3">
-      <img src="./assets/images/art7.jpg" alt="Gallery Art 4">
-    </div>
-  </section>
-
-  <!-- Upload Section -->
-  <section class="upload-section">
-    <h2>Upload Your Art</h2>
-    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
-      <div class="upload-box" id="drop-area">
-        <p>Drag & drop your image here or click to browse</p>
-        <input type="file" id="fileElem" name="image" accept="image/*">
-      </div>
-      <button type="submit" class="upload-button">Upload</button>
-    </form>
-    <div class="upload-preview" id="preview"></div>
-  </section>
-
-  <!-- Footer with Socials -->
   <footer class="footer">
     <p>&copy; 2025 NTSH. All rights reserved.</p>
-    <a href="https://www.instagram.com/theofficialntsh" target="_blank">Instagram</a> |
+    <a href="https://www.instagram.com/ntsh" target="_blank">Instagram</a> |
     <a href="https://www.tiktok.com/@ntsh" target="_blank">TikTok</a>
   </footer>
-
-<script src="./assets/js/upload.js" defer></script>
-
 </body>
 </html>
