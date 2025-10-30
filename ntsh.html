@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NTSH — Nothing To See Here</title>
+<meta name="description" content="NTSH by Jose Guzman — Nothing To See Here. Brand story, gallery, and updates." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #0b0f12; /* deep near-black */
+--panel: #0f1418; /* slightly lighter */
+--text: #e6f0ff;
+--muted: #a9b4c0;
+--accent: #39ff14; /* neon green */
+--accent-dim: #2ad410;
+--card: #0c1216;
+--border: #1b242b;
+--glow: 0 0 18px rgba(57,255,20,0.45);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+margin: 0;
+background: radial-gradient(1200px 800px at 70% -10%, rgba(57,255,20,0.06), transparent),
+radial-gradient(900px 700px at -10% 110%, rgba(57,255,20,0.05), transparent),
+var(--bg);
+color: var(--text);
+font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
+/* Top Nav */
+.nav {
+position: sticky; top: 0; z-index: 50;
+backdrop-filter: blur(6px);
+background: linear-gradient(180deg, rgba(11,15,18,0.9), rgba(11,15,18,0.6));
+border-bottom: 1px solid var(--border);
+}
+.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.logo {
+width: 28px; height: 28px; border-radius: 8px; background: var(--accent);
+box-shadow: var(--glow);
+}
+.brand h1 { font-size: 16px; margin: 0; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); }
+.nav a { color: var(--text); opacity: 0.9; }
+.nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; }
+
+
+/* Hero */
+.hero {
+max-width: 1100px; margin: 0 auto; padding: 72px 20px 36px;
+display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px;
+}
+.hero h2 {
+font-family: "JetBrains Mono", monospace; font-size: 44px; line-height: 1.05; margin: 0 0 12px;
+text-shadow: var(--glow);
+}
+.hero p { color: var(--muted); font-size: 16px; }
+.cta-row { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.btn {
+display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--panel);
+color: var(--text); font-weight: 600; letter-spacing: 0.01em;
+}
+.btn.accent { border-color: var(--accent-dim); box-shadow: var(--glow); }
+
+
+.hero-card {
+background: linear-gradient(180deg, rgba(57,255,20,0.06), rgba(57,255,20,0.0)), var(--card);
+</html>
+
+  //add NTSH page
