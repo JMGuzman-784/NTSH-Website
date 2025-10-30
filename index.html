@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NTSH Art Showcase</title>
-<link rel="stylesheet" href="./assets/css/style.css" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NTSH Art Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
-<header>
-<img src="./assets/images/Offical NTSH LOGO_D2_TransparentBG.png" alt="NTSH Logo" />
-</header>
+  <header>
+    <img src="./assets/images/Offical NTSH LOGO_D2_TransparentBG.png" alt="NTSH Logo" />
+  </header>
 
+  <main class="gallery-container">
+    <div class="upload-section">
+      <label for="imageUpload" class="upload-btn">+ Add Image</label>
+      <input type="file" id="imageUpload" accept="image/*" hidden />
+      <p class="upload-instruction">or drag & drop images here</p>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </main>
 
-<main class="gallery">
-<img src="./assets/images/Screenshot_20250904_032223_Gallery.jpg" alt="NTSH Art Sample" />
-<!-- Add more images here -->
-  <!-- Add this inside <main class="gallery-container"> before </main> -->
-<div class="upload-section">
-  <label for="imageUpload" class="upload-btn">+ Add Image</label>
-  <input type="file" id="imageUpload" accept="image/*" hidden />
-</div>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 NTSH | Nothing To See Here</p>
+      <a href="https://theofficialntsh.com" target="_blank">
+        <img src="./assets/images/ntsh-footer-logo.png" alt="NTSH Footer Logo" class="ntsh-footer-logo" />
+      </a>
+    </div>
+  </footer>
 
-<!-- Load JS -->
-<script src="./js/gallery.js"></script>
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-content" id="lightbox-img" />
+  </div>
 
-</main>
-
-
-<footer>
-<p>Follow me:</p>
-<div class="socials">
-<a href="https://instagram.com/YOUR_HANDLE" target="_blank">Instagram</a>
-<a href="https://tiktok.com/@YOUR_HANDLE" target="_blank">TikTok</a>
-</div>
-<p>&copy; 2025 NTSH | Nothing To See Here</p>
-</footer>
+  <script src="./js/gallery.js"></script>
 </body>
 </html>
