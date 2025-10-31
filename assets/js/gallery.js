@@ -1,10 +1,5 @@
-/* ====== NTSH Gallery Wiring ===========================================
-   Default folder layout:
-   /assets/{pencil|pen|paint|photo}/your-files.jpg
-   Change BASE_PATH or individual src strings if your paths differ.
-====================================================================== */
-
-const BASE_PATH = "assets"; // change if needed
+/* Seamless scroll + responsive controls + future art page link */
+const BASE_PATH = "assets";  // change if your folder differs
 
 const LIBRARY = {
   pencil: [
@@ -32,7 +27,10 @@ const LIBRARY = {
 const artList   = document.getElementById("artList");
 const imgEl     = document.getElementById("display");
 const captionEl = document.getElementById("caption");
-const tabs      = Array.from(document.querySelectorAll(".tab"));
+const tabs      = Array.from(document.querySelectorAll(".tab[role='tab']"));
+const tabsTrack = document.querySelector(".tabs-track");
+const sidebar   = document.querySelector(".sidebar");
+const toggleBtn = document.querySelector(".sidebar-toggle");
 
 let activeCat = "pencil";
 
@@ -51,16 +49,17 @@ function buildArtButtons(cat){
     btn.addEventListener("click", () => showImage(item));
     btn.addEventListener("keyup", (e)=>{ if(e.key === "Enter") showImage(item); });
     artList.appendChild(btn);
-    if(i===0) showImage(item); // autoload first item in each category
+    if(i===0) showImage(item); // autoload first item
   });
 }
 
 function showImage(item){
   imgEl.src = item.src;
-  imgEl.alt = `${item.title} — ${activeCat}`;
+  imgEl.alt = `${item.title} — ${capitalize(activeCat)}`;
   captionEl.textContent = `${item.title} · ${capitalize(activeCat)}`;
 }
 
+// Tab behavior
 tabs.forEach(tab=>{
   tab.addEventListener("click", ()=>{
     activeCat = tab.dataset.cat;
@@ -70,8 +69,33 @@ tabs.forEach(tab=>{
   tab.addEventListener("keyup", (e)=>{ if(e.key==="Enter") tab.click(); });
 });
 
-function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+// Tabs track: drag/trackpad friendly horizontal scroll
+if (tabsTrack){
+  let isDown = false, startX = 0, scrollLeft = 0;
+  tabsTrack.addEventListener("mousedown", (e)=>{ isDown=true; startX=e.pageX - tabsTrack.offsetLeft; scrollLeft=tabsTrack.scrollLeft; });
+  tabsTrack.addEventListener("mouseleave", ()=>{ isDown=false; });
+  tabsTrack.addEventListener("mouseup", ()=>{ isDown=false; });
+  tabsTrack.addEventListener("mousemove", (e)=>{
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - tabsTrack.offsetLeft;
+    const walk = (x - startX) * 1; // speed
+    tabsTrack.scrollLeft = scrollLeft - walk;
+  }, {passive:false});
+}
 
-// init
+// Sidebar tap-to-expand (for touch)
+if (toggleBtn){
+  toggleBtn.addEventListener("click", ()=>{
+    const collapsed = sidebar.getAttribute("data-collapsed") === "true";
+    sidebar.setAttribute("data-collapsed", String(!collapsed));
+    toggleBtn.setAttribute("aria-expanded", String(collapsed));
+  });
+}
+
+// Helpers
+function capitalize(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+// Init
 setActiveTab(activeCat);
 buildArtButtons(activeCat);
