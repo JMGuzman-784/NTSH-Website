@@ -1,11 +1,11 @@
 /* ====== NTSH Gallery Wiring ===========================================
-   Folder layout (change BASE_PATH if different):
+   Default folder layout:
    /assets/{pencil|pen|paint|photo}/your-files.jpg
+   Change BASE_PATH or individual src strings if your paths differ.
 ====================================================================== */
 
-const BASE_PATH = "assets"; // change if your repo uses a different folder name
+const BASE_PATH = "assets"; // change if needed
 
-// Update these paths to your real images
 const LIBRARY = {
   pencil: [
     { title: "Art 1", src: `${BASE_PATH}/pencil/art1.jpg` },
@@ -51,7 +51,7 @@ function buildArtButtons(cat){
     btn.addEventListener("click", () => showImage(item));
     btn.addEventListener("keyup", (e)=>{ if(e.key === "Enter") showImage(item); });
     artList.appendChild(btn);
-    if(i===0) showImage(item); // autoload first
+    if(i===0) showImage(item); // autoload first item in each category
   });
 }
 
@@ -61,7 +61,6 @@ function showImage(item){
   captionEl.textContent = `${item.title} · ${capitalize(activeCat)}`;
 }
 
-// tab events
 tabs.forEach(tab=>{
   tab.addEventListener("click", ()=>{
     activeCat = tab.dataset.cat;
@@ -71,7 +70,6 @@ tabs.forEach(tab=>{
   tab.addEventListener("keyup", (e)=>{ if(e.key==="Enter") tab.click(); });
 });
 
-// helpers
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
 // init
