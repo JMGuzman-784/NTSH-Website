@@ -1,0 +1,64 @@
+/* small, modern controls that match your theme */
+.auth-bar{
+  margin-top:10px;
+  display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+}
+.primary-btn, .ghost-btn, .link-btn{
+  border:0; cursor:pointer; font-weight:700; letter-spacing:.02em;
+  padding:10px 14px; border-radius:999px; transition:transform .08s, box-shadow .2s, background .2s, color .2s;
+}
+.primary-btn{
+  color:#081116;
+  background: linear-gradient(90deg, #00ffe1, #ff00ff);
+  box-shadow:0 0 24px rgba(0,255,225,.25), 0 0 24px rgba(255,0,255,.18);
+}
+.primary-btn:hover{ transform:translateY(-1px); }
+.ghost-btn{
+  background:#0c1117; color:#eaf2ff; border:1px solid rgba(255,255,255,.14);
+}
+.ghost-btn[disabled]{ opacity:.5; cursor:not-allowed }
+.link-btn{
+  background:transparent; color:#9aa3ad; padding:8px 6px;
+}
+
+/* modal */
+.modal{
+  position:fixed; inset:0; display:none; place-items:center;
+  background:rgba(0,0,0,.55); backdrop-filter: blur(6px);
+  z-index:50; padding:16px;
+}
+.modal[aria-hidden="false"]{ display:grid; }
+.modal-card{
+  width:100%; max-width:420px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)), #0d1116;
+  border-radius:16px; padding:18px; box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 18px 60px rgba(0,0,0,.45);
+}
+.modal-card h3{ margin:0 0 6px; }
+.modal-card .muted{ margin:0 0 12px; color:#9aa3ad; font-size:14px }
+.modal-card input{
+  width:100%; margin:8px 0; padding:12px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+  background:#0b0f14; color:#eaf2ff;
+}
+.modal-card .row{ display:flex; gap:10px; margin:6px 0 0; }
+
+/* reactions strip */
+.reactions{
+  position:absolute; right:14px; bottom:14px;
+  display:flex; gap:8px; background:rgba(0,0,0,.35);
+  padding:6px 8px; border-radius:12px; backdrop-filter: blur(8px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.06);
+}
+.reactions button{
+  border:0; background:transparent; font-size:18px; cursor:pointer;
+  transition: transform .06s ease; filter: drop-shadow(0 0 6px rgba(0,255,225,.3));
+}
+.reactions button:hover{ transform: translateY(-1px) scale(1.06); }
+
+/* phone-style toast */
+.toast{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-120%);
+  background:#0c1117; color:#eaf2ff; border:1px solid rgba(255,255,255,.12);
+  padding:10px 14px; border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,.45), 0 0 24px rgba(0,255,225,.12);
+  z-index:60; opacity:0; transition: transform .28s ease, opacity .28s ease;
+}
+.toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
