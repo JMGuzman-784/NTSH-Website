@@ -2,38 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>NTSH</title>
-  <!-- keep these root-absolute so they load on your custom domain -->
   <link rel="stylesheet" href="/gallery.css" />
   <script defer src="/gallery.js"></script>
 </head>
 <body>
   <header class="site-header">
-    <h1>NTSH</h1>
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <h1>NTSH</h1>
+    </div>
     <p>Nothing To See Here — Only Art That Speaks</p>
   </header>
 
   <main class="wrap">
-    <!-- HOVER-REVEAL SIDEBAR -->
-    <aside class="sidebar" aria-label="Art navigation">
+    <!-- SIDEBAR: hover on desktop, tap-to-expand on mobile -->
+    <aside class="sidebar" aria-label="Art navigation" data-collapsed="true">
+      <button class="sidebar-toggle" aria-expanded="false" aria-controls="artList">Art</button>
       <div class="handle" aria-hidden="true"></div>
       <h3>Art</h3>
       <div class="art-list" id="artList"><!-- buttons injected by JS --></div>
     </aside>
 
-    <!-- CONTENT -->
-    <section class="content">
-      <!-- STICKY CATEGORY TABS -->
+    <section class="content glass">
+      <!-- SCROLLABLE/STICKY TABS -->
       <nav class="tabs" role="tablist" aria-label="Categories">
-        <button class="tab" role="tab" aria-selected="true"  data-cat="pencil">Pencil</button>
-        <button class="tab" role="tab" aria-selected="false" data-cat="pen">Pen</button>
-        <button class="tab" role="tab" aria-selected="false" data-cat="paint">Paint</button>
-        <button class="tab" role="tab" aria-selected="false" data-cat="photo">Photography</button>
+        <div class="tabs-track" tabindex="0">
+          <button class="tab" role="tab" aria-selected="true"  data-cat="pencil">Pencil</button>
+          <button class="tab" role="tab" aria-selected="false" data-cat="pen">Pen</button>
+          <button class="tab" role="tab" aria-selected="false" data-cat="paint">Paint</button>
+          <button class="tab" role="tab" aria-selected="false" data-cat="photo">Photography</button>
+          <a class="tab tab-link" href="https://theofficialntsh.com/portfolio" target="_blank" rel="noopener">Portfolio ↗</a>
+          <a class="tab tab-link" href="/art.html">View All Art →</a>
+        </div>
       </nav>
 
       <!-- VIEWER -->
-      <div class="viewer" id="viewer">
+      <div class="viewer glass-deep" id="viewer">
         <img id="display" alt="NTSH Art" />
         <div class="caption" id="caption">Select an item</div>
       </div>
