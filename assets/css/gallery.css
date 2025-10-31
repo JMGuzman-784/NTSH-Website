@@ -99,7 +99,7 @@ body{
   position:sticky; top:0; z-index:5;
   display:flex; flex-wrap:wrap; gap:8px;
   padding:8px;
-  background:#0b0c0fCC; /* slight transparency */
+  background:#0b0c0fcc;
   backdrop-filter:saturate(1.2) blur(8px);
   border-radius:999px;
   width:max-content; margin:0 auto 14px;
@@ -124,8 +124,9 @@ body{
   min-height:420px;
 }
 .viewer img{
-  max-width:100%; max-height:100%; width:auto; height:auto;
-  display:block; filter:drop-shadow(0 0 20px rgba(0,255,240,.25));
+  max-width:100%; max-height:100%;
+  width:auto; height:auto; display:block;
+  filter:drop-shadow(0 0 20px rgba(0,255,240,.25));
   border-radius:10px;
 }
 .caption{
