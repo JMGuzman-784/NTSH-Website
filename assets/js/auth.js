@@ -1,6 +1,6 @@
 // ---- Supabase init (fill these in) ----
-const SUPABASE_URL = "https://YOUR-PROJECT-ref.supabase.co";
-const SUPABASE_ANON_KEY = "ey...your_anon_key...";
+const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 
 let supabaseClient = null;
 window.addEventListener("DOMContentLoaded", () => {
