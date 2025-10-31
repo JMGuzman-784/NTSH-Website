@@ -7,9 +7,22 @@
   <!-- ✅ Correct asset paths -->
   <link rel="stylesheet" href="assets/css/gallery.css" />
   <script defer src="assets/js/gallery.js"></script>
+  <!-- in <head> add after your gallery.css -->
+<link rel="stylesheet" href="assets/css/auth.css" />
+<!-- supabase sdk -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<!-- your scripts -->
+<script defer src="assets/js/auth.js"></script>
+
 </head>
 <body>
   <header class="site-header">
+    <div class="auth-bar">
+  <button id="uploadBtn" class="ghost-btn" disabled title="Artists only">Upload (artists)</button>
+  <button id="authBtn" class="primary-btn">Log in / Sign up</button>
+  <button id="logoutBtn" class="ghost-btn" hidden>Log out</button>
+</div>
+
     <div class="brand">
       <span class="logo-dot"></span>
       <h1>NTSH</h1>
@@ -37,10 +50,38 @@
       </nav>
 
       <div class="viewer glass-deep" id="viewer">
+        <div id="reactions" class="reactions">
+  <button data-emoji="star"  title="Star">⭐️</button>
+  <button data-emoji="fire"  title="Fire">🔥</button>
+  <button data-emoji="gem"   title="Gem">💎</button>
+  <button data-emoji="heart" title="Love">😍</button>
+  <button data-emoji="thumb" title="Thumbs up">👍</button>
+</div>
+
         <img id="display" alt="NTSH Art" />
         <div class="caption" id="caption">Select an item</div>
       </div>
     </section>
   </main>
+  <!-- Auth Modal -->
+<div id="authModal" class="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <h3 id="authTitle">Welcome to NTSH</h3>
+    <p class="muted">Create an account to react with emojis. Artists can request verification.</p>
+    <form id="authForm">
+      <input type="email" id="authEmail" placeholder="Email" required />
+      <input type="password" id="authPassword" placeholder="Password (min 6 chars)" required minlength="6" />
+      <div class="row">
+        <button type="submit" id="signInBtn" class="primary-btn">Sign in</button>
+        <button type="button" id="signUpBtn" class="ghost-btn">Sign up</button>
+      </div>
+      <button type="button" id="closeAuth" class="link-btn">Close</button>
+    </form>
+  </div>
+</div>
+
+<!-- Phone-style Toast -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
 </body>
 </html>
