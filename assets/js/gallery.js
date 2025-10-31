@@ -1,4 +1,5 @@
-const BASE_PATH = "assets"; // change if your folder differs
+// ✅ Point to your image folder
+const BASE_PATH = "assets/images";
 
 const LIBRARY = {
   pencil: [
@@ -23,17 +24,17 @@ const LIBRARY = {
   ],
 };
 
-const artList   = document.getElementById("artList");
-const imgEl     = document.getElementById("display");
+const artList = document.getElementById("artList");
+const imgEl = document.getElementById("display");
 const captionEl = document.getElementById("caption");
-const tabs      = Array.from(document.querySelectorAll(".tab[role='tab']"));
+const tabs = Array.from(document.querySelectorAll(".tab[role='tab']"));
 
 let activeCat = "pencil";
 
-function setActiveTab(cat){
-  tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.cat === cat)));
+function setActiveTab(cat) {
+  tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.cat === cat)));
 }
-function buildArtButtons(cat){
+function buildArtButtons(cat) {
   artList.innerHTML = "";
   const items = LIBRARY[cat] || [];
   items.forEach((item, i) => {
@@ -42,26 +43,28 @@ function buildArtButtons(cat){
     btn.type = "button";
     btn.innerHTML = `<span class="dot" aria-hidden="true"></span><span>${item.title}</span>`;
     btn.addEventListener("click", () => showImage(item));
-    btn.addEventListener("keyup", (e)=>{ if(e.key === "Enter") showImage(item); });
+    btn.addEventListener("keyup", (e) => { if (e.key === "Enter") showImage(item); });
     artList.appendChild(btn);
-    if(i===0) showImage(item);
+    if (i === 0) showImage(item);
   });
 }
-function showImage(item){
+function showImage(item) {
   imgEl.src = item.src;
   imgEl.alt = `${item.title} — ${capitalize(activeCat)}`;
   captionEl.textContent = `${item.title} · ${capitalize(activeCat)}`;
 }
-tabs.forEach(tab=>{
-  tab.addEventListener("click", ()=>{
+tabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
     activeCat = tab.dataset.cat;
     setActiveTab(activeCat);
     buildArtButtons(activeCat);
   });
-  tab.addEventListener("keyup", (e)=>{ if(e.key==="Enter") tab.click(); });
+  tab.addEventListener("keyup", (e) => { if (e.key === "Enter") tab.click(); });
 });
-function capitalize(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function capitalize(s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
 
-// init
+// Init
 setActiveTab(activeCat);
 buildArtButtons(activeCat);
