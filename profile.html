@@ -4,24 +4,53 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>NTSH — Profile</title>
-  <link rel="stylesheet" href="assets/css/gallery.css" />
+
+  <link rel="stylesheet" href="assets/css/gallery.css?v=1" />
+  <link rel="stylesheet" href="assets/css/account-ui.css?v=1" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+  <script defer src="assets/js/account-ui.js?v=1"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <h1>NTSH</h1>
+  <header class="site-header header-row">
+    <div class="header-left">
+      <div class="brand">
+        <span class="logo-dot"></span>
+        <h1>NTSH</h1>
+      </div>
+      <p>Profile (coming soon)</p>
     </div>
-    <p>Profile (coming soon)</p>
+
+    <div class="header-right">
+      <button id="accountBtn" class="account-btn" aria-haspopup="menu" aria-expanded="false">
+        <span id="accountAvatar" class="avatar">?</span>
+        <span class="account-meta">
+          <span id="accountName" class="account-name">Loading…</span>
+          <span class="account-sub">
+            <span id="accountUser" class="account-user">@—</span>
+            <span id="roleBadge" class="badge">viewer</span>
+          </span>
+        </span>
+        <span class="chev" aria-hidden="true">▾</span>
+      </button>
+
+      <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
+        <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
+        <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
+        <div class="menu-sep"></div>
+        <button class="menu-item danger" role="menuitem" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </div>
   </header>
 
   <main class="wrap">
     <section class="content glass" style="padding:16px;">
       <h2 style="margin:0 0 10px;">Profile</h2>
-      <p style="margin:0; opacity:.8;">
+      <p style="margin:0; opacity:.85;">
         Next: artist verification, tab customization, and upload tools will live here.
       </p>
-      <p style="margin:10px 0 0;">
+
+      <p style="margin:14px 0 0;">
         <a href="/home.html" style="color:#00ffe1; font-weight:800; text-decoration:none;">← Back to Home</a>
       </p>
     </section>
