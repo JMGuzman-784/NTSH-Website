@@ -4,84 +4,90 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>NTSH</title>
-  <!-- ✅ Correct asset paths -->
-  <link rel="stylesheet" href="assets/css/gallery.css" />
-  <script defer src="assets/js/gallery.js"></script>
-  <!-- in <head> add after your gallery.css -->
-<link rel="stylesheet" href="assets/css/auth.css" />
-<!-- supabase sdk -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<!-- your scripts -->
-<script defer src="assets/js/auth.js"></script>
 
+  <link rel="stylesheet" href="assets/css/auth-gate.css" />
+
+  <!-- Supabase JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+
+  <!-- Gate Logic -->
+  <script defer src="assets/js/auth-gate.js"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="auth-bar">
-  <button id="uploadBtn" class="ghost-btn" disabled title="Artists only">Upload (artists)</button>
-  <button id="authBtn" class="primary-btn">Log in / Sign up</button>
-  <button id="logoutBtn" class="ghost-btn" hidden>Log out</button>
-</div>
+  <main class="gate">
+    <section class="card">
+      <div class="logo-wrap">
+        <div class="ntsh" aria-label="NTSH logo">NTSH</div>
+        <div class="tagline">Nothing To See Here — Only Art That Speaks</div>
+      </div>
 
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <h1>NTSH</h1>
-    </div>
-    <p>Nothing To See Here — Only Art That Speaks</p>
-  </header>
+      <div class="actions">
+        <button id="openLogin" class="btn primary">Log In</button>
+        <button id="openSignup" class="btn ghost">Sign Up</button>
+      </div>
 
-  <main class="wrap">
-    <aside class="sidebar" aria-label="Art navigation">
-      <div class="handle" aria-hidden="true"></div>
-      <h3>Art</h3>
-      <div class="art-list" id="artList"></div>
-    </aside>
-
-    <section class="content glass">
-      <nav class="tabs" role="tablist" aria-label="Categories">
-        <div class="tabs-track" tabindex="0">
-          <button class="tab" role="tab" aria-selected="true" data-cat="pencil">Pencil</button>
-          <button class="tab" role="tab" aria-selected="false" data-cat="pen">Pen</button>
-          <button class="tab" role="tab" aria-selected="false" data-cat="paint">Paint</button>
-          <button class="tab" role="tab" aria-selected="false" data-cat="photo">Photography</button>
-          <a class="tab tab-link" href="https://theofficialntsh.com/portfolio" target="_blank" rel="noopener">Portfolio ↗</a>
-          <a class="tab tab-link" href="/art.html">View All Art →</a>
-        </div>
-      </nav>
-
-      <div class="viewer glass-deep" id="viewer">
-        <div id="reactions" class="reactions">
-  <button data-emoji="star"  title="Star">⭐️</button>
-  <button data-emoji="fire"  title="Fire">🔥</button>
-  <button data-emoji="gem"   title="Gem">💎</button>
-  <button data-emoji="heart" title="Love">😍</button>
-  <button data-emoji="thumb" title="Thumbs up">👍</button>
-</div>
-
-        <img id="display" alt="NTSH Art" />
-        <div class="caption" id="caption">Select an item</div>
+      <div class="mini">
+        <span class="muted">Viewers can browse without an account.</span>
+        <span class="muted">Accounts unlock reactions + personalization.</span>
       </div>
     </section>
   </main>
-  <!-- Auth Modal -->
-<div id="authModal" class="modal" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <h3 id="authTitle">Welcome to NTSH</h3>
-    <p class="muted">Create an account to react with emojis. Artists can request verification.</p>
-    <form id="authForm">
-      <input type="email" id="authEmail" placeholder="Email" required />
-      <input type="password" id="authPassword" placeholder="Password (min 6 chars)" required minlength="6" />
-      <div class="row">
-        <button type="submit" id="signInBtn" class="primary-btn">Sign in</button>
-        <button type="button" id="signUpBtn" class="ghost-btn">Sign up</button>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-top">
+        <h2 id="modalTitle">Welcome</h2>
+        <button id="closeModal" class="icon-btn" aria-label="Close">✕</button>
       </div>
-      <button type="button" id="closeAuth" class="link-btn">Close</button>
-    </form>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" class="form" hidden>
+        <label class="label">Email or Username</label>
+        <input id="loginIdentity" type="text" autocomplete="username" placeholder="email@domain.com or jg_001" required />
+
+        <label class="label">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" required />
+
+        <button type="submit" class="btn primary full">Log In</button>
+
+        <p class="switch muted">
+          No account? <button type="button" id="toSignup" class="link">Sign Up</button>
+        </p>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signupForm" class="form" hidden>
+        <div class="grid2">
+          <div>
+            <label class="label">First Name</label>
+            <input id="firstName" type="text" autocomplete="given-name" placeholder="Jose" required />
+          </div>
+          <div>
+            <label class="label">Last Name</label>
+            <input id="lastName" type="text" autocomplete="family-name" placeholder="Guzman" required />
+          </div>
+        </div>
+
+        <label class="label">Email</label>
+        <input id="email" type="email" autocomplete="email" placeholder="email@domain.com" required />
+
+        <label class="label">Password (8–10 characters)</label>
+        <input id="password" type="password" autocomplete="new-password" placeholder="8–10 characters" required minlength="8" maxlength="10" />
+
+        <label class="label">Confirm Password</label>
+        <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Must match password" required minlength="8" maxlength="10" />
+
+        <button type="submit" class="btn primary full">Create Account</button>
+
+        <p class="switch muted">
+          Already have an account? <button type="button" id="toLogin" class="link">Log In</button>
+        </p>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- Phone-style Toast -->
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
