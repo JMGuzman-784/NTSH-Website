@@ -7,17 +7,47 @@
 
   <!-- reuse your existing gallery styles for now -->
   <link rel="stylesheet" href="assets/css/gallery.css" />
+  <link rel="stylesheet" href="assets/css/account-ui.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script defer src="assets/js/account-ui.js"></script>
+
 
   <!-- (optional) later we’ll add app-home.css and app-home.js -->
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header header-row">
+  <div class="header-left">
     <div class="brand">
       <span class="logo-dot"></span>
       <h1>NTSH</h1>
     </div>
     <p>Nothing To See Here — Only Art That Speaks</p>
-  </header>
+  </div>
+
+  <div class="header-right">
+    <!-- Account UI -->
+    <button id="accountBtn" class="account-btn" aria-haspopup="menu" aria-expanded="false">
+      <span id="accountAvatar" class="avatar">?</span>
+      <span class="account-meta">
+        <span id="accountName" class="account-name">Loading…</span>
+        <span class="account-sub">
+          <span id="accountUser" class="account-user">@—</span>
+          <span id="roleBadge" class="badge">viewer</span>
+        </span>
+      </span>
+      <span class="chev" aria-hidden="true">▾</span>
+    </button>
+
+    <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
+      <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
+      <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
+      <div class="menu-sep"></div>
+      <button class="menu-item danger" role="menuitem" id="logoutBtn" type="button">Log out</button>
+    </div>
+  </div>
+</header>
+
 
   <main class="wrap">
     <!-- LEFT: Artists Pane (scaffold) -->
