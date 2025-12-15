@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>NTSH</title>
 
-  <link rel="stylesheet" href="assets/css/auth-gate.css" />
+  <link rel="stylesheet" href="assets/css/auth-gate.css?v=1" />
 
-  <!-- Supabase JS (CDN) -->
+  <!-- ✅ Supabase UMD build (required for window.supabase) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 
-
-  <!-- Gate Logic -->
-  <script defer src="assets/js/auth-gate.js"></script>
+  <script defer src="assets/js/auth-gate.js?v=1"></script>
 </head>
 <body>
   <main class="gate">
@@ -28,8 +26,8 @@
       </div>
 
       <div class="mini">
-        <span class="muted">Are you an artist?</span>
-        <span class="muted">Create an account to view, react, and personalize.</span>
+        <span class="muted">Viewers can browse without an account.</span>
+        <span class="muted">Accounts unlock reactions + personalization.</span>
       </div>
     </section>
   </main>
@@ -62,11 +60,11 @@
         <div class="grid2">
           <div>
             <label class="label">First Name</label>
-            <input id="firstName" type="text" autocomplete="given-name" placeholder="First Name" required />
+            <input id="firstName" type="text" autocomplete="given-name" placeholder="Jose" required />
           </div>
           <div>
             <label class="label">Last Name</label>
-            <input id="lastName" type="text" autocomplete="family-name" placeholder="Last Name" required />
+            <input id="lastName" type="text" autocomplete="family-name" placeholder="Guzman" required />
           </div>
         </div>
 
