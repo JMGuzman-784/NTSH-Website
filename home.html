@@ -5,51 +5,45 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>NTSH — Home</title>
 
-  <!-- reuse your existing gallery styles for now -->
-  <link rel="stylesheet" href="assets/css/gallery.css" />
-  
-  <link rel="stylesheet" href="assets/css/account-ui.css?v=3" />
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+  <link rel="stylesheet" href="assets/css/gallery.css?v=1" />
+  <link rel="stylesheet" href="assets/css/account-ui.css?v=1" />
 
+  <!-- ✅ Supabase UMD build -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 
-
-
-
-  <!-- (optional) later we’ll add app-home.css and app-home.js -->
+  <script defer src="assets/js/account-ui.js?v=1"></script>
 </head>
 <body>
   <header class="site-header header-row">
-  <div class="header-left">
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <h1>NTSH</h1>
+    <div class="header-left">
+      <div class="brand">
+        <span class="logo-dot"></span>
+        <h1>NTSH</h1>
+      </div>
+      <p>Nothing To See Here — Only Art That Speaks</p>
     </div>
-    <p>Nothing To See Here — Only Art That Speaks</p>
-  </div>
 
-  <div class="header-right">
-    <!-- Account UI -->
-    <button id="accountBtn" class="account-btn" aria-haspopup="menu" aria-expanded="false">
-      <span id="accountAvatar" class="avatar">?</span>
-      <span class="account-meta">
-        <span id="accountName" class="account-name">Loading…</span>
-        <span class="account-sub">
-          <span id="accountUser" class="account-user">@—</span>
-          <span id="roleBadge" class="badge">viewer</span>
+    <div class="header-right">
+      <button id="accountBtn" class="account-btn" aria-haspopup="menu" aria-expanded="false">
+        <span id="accountAvatar" class="avatar">?</span>
+        <span class="account-meta">
+          <span id="accountName" class="account-name">Loading…</span>
+          <span class="account-sub">
+            <span id="accountUser" class="account-user">@—</span>
+            <span id="roleBadge" class="badge">viewer</span>
+          </span>
         </span>
-      </span>
-      <span class="chev" aria-hidden="true">▾</span>
-    </button>
+        <span class="chev" aria-hidden="true">▾</span>
+      </button>
 
-    <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
-      <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
-      <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
-      <div class="menu-sep"></div>
-      <button class="menu-item danger" role="menuitem" id="logoutBtn" type="button">Log out</button>
+      <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
+        <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
+        <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
+        <div class="menu-sep"></div>
+        <button class="menu-item danger" role="menuitem" id="logoutBtn" type="button">Log out</button>
+      </div>
     </div>
-  </div>
-</header>
-
+  </header>
 
   <main class="wrap">
     <!-- LEFT: Artists Pane (scaffold) -->
@@ -57,13 +51,12 @@
       <div class="handle" aria-hidden="true"></div>
       <h3>Artists</h3>
 
-      <!-- search/sort scaffolding -->
       <div style="display:flex; gap:8px; padding:10px 6px;">
-        <input id="artistSearch" placeholder="Search artists…" style="width:100%; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#0b0f14; color:#eaf2ff;" />
+        <input id="artistSearch" placeholder="Search artists…"
+          style="width:100%; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#0b0f14; color:#eaf2ff;" />
       </div>
 
       <div class="art-list" id="artistList">
-        <!-- fake artists for now -->
         <button class="art-btn"><span class="dot"></span><span>Raid (Owner)</span></button>
         <button class="art-btn"><span class="dot"></span><span>Artist Alpha</span></button>
         <button class="art-btn"><span class="dot"></span><span>Artist Beta</span></button>
@@ -79,6 +72,7 @@
           <button class="tab" role="tab" aria-selected="false">Pen</button>
           <button class="tab" role="tab" aria-selected="false">Paint</button>
           <button class="tab" role="tab" aria-selected="false">Photography</button>
+
           <a class="tab tab-link" href="https://jmguzman-784.github.io/portfolio" target="_blank" rel="noopener">Portfolio ↗</a>
           <button class="tab tab-link" type="button">View All Art →</button>
         </div>
