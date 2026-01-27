@@ -139,3 +139,57 @@
   .account-meta{ min-width: 0; }
   .account-name{ max-width: 140px; }
 }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.hidden { display: none; }
+
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.modal-card label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.modal-card input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: #0b0f14;
+  border: 1px solid rgba(255,255,255,.12);
+  color: #fff;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modal-actions button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+}
+
