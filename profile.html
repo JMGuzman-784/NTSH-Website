@@ -33,26 +33,6 @@
         </span>
         <span class="chev" aria-hidden="true">▾</span>
       </button>
-<button id="uploadBtn"
-  style="
-    padding:10px 16px;
-    border-radius:12px;
-    background:#00ffe1;
-    color:#000;
-    font-weight:800;
-    border:none;
-    cursor:pointer;
-  ">
-  Upload Art
-</button>
-
-<input
-  id="fileInput"
-  type="file"
-  accept="image/*"
-  style="display:none"
-/>
-
       <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
         <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
         <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
@@ -85,18 +65,26 @@
 
     <!-- Artist-only actions -->
     <div id="artistActions" style="display:none; margin-bottom:18px;">
-      <button
-        style="
-          padding:10px 16px;
-          border-radius:12px;
-          background:#00ffe1;
-          color:#000;
-          font-weight:800;
-          border:none;
-          cursor:pointer;
-        ">
-        Upload Art
-      </button>
+      <button id="uploadBtn"
+  style="
+    padding:10px 16px;
+    border-radius:12px;
+    background:#00ffe1;
+    color:#000;
+    font-weight:800;
+    border:none;
+    cursor:pointer;
+  ">
+  Upload Art
+</button>
+
+<input
+  id="fileInput"
+  type="file"
+  accept="image/*"
+  style="display:none"
+/>
+
     </div>
 
     <hr style="margin:20px 0; opacity:.2;" />
