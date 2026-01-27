@@ -44,16 +44,62 @@
   </header>
 
   <main class="wrap">
-    <section class="content glass" style="padding:16px;">
-      <h2 style="margin:0 0 10px;">Profile</h2>
-      <p style="margin:0; opacity:.85;">
-        Next: artist verification, tab customization, and upload tools will live here.
-      </p>
+  <section class="content glass" style="padding:20px;">
 
-      <p style="margin:14px 0 0;">
-        <a href="/home.html" style="color:#00ffe1; font-weight:800; text-decoration:none;">← Back to Home</a>
-      </p>
-    </section>
-  </main>
+    <!-- Artist Identity -->
+    <h2 id="profileName" style="margin:0;">Artist</h2>
+    <p id="profileRole" style="margin:4px 0 12px; opacity:.85;">
+      Viewer • NTSH
+    </p>
+
+    <!-- Social Links -->
+    <div style="display:flex; gap:14px; margin-bottom:16px;">
+      <a id="igLink" href="#" target="_blank"
+         style="color:#00ffe1; text-decoration:none; display:none;">
+        Instagram
+      </a>
+      <a id="ttLink" href="#" target="_blank"
+         style="color:#00ffe1; text-decoration:none; display:none;">
+        TikTok
+      </a>
+    </div>
+
+    <!-- Artist-only actions -->
+    <div id="artistActions" style="display:none; margin-bottom:18px;">
+      <button
+        style="
+          padding:10px 16px;
+          border-radius:12px;
+          background:#00ffe1;
+          color:#000;
+          font-weight:800;
+          border:none;
+          cursor:pointer;
+        ">
+        Upload Art
+      </button>
+    </div>
+
+    <hr style="margin:20px 0; opacity:.2;" />
+
+    <!-- Portfolio -->
+    <h3 style="margin-bottom:10px;">Portfolio</h3>
+    <div id="portfolioGrid"
+         style="display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px;">
+      <!-- populated later -->
+      <div style="aspect-ratio:1/1; background:#111; border-radius:10px;"></div>
+      <div style="aspect-ratio:1/1; background:#111; border-radius:10px;"></div>
+    </div>
+
+    <p style="margin:20px 0 0;">
+      <a href="/home.html"
+         style="color:#00ffe1; font-weight:800; text-decoration:none;">
+        ← Back to Home
+      </a>
+    </p>
+
+  </section>
+</main>
+
 </body>
 </html>
