@@ -128,7 +128,7 @@ async function hydrateAccount(user){
     const tt = document.getElementById("ttLink");
     if (ig && tt) {
       ig.href = "https://instagram.com/raids.art";
-      tt.href = "https://tiktok.com/@raidcreates";
+      tt.href = "https://tiktok.com/@raidtheofficial";
       ig.style.display = "inline";
       tt.style.display = "inline";
     }
