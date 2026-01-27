@@ -142,3 +142,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (role === "admin") badge.classList.add("admin");
   if (role === "artist") badge.classList.add("artist");
 }
+
+// ---- Settings modal logic ----
+document.addEventListener("DOMContentLoaded", () => {
+  const settingsBtn = document.getElementById("settingsBtn");
+  const modal = document.getElementById("settingsModal");
+  const closeBtn = document.getElementById("closeSettingsBtn");
+  const saveBtn = document.getElementById("saveSettingsBtn");
+
+  const nameInput = document.getElementById("settingsDisplayName");
+  const userInput = document.getElementById("settingsUsername");
+
+  if (!settingsBtn || !modal) return;
+
+  settingsBtn.addEventListener("click", async () => {
+    modal.classList.remove("hidden");
+
+    // Pre-fill with current values
+    nameInput.value = document.getElementById("accountName")?.textContent || "";
+    userInput.value = document.getElementById("accountUser")?.textContent.replace("@","") || "";
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  saveBtn.addEventListener("click", async () => {
+    const display_name = nameInput.value.trim();
+    const username = userInput.value.trim().toLowerCase();
+
+    if (!display_name || !username) {
+      alert("Both fields are required.");
+      return;
+    }
+
+    const { error } = await supabaseClient
+      .from("profiles")
+      .update({ display_name, username })
+      .eq("id", (await supabaseClient.auth.getUser()).data.user.id);
+
+    if (error) {
+      alert("Username may already be taken.");
+      console.error(error);
+      return;
+    }
+
+    // Update UI immediately
+    document.getElementById("accountName").textContent = display_name;
+    document.getElementById("accountUser").textContent = `@${username}`;
+    document.getElementById("accountAvatar").textContent = display_name[0].toUpperCase();
+
+    modal.classList.add("hidden");
+  });
+});
