@@ -75,52 +75,14 @@ function wireMenu(){
 }
 
 async function hydrateAccount(user){
-
-  // ---- Profile page enhancements (safe add-on) ----
-document.addEventListener("DOMContentLoaded", async () => {
-  const role = document.body?.dataset?.role;
-  const nameEl = document.getElementById("profileName");
-  const roleEl = document.getElementById("profileRole");
-  const artistActions = document.getElementById("artistActions");
-
-  if (!nameEl || !roleEl) return;
-
-  // Use header values already hydrated
-  const headerName = document.getElementById("accountName")?.textContent;
-  const headerUser = document.getElementById("accountUser")?.textContent;
-
-  nameEl.textContent = headerName || "Artist";
-  roleEl.textContent = `${role || "viewer"} • NTSH`;
-
-  // Artist/admin privileges
-  if (role === "artist" || role === "admin") {
-    artistActions.style.display = "block";
-  }
-
-  // Social links (hardcoded for now, DB later)
-  if (headerUser === "@raid") {
-    const ig = document.getElementById("igLink");
-    const tt = document.getElementById("ttLink");
-
-    ig.href = "https://instagram.com/raids.art";
-    tt.href = "https://tiktok.com/@raidcreates";
-
-    ig.style.display = "inline";
-    tt.style.display = "inline";
-  }
-});
-
-  
   const avatar = document.getElementById("accountAvatar");
   const nameEl = document.getElementById("accountName");
   const userEl = document.getElementById("accountUser");
   const badge = document.getElementById("roleBadge");
 
-  // Default fallback
   const email = (user.email || "").toLowerCase();
   const fallbackInitial = email ? email[0].toUpperCase() : "?";
 
-  // Pull profile
   const { data: profile, error } = await supabaseClient
     .from("profiles")
     .select("display_name, username, role")
@@ -133,6 +95,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const username = profile?.username || "user_000";
   const role = (profile?.role || "viewer").toLowerCase();
 
+  // 🔑 SET ROLE GLOBALLY
+  document.body.dataset.role = role;
+
   avatar.textContent = (displayName?.[0] || fallbackInitial).toUpperCase();
   nameEl.textContent = displayName;
   userEl.textContent = `@${username}`;
@@ -141,7 +106,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   badge.classList.remove("admin","artist");
   if (role === "admin") badge.classList.add("admin");
   if (role === "artist") badge.classList.add("artist");
+
+  // ---- Profile page UI sync ----
+  const profileName = document.getElementById("profileName");
+  const profileRole = document.getElementById("profileRole");
+  const artistActions = document.getElementById("artistActions");
+
+  if (profileName) profileName.textContent = displayName;
+  if (profileRole) profileRole.textContent = `${role} • NTSH`;
+
+  if (artistActions && (role === "artist" || role === "admin")) {
+    artistActions.style.display = "block";
+  }
+
+  // Socials (temporary hardcode)
+  if (username === "raid") {
+    const ig = document.getElementById("igLink");
+    const tt = document.getElementById("ttLink");
+    if (ig && tt) {
+      ig.href = "https://instagram.com/raids.art";
+      tt.href = "https://tiktok.com/@raidcreates";
+      ig.style.display = "inline";
+      tt.style.display = "inline";
+    }
+  }
 }
+
 
 // ---- Settings modal logic ----
 document.addEventListener("DOMContentLoaded", () => {
