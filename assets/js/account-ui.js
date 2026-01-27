@@ -195,3 +195,61 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.classList.add("hidden");
   });
 });
+// ---- Upload Art (V1) ----
+document.addEventListener("DOMContentLoaded", () => {
+  const uploadBtn = document.getElementById("uploadBtn");
+  const fileInput = document.getElementById("fileInput");
+
+  if (!uploadBtn || !fileInput) return;
+
+  uploadBtn.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      alert("You must be logged in.");
+      return;
+    }
+
+    const fileExt = file.name.split(".").pop();
+    const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
+
+    // 1️⃣ Upload to pending-art bucket
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from("pending-art")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.error(uploadError);
+      alert("Upload failed.");
+      return;
+    }
+
+    // 2️⃣ Insert metadata row
+    const { error: dbError } = await supabaseClient
+      .from("artworks")
+      .insert({
+        owner_id: user.id,
+        bucket: "pending-art",
+        file_path: filePath
+      });
+
+    if (dbError) {
+      console.error(dbError);
+      alert("Database insert failed.");
+      return;
+    }
+
+    alert("Upload successful! Pending approval.");
+    fileInput.value = "";
+  });
+});
