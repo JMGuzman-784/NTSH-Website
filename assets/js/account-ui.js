@@ -75,6 +75,42 @@ function wireMenu(){
 }
 
 async function hydrateAccount(user){
+
+  // ---- Profile page enhancements (safe add-on) ----
+document.addEventListener("DOMContentLoaded", async () => {
+  const role = document.body?.dataset?.role;
+  const nameEl = document.getElementById("profileName");
+  const roleEl = document.getElementById("profileRole");
+  const artistActions = document.getElementById("artistActions");
+
+  if (!nameEl || !roleEl) return;
+
+  // Use header values already hydrated
+  const headerName = document.getElementById("accountName")?.textContent;
+  const headerUser = document.getElementById("accountUser")?.textContent;
+
+  nameEl.textContent = headerName || "Artist";
+  roleEl.textContent = `${role || "viewer"} • NTSH`;
+
+  // Artist/admin privileges
+  if (role === "artist" || role === "admin") {
+    artistActions.style.display = "block";
+  }
+
+  // Social links (hardcoded for now, DB later)
+  if (headerUser === "@raid") {
+    const ig = document.getElementById("igLink");
+    const tt = document.getElementById("ttLink");
+
+    ig.href = "https://instagram.com/raids.art";
+    tt.href = "https://tiktok.com/@raidcreates";
+
+    ig.style.display = "inline";
+    tt.style.display = "inline";
+  }
+});
+
+  
   const avatar = document.getElementById("accountAvatar");
   const nameEl = document.getElementById("accountName");
   const userEl = document.getElementById("accountUser");
