@@ -73,6 +73,9 @@ function wireMenu(){
     window.location.href = "/";
   });
 }
+async function loadMyPendingArt() {
+  ...
+}
 
 async function hydrateAccount(user){
   
@@ -133,6 +136,8 @@ async function hydrateAccount(user){
       tt.style.display = "inline";
     }
   }
+  loadMyPendingArt();
+
 }
 
 
@@ -246,3 +251,46 @@ document.addEventListener("DOMContentLoaded", () => {
     fileInput.value = "";
   });
 });
+// ---- Load My Pending Art (Profile) ----
+async function loadMyPendingArt() {
+  const grid = document.getElementById("portfolioGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) return;
+
+  const { data: artworks, error } = await supabaseClient
+    .from("artworks")
+    .select("id, file_path")
+    .eq("owner_id", user.id)
+    .eq("bucket", "pending-art")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Load art error:", error);
+    return;
+  }
+
+  for (const art of artworks) {
+    const { data: signed, error: urlErr } = await supabaseClient
+      .storage
+      .from("pending-art")
+      .createSignedUrl(art.file_path, 60 * 60);
+
+    if (urlErr) continue;
+
+    const img = document.createElement("img");
+    img.src = signed.signedUrl;
+    img.style.width = "100%";
+    img.style.aspectRatio = "1 / 1";
+    img.style.objectFit = "cover";
+    img.style.borderRadius = "10px";
+
+    grid.appendChild(img);
+  }
+}
