@@ -75,6 +75,7 @@ function wireMenu(){
 }
 
 async function hydrateAccount(user){
+  
   const avatar = document.getElementById("accountAvatar");
   const nameEl = document.getElementById("accountName");
   const userEl = document.getElementById("accountUser");
@@ -97,6 +98,8 @@ async function hydrateAccount(user){
 
   // 🔑 SET ROLE GLOBALLY
   document.body.dataset.role = role;
+ console.log("ROLE:", role, "artistActions:", document.getElementById("artistActions"));
+
 
   avatar.textContent = (displayName?.[0] || fallbackInitial).toUpperCase();
   nameEl.textContent = displayName;
