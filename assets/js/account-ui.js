@@ -5,8 +5,12 @@
 const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
+/* =========================
+   SUPABASE CONFIG
+   ========================= */
 
 const REQUIRE_LOGIN_ON_HOME = false;
+
 let supabaseClient = null;
 
 /* =========================
@@ -54,7 +58,6 @@ function wireMenu() {
   const btn = document.getElementById("accountBtn");
   const menu = document.getElementById("accountMenu");
   const logoutBtn = document.getElementById("logoutBtn");
-  const settingsBtn = document.getElementById("settingsBtn");
 
   if (!btn || !menu) return;
 
@@ -73,10 +76,6 @@ function wireMenu() {
     await supabaseClient.auth.signOut();
     window.location.href = "/";
   });
-
-  settingsBtn?.addEventListener("click", () => {
-    document.getElementById("settingsModal")?.classList.remove("hidden");
-  });
 }
 
 /* =========================
@@ -89,37 +88,39 @@ async function hydrateAccount(user) {
   const userEl = document.getElementById("accountUser");
   const badge = document.getElementById("roleBadge");
 
+  if (!avatar || !nameEl || !userEl || !badge) return;
+
+  const email = user.email?.toLowerCase() || "";
+  const fallbackInitial = email ? email[0].toUpperCase() : "?";
+
   const { data: profile } = await supabaseClient
     .from("profiles")
     .select("display_name, username, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  const displayName =
-    profile?.display_name || user.email?.split("@")[0] || "User";
+  const displayName = profile?.display_name || email.split("@")[0] || "User";
   const username = profile?.username || "user";
   const role = (profile?.role || "viewer").toLowerCase();
 
   document.body.dataset.role = role;
 
-  if (avatar) avatar.textContent = displayName[0]?.toUpperCase() || "?";
-  if (nameEl) nameEl.textContent = displayName;
-  if (userEl) userEl.textContent = `@${username}`;
-  if (badge) {
-    badge.textContent = role;
-    badge.classList.toggle("artist", role === "artist");
-    badge.classList.toggle("admin", role === "admin");
-  }
+  avatar.textContent = displayName[0]?.toUpperCase() || fallbackInitial;
+  nameEl.textContent = displayName;
+  userEl.textContent = `@${username}`;
 
-  syncProfileUI(displayName, role, username);
+  badge.textContent = role;
+  badge.className = `badge ${role}`;
+
+  syncProfileUI(displayName, role);
 
   if (role === "artist" || role === "admin") {
     loadMyPendingArt();
   }
 
   const adminBtn = document.getElementById("adminPanelBtn");
-  if (adminBtn) {
-    adminBtn.style.display = role === "admin" ? "block" : "none";
+  if (adminBtn && role === "admin") {
+    adminBtn.style.display = "block";
   }
 }
 
@@ -127,28 +128,16 @@ async function hydrateAccount(user) {
    PROFILE UI
    ========================= */
 
-function syncProfileUI(displayName, role, username) {
+function syncProfileUI(displayName, role) {
   const profileName = document.getElementById("profileName");
   const profileRole = document.getElementById("profileRole");
   const artistActions = document.getElementById("artistActions");
 
-  if (profileName) profileName.textContent = displayName;
-  if (profileRole) profileRole.textContent = `${role} • NTSH`;
+  profileName && (profileName.textContent = displayName);
+  profileRole && (profileRole.textContent = `${role} • NTSH`);
 
-  if (artistActions) {
-    artistActions.style.display =
-      role === "artist" || role === "admin" ? "block" : "none";
-  }
-
-  if (username === "raid") {
-    const ig = document.getElementById("igLink");
-    const tt = document.getElementById("ttLink");
-    if (ig && tt) {
-      ig.href = "https://instagram.com/raids.art";
-      tt.href = "https://tiktok.com/@raidtheofficial";
-      ig.style.display = "inline";
-      tt.style.display = "inline";
-    }
+  if (artistActions && (role === "artist" || role === "admin")) {
+    artistActions.style.display = "block";
   }
 }
 
@@ -157,79 +146,67 @@ function syncProfileUI(displayName, role, username) {
    ========================= */
 
 function wireUploadModal() {
-  const openBtn = document.getElementById("uploadBtn");
+  const uploadBtn = document.getElementById("uploadBtn");
   const modal = document.getElementById("uploadModal");
   const cancelBtn = document.getElementById("cancelUpload");
   const submitBtn = document.getElementById("submitUpload");
+  const fileInput = document.getElementById("fileInput");
 
-  if (!openBtn || !modal) return;
+  if (!uploadBtn || !modal) return;
 
-  openBtn.addEventListener("click", () => {
+  uploadBtn.addEventListener("click", () => {
     modal.classList.remove("hidden");
   });
 
   cancelBtn?.addEventListener("click", () => {
     modal.classList.add("hidden");
-    resetUploadForm();
+    fileInput.value = "";
   });
 
-  submitBtn?.addEventListener("click", handleUploadSubmit);
-}
+  submitBtn?.addEventListener("click", async () => {
+    const file = fileInput.files[0];
+    const title = document.getElementById("artTitle")?.value.trim() || null;
+    const description =
+      document.getElementById("artDescription")?.value.trim() || null;
 
-function resetUploadForm() {
-  const fileInput = document.getElementById("fileInput");
-  const titleInput = document.getElementById("artTitle");
-  const descInput = document.getElementById("artDescription");
+    if (!file) {
+      alert("Please select an image.");
+      return;
+    }
 
-  if (fileInput) fileInput.value = "";
-  if (titleInput) titleInput.value = "";
-  if (descInput) descInput.value = "";
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
+
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from("pending-art")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      alert("Upload failed.");
+      return;
+    }
+
+    await supabaseClient.from("artworks").insert({
+      owner_id: user.id,
+      file_path: filePath,
+      title,
+      description,
+      status: "pending"
+    });
+
+    modal.classList.add("hidden");
+    fileInput.value = "";
+    alert("Artwork submitted for review.");
+
+    loadMyPendingArt();
+  });
 }
 
 /* =========================
-   HANDLE UPLOAD
-   ========================= */
-
-async function handleUploadSubmit() {
-  const fileInput = document.getElementById("fileInput");
-  const titleInput = document.getElementById("artTitle");
-  const descInput = document.getElementById("artDescription");
-
-  const file = fileInput?.files[0];
-  if (!file) {
-    alert("Please select an image.");
-    return;
-  }
-
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  if (!user) return;
-
-  const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
-
-  const { error: uploadError } = await supabaseClient.storage
-    .from("pending-art")
-    .upload(filePath, file);
-
-  if (uploadError) {
-    alert("Upload failed.");
-    return;
-  }
-
-  await supabaseClient.from("artworks").insert({
-    owner_id: user.id,
-    file_path: filePath,
-    title: titleInput?.value.trim() || null,
-    description: descInput?.value.trim() || null,
-    status: "pending"
-  });
-
-  document.getElementById("uploadModal")?.classList.add("hidden");
-  resetUploadForm();
-  loadMyPendingArt();
-}
-
-/* =========================
-   LOAD PENDING ART
+   PENDING ART (PROFILE)
    ========================= */
 
 async function loadMyPendingArt() {
@@ -239,6 +216,7 @@ async function loadMyPendingArt() {
   grid.innerHTML = "";
 
   const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
 
   const { data: artworks } = await supabaseClient
     .from("artworks")
@@ -253,7 +231,8 @@ async function loadMyPendingArt() {
   }
 
   for (const art of artworks) {
-    const { data } = await supabaseClient.storage
+    const { data } = await supabaseClient
+      .storage
       .from("pending-art")
       .createSignedUrl(art.file_path, 3600);
 
@@ -266,25 +245,4 @@ async function loadMyPendingArt() {
     card.appendChild(img);
     grid.appendChild(card);
   }
-}
-
-/* =========================
-   ADMIN APPROVAL
-   ========================= */
-
-async function approveArtwork(artworkId) {
-  const { error } = await supabaseClient
-    .from("artworks")
-    .update({
-      status: "approved",
-      approved_at: new Date().toISOString()
-    })
-    .eq("id", artworkId);
-
-  if (error) {
-    alert("Failed to approve artwork.");
-    return;
-  }
-
-  alert("Artwork approved.");
 }
