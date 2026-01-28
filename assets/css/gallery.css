@@ -115,3 +115,22 @@ body{
   .art-list{ flex-direction:row; flex-wrap:wrap }
 }
 @media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important} }
+
+
+
+
+
+.ntsh-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 320px;
+}
+
+.ntsh-hero img {
+  max-width: 80%;
+  max-height: 60vh;
+  object-fit: contain;
+  opacity: 0.95;
+}
