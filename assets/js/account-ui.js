@@ -1,12 +1,12 @@
 const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
-
 /* =========================
    CONFIG
    ========================= */
 
 const REQUIRE_LOGIN_ON_HOME = false;
 let supabaseClient = null;
+
 /* =========================
    INIT
    ========================= */
@@ -34,6 +34,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  await hydrateAccount(user);
+
+  supabaseClient.auth.onAuthStateChange(async (_evt, session) => {
+    if (!session?.user) {
+      if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
+      return;
+    }
+    await hydrateAccount(session.user);
+  });
+});
 
 /* =========================
    HEADER MENU
@@ -68,10 +78,10 @@ function wireMenu() {
   });
 }
 
-
 /* =========================
    ACCOUNT HYDRATION
    ========================= */
+
 async function hydrateAccount(user) {
   const avatar = document.getElementById("accountAvatar");
   const nameEl = document.getElementById("accountName");
@@ -103,12 +113,10 @@ async function hydrateAccount(user) {
 
   syncProfileUI(displayName, role, username);
 
-  // Artist-only
   if (role === "artist") {
     loadMyPendingArt();
   }
 
-  // Admin-only
   const adminBtn = document.getElementById("adminPanelBtn");
   if (adminBtn && role === "admin") {
     adminBtn.style.display = "block";
@@ -131,7 +139,6 @@ function syncProfileUI(displayName, role, username) {
     artistActions.style.display = "block";
   }
 
-  // Temporary hardcoded socials
   if (username === "raid") {
     const ig = document.getElementById("igLink");
     const tt = document.getElementById("ttLink");
@@ -143,7 +150,6 @@ function syncProfileUI(displayName, role, username) {
     }
   }
 }
-
 
 /* =========================
    SETTINGS MODAL
@@ -170,9 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const {
-      data: { user }
-    } = await supabaseClient.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
     const { error } = await supabaseClient
       .from("profiles")
@@ -188,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
     hydrateAccount(user);
   });
 });
-
 
 /* =========================
    UPLOAD ART (ARTISTS ONLY)
@@ -206,9 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const file = fileInput.files[0];
     if (!file) return;
 
-    const {
-      data: { user }
-    } = await supabaseClient.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
     const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
 
@@ -234,10 +235,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
 /* =========================
    PENDING ART (PROFILE)
    ========================= */
+
 async function loadMyPendingArt() {
   const grid = document.getElementById("portfolioGrid");
   if (!grid) return;
@@ -275,9 +276,8 @@ async function loadMyPendingArt() {
   }
 }
 
-
 /* =========================
-   APPROVAL (RAID / ADMIN)
+   APPROVAL (ADMIN)
    ========================= */
 
 async function approveArtwork(artworkId) {
