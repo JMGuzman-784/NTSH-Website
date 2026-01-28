@@ -29,13 +29,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { data } = await supabaseClient.auth.getSession();
   const user = data.session?.user;
 
-  if (!user) {
-    const path = window.location.pathname;
-    if (path.includes("home.html") || path.includes("profile.html")) {
-      window.location.href = "/";
-    }
-    return;
-  }
+  if (window.location.pathname.includes("admin.html") && role !== "admin") {
+  alert("Admin access only.");
+  window.location.href = "/profile.html";
+}
+
 
   await hydrateAccount(user);
 
