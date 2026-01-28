@@ -195,6 +195,66 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const uploadBtn = document.getElementById("uploadBtn");
+  const modal = document.getElementById("uploadModal");
+  const cancelBtn = document.getElementById("cancelUpload");
+  const submitBtn = document.getElementById("submitUpload");
+  const fileInput = document.getElementById("fileInput");
+
+  if (!uploadBtn || !modal) return;
+
+  uploadBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
+
+  cancelBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+    fileInput.value = "";
+  });
+
+  submitBtn.addEventListener("click", async () => {
+    const file = fileInput.files[0];
+    const title = document.getElementById("artTitle").value.trim();
+    const description =
+      document.getElementById("artDescription")?.value.trim() || null;
+
+    if (!file) {
+      alert("Please select an image.");
+      return;
+    }
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
+
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from("pending-art")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      alert("Upload failed.");
+      return;
+    }
+
+    await supabaseClient.from("artworks").insert({
+      owner_id: user.id,
+      file_path: filePath,
+      title: title || null,
+      description,
+      status: "pending"
+    });
+
+    modal.classList.add("hidden");
+    fileInput.value = "";
+    alert("Artwork submitted for review.");
+    loadMyPendingArt();
+  });
+});
+
+
 /* =========================
    PENDING ART (PROFILE)
    ========================= */
