@@ -338,12 +338,15 @@ async function approveArt(art) {
   loadMyPendingArt();
 }
 
-approveBtn.onclick = () => approveArt(art);
+approveBtn.onclick = () => approveArtwork(art.id);
 
 async function loadMyPendingArt() {
   const grid = document.getElementById("portfolioGrid");
   if (!grid) return;
 
+.eq("status", "pending")
+
+  
   grid.innerHTML = "";
 
   const {
@@ -446,3 +449,24 @@ async function approveArt(art) {
   alert("Art approved.");
   loadMyPendingArt();
 }
+
+// ---- Approve artwork (ADMIN / OWNER) ----
+async function approveArtwork(artworkId) {
+  const { error } = await supabaseClient
+    .from("artworks")
+    .update({
+      status: "approved",
+      approved_at: new Date().toISOString()
+    })
+    .eq("id", artworkId);
+
+  if (error) {
+    console.error("Approve failed:", error);
+    alert("Failed to approve artwork.");
+    return;
+  }
+
+  alert("Artwork approved.");
+  loadMyPendingArt(); // refresh pending list
+}
+
