@@ -1,64 +1,59 @@
 const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 // ===== ADMIN: REVIEW ONLY =====
-
-function getArt() {
-  return JSON.parse(localStorage.getItem("ntsh_art")) || [];
-}
-
-function saveArt(data) {
-  localStorage.setItem("ntsh_art", JSON.stringify(data));
-}
-
-function approveArt(id) {
-  const art = getArt().map(item =>
-    item.id === id ? { ...item, status: "approved" } : item
-  );
-  saveArt(art);
-  renderPending();
-}
-
-function rejectArt(id) {
-  const art = getArt().map(item =>
-    item.id === id ? { ...item, status: "rejected" } : item
-  );
-  saveArt(art);
-  renderPending();
-}
-
-function renderPending() {
+document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("pending-art");
   if (!container) return;
 
-  const art = getArt();
-  container.innerHTML = "";
+  const { data: artworks, error } = await supabaseClient
+    .from("artworks")
+    .select("*")
+    .eq("status", "pending")
+    .order("created_at", { ascending: false });
 
-  const pending = art.filter(a => a.status === "pending");
+  if (error) {
+    container.innerHTML = "<p>Error loading submissions.</p>";
+    return;
+  }
 
-  if (pending.length === 0) {
+  if (!artworks || artworks.length === 0) {
     container.innerHTML = "<p>No pending submissions.</p>";
     return;
   }
 
-  pending.forEach(item => {
+  for (const art of artworks) {
+    const { data } = await supabaseClient
+      .storage
+      .from("pending-art")
+      .createSignedUrl(art.file_path, 3600);
+
     const card = document.createElement("div");
-    card.style.border = "1px solid #333";
-    card.style.padding = "12px";
-    card.style.marginBottom = "12px";
+    card.className = "art-card";
 
     card.innerHTML = `
-      <img src="${item.image}" style="max-width:100%;margin-bottom:8px;">
-      <strong>${item.title}</strong><br>
-      <em>${item.artType}</em><br>
-      <small>Stencil: ${item.stencilType}</small><br>
-      <p>${item.description || ""}</p>
-      <button onclick="approveArt('${item.id}')">Approve</button>
-      <button onclick="rejectArt('${item.id}')">Reject</button>
+      <img src="${data.signedUrl}">
+      <strong>${art.title || "Untitled"}</strong>
+      <p>${art.description || ""}</p>
+      <button data-id="${art.id}" class="approve">Approve</button>
+      <button data-id="${art.id}" class="reject">Reject</button>
     `;
 
     container.appendChild(card);
-  });
-}
+  }
 
-// Initial render
-renderPending();
+  container.addEventListener("click", async (e) => {
+    if (!e.target.dataset.id) return;
+
+    const id = e.target.dataset.id;
+    const status = e.target.classList.contains("approve")
+      ? "approved"
+      : "rejected";
+
+    await supabaseClient
+      .from("artworks")
+      .update({ status })
+      .eq("id", id);
+
+    location.reload();
+  });
+});
