@@ -1,0 +1,284 @@
+/* =========================
+   ROOT / THEME
+========================= */
+
+:root {
+  --bg-black: #050505;
+  --panel-black: #0b0b0b;
+
+  --cyan: #00ffe1;
+  --teal: #00cbb8;
+  --magenta: #ff2fd4;
+
+  --text-main: #e6e6e6;
+  --text-dim: #8a8a8a;
+
+  --glow-cyan: 0 0 12px rgba(0,255,225,0.35);
+  --glow-magenta: 0 0 10px rgba(255,47,212,0.35);
+}
+
+/* =========================
+   BASE
+========================= */
+
+body {
+  margin: 0;
+  background: var(--bg-black);
+  color: var(--text-main);
+  font-family: "Inter", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.site-header {
+  position: relative;
+  padding: 20px 24px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ntsh-logo {
+  width: 64px;
+  opacity: 0.9;
+  filter: drop-shadow(var(--glow-cyan));
+  transition: filter 0.3s ease;
+}
+
+.ntsh-logo:hover {
+  filter: drop-shadow(var(--glow-magenta));
+}
+
+/* =========================
+   ACCOUNT BUTTON
+========================= */
+
+.account-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.badge.admin {
+  font-size: 0.7rem;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  padding: 2px 6px;
+  border-radius: 999px;
+  box-shadow: var(--glow-cyan);
+}
+
+/* =========================
+   ADMIN IDENTITY
+========================= */
+
+.admin-identity {
+  text-align: center;
+  margin: 40px 0 60px;
+}
+
+.admin-identity h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.admin-sub {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  margin-top: 6px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.admin-section {
+  padding: 0 24px 60px;
+}
+
+.admin-section h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 18px;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+}
+
+/* =========================
+   ART GRID
+========================= */
+
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.art-card {
+  position: relative;
+  background: var(--panel-black);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.art-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-cyan);
+}
+
+.art-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* =========================
+   ART OVERLAY (HOVER)
+========================= */
+
+.art-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5,5,5,0.75);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  transition: opacity 0.2s ease;
+}
+
+.art-card:hover .art-overlay {
+  opacity: 1;
+}
+
+.art-title {
+  font-size: 0.8rem;
+}
+
+.art-artist {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* =========================
+   ART ACTIONS
+========================= */
+
+.art-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 8px;
+}
+
+.art-actions button {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--text-dim);
+  color: var(--text-main);
+  font-size: 0.7rem;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.art-actions .approve:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.art-actions .reject:hover {
+  border-color: var(--magenta);
+  color: var(--magenta);
+  box-shadow: var(--glow-magenta);
+}
+
+/* =========================
+   PENDING ARTISTS
+========================= */
+
+.pending-artists {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.artist-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--panel-black);
+  border-radius: 10px;
+}
+
+.artist-id {
+  font-size: 0.85rem;
+}
+
+.artist-meta {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* =========================
+   FOOTER / EASTER EGG
+========================= */
+
+.site-footer {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+}
+
+.easter-egg {
+  width: 22px;
+  opacity: 0.4;
+  cursor: pointer;
+  animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  .ntsh-logo {
+    width: 52px;
+  }
+
+  .art-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+}
