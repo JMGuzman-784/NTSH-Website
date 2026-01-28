@@ -1,20 +1,15 @@
 // ================================
-// SUPABASE INIT (GLOBAL, SINGLETON)
+// SUPABASE GLOBAL CLIENT (SINGLE)
 // ================================
-const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
-const SUPABASE_ANON_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
+if (!window.window.supabaseClient) {
+  const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
+  const SUPABASE_ANON_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 
-
-if (typeof supabase === "undefined") {
-  console.error("Supabase SDK not loaded");
+  window.window.supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 }
-
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-const REQUIRE_LOGIN_ON_HOME = false;
 
 // ================================
 // INIT
@@ -24,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   wireAdminButton();
   wireUploadModal();
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const { data: { session } } = await window.supabaseClient.auth.getSession();
   const user = session?.user;
 
   if (!user) {
@@ -34,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await hydrateAccount(user);
 
-  supabaseClient.auth.onAuthStateChange(async (_evt, session) => {
+  window.supabaseClient.auth.onAuthStateChange(async (_evt, session) => {
     if (!session?.user) {
       if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
       return;
@@ -65,7 +60,7 @@ function wireMenu() {
   });
 
   logoutBtn?.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
+    await window.supabaseClient.auth.signOut();
     window.location.href = "/";
   });
 }
@@ -95,7 +90,7 @@ async function hydrateAccount(user) {
 
   const email = user.email?.toLowerCase() || "";
 
-  const { data: profile } = await supabaseClient
+  const { data: profile } = await window.supabaseClient
     .from("profiles")
     .select("display_name, username, role")
     .eq("id", user.id)
@@ -172,12 +167,12 @@ function wireUploadModal() {
       return;
     }
 
-    const { data: { user } } = await supabaseClient.auth.getUser();
+    const { data: { user } } = await window.supabaseClient.auth.getUser();
     if (!user) return;
 
     const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
 
-    const { error: uploadError } = await supabaseClient
+    const { error: uploadError } = await window.supabaseClient
       .storage
       .from("pending-art")
       .upload(filePath, file);
@@ -188,7 +183,7 @@ function wireUploadModal() {
       return;
     }
 
-    await supabaseClient.from("artworks").insert({
+    await window.supabaseClient.from("artworks").insert({
       owner_id: user.id,
       file_path: filePath,
       title: titleInput?.value || null,
@@ -215,10 +210,10 @@ async function loadMyPendingArt() {
 
   grid.innerHTML = "";
 
-  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { data: { user } } = await window.supabaseClient.auth.getUser();
   if (!user) return;
 
-  const { data: artworks } = await supabaseClient
+  const { data: artworks } = await window.supabaseClient
     .from("artworks")
     .select("*")
     .eq("owner_id", user.id)
@@ -231,7 +226,7 @@ async function loadMyPendingArt() {
   }
 
   for (const art of artworks) {
-    const { data } = await supabaseClient
+    const { data } = await window.supabaseClient
       .storage
       .from("pending-art")
       .createSignedUrl(art.file_path, 3600);
