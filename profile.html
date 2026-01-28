@@ -168,31 +168,18 @@
   <div class="modal-card">
     <h2>Upload Artwork</h2>
 
-    <label>
-      Title
-      <input id="artTitle" type="text" placeholder="Artwork title" />
-    </label>
+    <input id="artTitle" placeholder="Title (optional)" />
+    <textarea id="artDescription" placeholder="Describe this piece (optional)"></textarea>
 
-    <label>
-      Description
-      <textarea
-        id="artDescription"
-        rows="4"
-        placeholder="Describe this piece (optional)"
-      ></textarea>
-    </label>
-
-    <label class="file-input">
-      Select Image
-      <input id="fileInput" type="file" accept="image/*" hidden />
-    </label>
+    <input id="fileInput" type="file" accept="image/*" />
 
     <div class="modal-actions">
       <button id="cancelUpload" class="btn secondary">Cancel</button>
-      <button id="submitUpload" class="btn primary">Upload</button>
+      <button id="confirmUpload" class="btn primary">Upload</button>
     </div>
   </div>
 </div>
+
 
 
 </body>
