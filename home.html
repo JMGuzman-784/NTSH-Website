@@ -78,9 +78,30 @@
         </div>
       </nav>
 
-      <div class="viewer glass-deep" id="viewer">
-        <img id="display" alt="NTSH Art" />
-        <div class="caption" id="caption">Select an artist</div>
+<div class="viewer glass-deep" id="viewer">
+
+  <!-- NTSH Hero (shows when no art selected) -->
+  <div id="ntshHero" class="ntsh-hero">
+    <img
+      src="assets/images/ntsh-hero.png"
+      alt="NTSH Hero Art"
+    />
+  </div>
+
+  <!-- Dynamic art display (used later) -->
+  <img id="display" alt="NTSH Art" style="display:none;" />
+
+  <div class="caption" id="caption">Select an artist</div>
+
+  <div id="reactions" class="reactions">
+    <button title="Star">⭐️</button>
+    <button title="Fire">🔥</button>
+    <button title="Gem">💎</button>
+    <button title="Love">😍</button>
+    <button title="Thumbs up">👍</button>
+  </div>
+</div>
+
 
         <div id="reactions" class="reactions">
           <button title="Star">⭐️</button>
