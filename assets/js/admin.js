@@ -1,65 +1,158 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>NTSH — Admin Panel</title>
+const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
 
-  <!-- Shared styles -->
-  <link rel="stylesheet" href="assets/css/gallery.css?v=1" />
-  <link rel="stylesheet" href="assets/css/account-ui.css?v=1" />
+let supabaseClient = null;
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!window.supabase) {
+    console.error("Supabase SDK not loaded");
+    return;
+  }
 
-  <!-- Admin logic (Phase 2) -->
-  <script defer src="assets/js/admin.js?v=1"></script>
-</head>
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-<body>
-  <!-- HEADER -->
-  <header class="site-header header-row">
-    <div class="header-left">
-      <div class="brand">
-        <span class="logo-dot"></span>
-        <h1>NTSH</h1>
-      </div>
-      <p>Admin Panel — Review Submissions</p>
+  const { data } = await supabaseClient.auth.getSession();
+  const user = data.session?.user;
+
+  if (!user) {
+    window.location.href = "/";
+    return;
+  }
+
+  const role = document.body.dataset.role;
+
+  if (role !== "admin") {
+    alert("Admin access only.");
+    window.location.href = "/profile.html";
+    return;
+  }
+
+  loadPendingArtworks();
+});
+
+/* -----------------------------
+   Load Pending Art (ADMIN)
+-------------------------------- */
+async function loadPendingArtworks() {
+  const grid = document.getElementById("adminArtGrid");
+  const empty = document.getElementById("adminEmptyState");
+
+  grid.innerHTML = "";
+  empty.textContent = "Loading pending submissions…";
+
+  const { data: artworks, error } = await supabaseClient
+    .from("artworks")
+    .select(`
+      id,
+      file_path,
+      description,
+      owner_id,
+      created_at
+    `)
+    .eq("bucket", "pending-art")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    empty.textContent = "Failed to load submissions.";
+    return;
+  }
+
+  if (!artworks || artworks.length === 0) {
+    empty.textContent = "No pending submissions.";
+    return;
+  }
+
+  empty.style.display = "none";
+
+  for (const art of artworks) {
+    renderArtworkCard(art, grid);
+  }
+}
+
+/* -----------------------------
+   Render Admin Card
+-------------------------------- */
+async function renderArtworkCard(art, grid) {
+  const { data: signed } = await supabaseClient
+    .storage
+    .from("pending-art")
+    .createSignedUrl(art.file_path, 60 * 60);
+
+  if (!signed?.signedUrl) return;
+
+  const card = document.createElement("div");
+  card.style.cssText = `
+    background:#111;
+    border-radius:14px;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  `;
+
+  card.innerHTML = `
+    <img
+      src="${signed.signedUrl}"
+      style="width:100%; border-radius:10px; object-fit:cover;"
+    />
+
+    <div style="font-size:13px; opacity:.7;">
+      ${art.description || "No description provided."}
     </div>
 
-    <div class="header-right">
-      <a href="/profile.html"
-         style="color:#00ffe1; font-weight:800; text-decoration:none;">
-        ← Back to Profile
-      </a>
+    <div style="display:flex; gap:8px;">
+      <button class="approveBtn">Approve</button>
+      <button class="rejectBtn">Reject</button>
     </div>
-  </header>
+  `;
 
-  <!-- MAIN -->
-  <main class="wrap">
-    <section class="content glass" style="padding:20px;">
+  card.querySelector(".approveBtn").onclick = () => approveArtwork(art);
+  card.querySelector(".rejectBtn").onclick = () => rejectArtwork(art);
 
-      <h2 style="margin-top:0;">Pending Artwork Submissions</h2>
+  styleAdminButtons(card);
+  grid.appendChild(card);
+}
 
-      <!-- Empty state (replaced in Phase 2) -->
-      <p id="adminEmptyState" style="opacity:.6;">
-        Loading pending submissions…
-      </p>
+/* -----------------------------
+   Button Styling
+-------------------------------- */
+function styleAdminButtons(card) {
+  const approve = card.querySelector(".approveBtn");
+  const reject = card.querySelector(".rejectBtn");
 
-      <!-- Admin review grid -->
-      <div
-        id="adminArtGrid"
-        style="
-          display:grid;
-          grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-          gap:16px;
-          margin-top:20px;
-        "
-      >
-        <!-- Cards injected in Phase 2 -->
-      </div>
+  approve.style.cssText = `
+    flex:1;
+    padding:8px;
+    background:#00ffe1;
+    color:#000;
+    border:none;
+    border-radius:8px;
+    font-weight:800;
+    cursor:pointer;
+  `;
 
-    </section>
-  </main>
-</body>
-</html>
+  reject.style.cssText = `
+    flex:1;
+    padding:8px;
+    background:#222;
+    color:#ff6b6b;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:8px;
+    font-weight:800;
+    cursor:pointer;
+  `;
+}
+
+/* -----------------------------
+   Approve
+-------------------------------- */
+async function approveArtwork(art) {
+  const move = await supabaseClient
+    .storage
+    .from("pending-art")
+    .move(art.file_path, art.file_path, {
+      destinationBucket: "
