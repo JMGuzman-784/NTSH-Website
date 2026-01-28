@@ -425,3 +425,50 @@ body {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 0.8; }
 }
+/* ADMIN UPLOAD LAYOUT */
+.admin-upload {
+  max-width: 520px;
+  margin: auto;
+  padding: 12px;
+}
+
+/* INPUTS */
+.admin-upload input,
+.admin-upload textarea,
+.admin-upload select,
+.admin-upload button {
+  width: 100%;
+  margin-bottom: 12px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* TEXTAREA */
+.admin-upload textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* STATUS MESSAGE */
+#upload-status {
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* SOCIAL HANDLES */
+.socials {
+  margin-top: 14px;
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+/* MOBILE SAFETY */
+@media (max-width: 600px) {
+  body {
+    padding: 8px;
+  }
+
+  h1, h2 {
+    font-size: 1.2rem;
+  }
+}
