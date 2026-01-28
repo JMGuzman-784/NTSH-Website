@@ -3,50 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NTSH Admin Panel</title
-  
+  <title>NTSH • Admin Panel</title>
 
-  <!-- Core styles -->
+  <!-- STYLES -->
   <link rel="stylesheet" href="/assets/css/account-ui.css" />
-  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="/assets/css/gallery.css" />
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Shared logic -->
+  <!-- AUTH / ACCOUNT -->
   <script defer src="/assets/js/account-ui.js"></script>
+
   <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
 
-<body data-role="admin">
+<body>
 
-<header class="admin-header">
-  <div class="admin-title">
-    <span class="admin-dot"></span>
-    <h1>NTSH</h1>
+<!-- HEADER -->
+<header class="account-header">
+  <button id="accountBtn">
+    <span id="accountAvatar">?</span>
+    <span id="accountName">Loading</span>
+    <span id="roleBadge">admin</span>
+  </button>
+
+  <div id="accountMenu" class="menu">
+    <button id="logoutBtn">Logout</button>
   </div>
-  <p class="admin-sub">Admin • Pending Review</p>
 </header>
 
-<main class="admin-wrap">
+<!-- ADMIN PANEL -->
+<section class="profile-card">
+  <h1>Admin Panel</h1>
+  <p>Review and approve submitted artwork</p>
 </section>
 
-  <!-- Pending Art -->
-  <section class="admin-section">
-    <h2 class="section-title">Pending Art</h2>
+<!-- PENDING ART -->
+<section class="portfolio-section">
+  <h2>Pending Submissions</h2>
+  <div id="pending-art"></div>
+</section>
 
-    <div id="adminPendingGrid" class="pending-grid">
-      <!-- JS injects cards here -->
-      <!-- Placeholder for now -->
-      <div class="pending-card ghost">
-        <div class="ghost-img"></div>
-        <div class="ghost-lines"></div>
-      </div>
-    </div>
-
-  </section>
-
-</main>
+<!-- ADMIN LOGIC -->
+<script src="/assets/js/admin.js"></script>
 
 </body>
 </html>
