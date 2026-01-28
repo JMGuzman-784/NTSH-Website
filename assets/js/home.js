@@ -1,73 +1,70 @@
 (() => {
-  if (window.__ADMIN_LOADED__) return;
-  window.__ADMIN_LOADED__ = true;
+  if (window.__HOME_LOADED__) return;
+  window.__HOME_LOADED__ = true;
 
   document.addEventListener("DOMContentLoaded", async () => {
-    if (!window.supabaseClient) {
-      console.error("Supabase client not available");
+    if (!window.supabaseClient) return;
+
+    const supabase = window.supabaseClient;
+    const track = document.getElementById("home-gallery");
+    const dotsWrap = document.getElementById("gallery-dots");
+
+    if (!track) return;
+
+    const { data: artworks } = await supabase
+      .from("artworks")
+      .select("*")
+      .eq("status", "approved")
+      .order("created_at", { ascending: false });
+
+    if (!artworks || artworks.length === 0) {
+      track.innerHTML = "<p style='opacity:.6'>No approved art yet.</p>";
       return;
     }
 
-    const supabase = window.supabaseClient;
-    const container = document.getElementById("pending-art");
-    if (!container) return;
+    track.innerHTML = "";
+    dotsWrap.innerHTML = "";
 
-    container.innerHTML = "";
+    artworks.forEach(async (art, index) => {
+      const { data } = await supabase
+        .storage
+        .from("pending-art")
+        .createSignedUrl(art.file_path, 3600);
 
-    try {
-      const { data: artworks, error } = await supabase
-        .from("artworks")
-        .select("*")
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+      if (!data?.signedUrl) return;
 
-      if (error) throw error;
+      // CARD
+      const card = document.createElement("div");
+      card.className = "gallery-card";
+      card.innerHTML = `<img src="${data.signedUrl}" alt="${art.title || ""}" />`;
+      track.appendChild(card);
 
-      if (!artworks || artworks.length === 0) {
-        container.innerHTML = "<p>No pending submissions.</p>";
-        return;
-      }
+      // DOT
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      if (index === 0) dot.classList.add("active");
 
-      for (const art of artworks) {
-        const { data: signed } = await supabase
-          .storage
-          .from("pending-art")
-          .createSignedUrl(art.file_path, 3600);
+      dot.onclick = () => {
+        track.scrollTo({
+          left: card.offsetLeft,
+          behavior: "smooth"
+        });
+      };
 
-        const card = document.createElement("div");
-        card.className = "art-card";
+      dotsWrap.appendChild(dot);
+    });
 
-        card.innerHTML = `
-          <img class="art-thumb" src="${signed.signedUrl}" />
-          <strong>${art.title || "Untitled"}</strong>
-          <p>${art.description || ""}</p>
-          <div class="admin-actions">
-            <button data-id="${art.id}" data-action="approve">Approve</button>
-            <button data-id="${art.id}" data-action="reject">Reject</button>
-          </div>
-        `;
+    // Sync dots on scroll
+    track.addEventListener("scroll", () => {
+      const cards = [...track.children];
+      const dots = [...dotsWrap.children];
 
-        container.appendChild(card);
-      }
+      const index = cards.findIndex(
+        c => c.offsetLeft >= track.scrollLeft - 10
+      );
 
-      container.addEventListener("click", async (e) => {
-        const btn = e.target;
-        if (!btn.dataset?.id) return;
-
-        const status =
-          btn.dataset.action === "approve" ? "approved" : "rejected";
-
-        await supabase
-          .from("artworks")
-          .update({ status })
-          .eq("id", btn.dataset.id);
-
-        location.reload();
-      });
-
-    } catch (err) {
-      console.error("Admin load failed:", err);
-      container.innerHTML = "<p>Unexpected error.</p>";
-    }
+      dots.forEach(d => d.classList.remove("active"));
+      if (dots[index]) dots[index].classList.add("active");
+    });
   });
 })();
