@@ -65,6 +65,39 @@
     </div>
   </div>
 </div>
+<button id="open-upload">Upload Art</button>
+
+<div id="upload-modal" class="modal hidden">
+  <div class="modal-box">
+    <h2>Submit Art</h2>
+
+    <input type="text" id="art-title" placeholder="Title">
+
+    <textarea id="art-description" placeholder="Description"></textarea>
+
+    <select id="art-type">
+      <option value="">Type of art</option>
+      <option value="Pencil">Pencil</option>
+      <option value="Ink">Ink</option>
+      <option value="Digital">Digital</option>
+      <option value="Mixed">Mixed Media</option>
+    </select>
+
+    <select id="stencil-type">
+      <option value="">Stencil (optional)</option>
+      <option value="Tattoo stencil">Tattoo stencil</option>
+      <option value="Graffiti stencil">Graffiti stencil</option>
+      <option value="None">None</option>
+    </select>
+
+    <input type="file" id="art-file" accept="image/*">
+
+    <button id="submit-art">Submit</button>
+    <button id="close-upload">Cancel</button>
+
+    <p id="upload-status"></p>
+  </div>
+</div>
 
 </body>
 </html>
