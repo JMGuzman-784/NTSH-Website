@@ -75,22 +75,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Insert DB record
     const { error: insertError } = await supabaseClient
-      .from("artworks")
-      .insert({
-        owner_id: user.id,
-        title,
-        description,
-        art_type: artType,
-        stencil_type: stencilType || null,
-        file_path: filePath,
-        status: "pending",
-      });
+  .from("artworks")
+  .insert({
+    owner_id: user.id,
+    title,
+    description,
+    file_path: filePath,
+    status: "pending",
+  });
 
-    if (insertError) {
-      console.error(insertError);
-      statusText.textContent = "Failed to save artwork.";
-      return;
-    }
+if (insertError) {
+  console.error("DB insert failed:", insertError);
+  statusText.textContent = "Database error. Artwork not saved.";
+  return;
+}
+
 
     // Success
     statusText.textContent = "Submitted for review ✔️";
