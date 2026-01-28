@@ -9,11 +9,15 @@
   <link rel="stylesheet" href="/assets/css/account-ui.css" />
   <link rel="stylesheet" href="/assets/css/gallery.css" />
 
-  <!-- SUPABASE (future use) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase CDN FIRST -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- ACCOUNT / AUTH LOGIC -->
-  <script defer src="/assets/js/account-ui.js"></script>
+<!-- Your shared supabase init -->
+<script src="/assets/js/account-ui.js"></script>
+
+<!-- Page-specific JS LAST -->
+<script defer src="/assets/js/profile.js?v=FINAL"></script>
+
 
   <!-- FAVICON -->
   <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
