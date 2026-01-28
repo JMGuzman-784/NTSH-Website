@@ -122,6 +122,13 @@ async function hydrateAccount(user) {
 
   if (role === "artist" || role === "admin") {
     loadMyPendingArt();
+
+     const adminBtn = document.getElementById("adminPanelBtn");
+
+if (adminBtn && role === "admin") {
+  adminBtn.style.display = "block";
+}
+
   }
 }
 
