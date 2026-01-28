@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="assets/css/gallery.css?v=1" />
   <link rel="stylesheet" href="assets/css/account-ui.css?v=1" />
 
-  <!-- ✅ Supabase UMD build -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
-
   <script defer src="assets/js/account-ui.js?v=1"></script>
 </head>
+
 <body>
+  <!-- HEADER -->
   <header class="site-header header-row">
     <div class="header-left">
       <div class="brand">
@@ -33,107 +33,37 @@
             <span id="roleBadge" class="badge">viewer</span>
           </span>
         </span>
-        <span class="chev" aria-hidden="true">▾</span>
+        <span class="chev">▾</span>
       </button>
 
       <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
-        <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
-        <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
+        <a class="menu-item" href="/profile.html">Profile</a>
+        <button class="menu-item" id="settingsBtn">Settings</button>
         <div class="menu-sep"></div>
-        <button class="menu-item danger" role="menuitem" id="logoutBtn" type="button">Log out</button>
+        <button class="menu-item danger" id="logoutBtn">Log out</button>
       </div>
     </div>
   </header>
 
+  <!-- MAIN -->
   <main class="wrap">
-    <!-- LEFT: Artists Pane (scaffold) -->
-    <aside class="sidebar" aria-label="Artists">
-      <div class="handle" aria-hidden="true"></div>
-      <h3>Artists</h3>
-
-      <div style="display:flex; gap:8px; padding:10px 6px;">
-        <input id="artistSearch" placeholder="Search artists…"
-          style="width:100%; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#0b0f14; color:#eaf2ff;" />
-      </div>
-
-      <div class="art-list" id="artistList">
-        <button class="art-btn"><span class="dot"></span><span>Raid (Owner)</span></button>
-        <button class="art-btn"><span class="dot"></span><span>Artist Alpha</span></button>
-        <button class="art-btn"><span class="dot"></span><span>Artist Beta</span></button>
-      </div>
-    </aside>
-
-    <!-- RIGHT: Main pane -->
     <section class="content glass">
-      <nav class="tabs" role="tablist" aria-label="Portfolio Tabs">
-        <div class="tabs-track" tabindex="0">
-          <button class="tab" role="tab" aria-selected="true">Raid’s Reel</button>
-          <button class="tab" role="tab" aria-selected="false">Pencil</button>
-          <button class="tab" role="tab" aria-selected="false">Pen</button>
-          <button class="tab" role="tab" aria-selected="false">Paint</button>
-          <button class="tab" role="tab" aria-selected="false">Photography</button>
 
-          <a class="tab tab-link" href="https://jmguzman-784.github.io/portfolio" target="_blank" rel="noopener">Portfolio ↗</a>
-          <button class="tab tab-link" type="button">View All Art →</button>
+      <!-- TABS -->
+      <nav class="tabs">
+        <div class="tabs-track">
+          <button class="tab active">Raid’s Reel</button>
+          <button class="tab">Pencil</button>
+          <button class="tab">Pen</button>
+          <button class="tab">Paint</button>
+          <button class="tab">Photography</button>
+
+          <a class="tab tab-link" href="https://jmguzman-784.github.io/portfolio" target="_blank">
+            Portfolio ↗
+          </a>
+          <button class="tab tab-link">View All Art →</button>
         </div>
       </nav>
 
-<div class="viewer glass-deep" id="viewer">
-
-  <!-- NTSH Hero (shows when no art selected) -->
-  <div id="ntshHero" class="ntsh-hero">
-    <img
-      src="assets/images/NTSH title site logo.png"
-      alt="NTSH Hero Art"
-    />
-  </div>
-
-  <!-- Dynamic art display (used later) -->
-  <img id="display" alt="NTSH Art" style="display:none;" />
-
-  <div class="caption" id="caption">Select an artist</div>
-
-  <div id="reactions" class="reactions">
-    <button title="Star">⭐️</button>
-    <button title="Fire">🔥</button>
-    <button title="Gem">💎</button>
-    <button title="Love">😍</button>
-    <button title="Thumbs up">👍</button>
-  </div>
-</div>
-
-
-        <div id="reactions" class="reactions">
-          <button title="Star">⭐️</button>
-          <button title="Fire">🔥</button>
-          <button title="Gem">💎</button>
-          <button title="Love">😍</button>
-          <button title="Thumbs up">👍</button>
-        </div>
-      </div>
-    </section>
-  </main>
-  <!-- Settings Modal -->
-<div id="settingsModal" class="modal hidden">
-  <div class="modal-card glass">
-    <h3>Account Settings</h3>
-
-    <label>
-      Display name
-      <input id="settingsDisplayName" type="text" />
-    </label>
-
-    <label>
-      Username
-      <input id="settingsUsername" type="text" />
-    </label>
-
-    <div class="modal-actions">
-      <button id="saveSettingsBtn">Save</button>
-      <button id="closeSettingsBtn" class="ghost">Cancel</button>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
+      <!-- VIEWER -->
+      <div class="viewer glass-deep" id
