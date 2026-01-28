@@ -338,3 +338,5 @@ async function approveArt(art) {
   loadMyPendingArt();
 }
 
+approveBtn.onclick = () => approveArt(art);
+
