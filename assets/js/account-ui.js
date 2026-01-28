@@ -7,11 +7,6 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const REQUIRE_LOGIN_ON_HOME = false;
 let supabaseClient = null;
-
-
-/* =========================
-   INIT
-   ========================= */
 /* =========================
    INIT
    ========================= */
@@ -29,11 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   wireMenu();
 
-  const { data } = await supabaseClient
-  .storage
-  .from("pending-art")
-  .createSignedUrl(art.file_path, 3600);
-
+  const { data } = await supabaseClient.auth.getSession();
   const user = data.session?.user;
 
   if (!user) {
@@ -53,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await hydrateAccount(session.user);
   });
 });
+
 
 
 
@@ -105,7 +97,6 @@ function wireMenu() {
 /* =========================
    ACCOUNT HYDRATION
    ========================= */
-
 async function hydrateAccount(user) {
   const avatar = document.getElementById("accountAvatar");
   const nameEl = document.getElementById("accountName");
@@ -115,13 +106,11 @@ async function hydrateAccount(user) {
   const email = user.email?.toLowerCase() || "";
   const fallbackInitial = email ? email[0].toUpperCase() : "?";
 
-  const { data: profile, error } = await supabaseClient
+  const { data: profile } = await supabaseClient
     .from("profiles")
     .select("display_name, username, role")
     .eq("id", user.id)
     .maybeSingle();
-
-  if (error) console.warn("Profile fetch error:", error);
 
   const displayName = profile?.display_name || email.split("@")[0] || "User";
   const username = profile?.username || "user_000";
@@ -139,18 +128,17 @@ async function hydrateAccount(user) {
 
   syncProfileUI(displayName, role, username);
 
-if (role === "artist") {
-  loadMyPendingArt();
-}
+  // Artist-only
+  if (role === "artist") {
+    loadMyPendingArt();
+  }
 
-const adminBtn = document.getElementById("adminPanelBtn");
-if (adminBtn && role === "admin") {
-  adminBtn.style.display = "block";
-}
-
+  // Admin-only
+  const adminBtn = document.getElementById("adminPanelBtn");
+  if (adminBtn && role === "admin") {
+    adminBtn.style.display = "block";
   }
 }
-
 
 /* =========================
    PROFILE UI
@@ -275,16 +263,13 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =========================
    PENDING ART (PROFILE)
    ========================= */
-
 async function loadMyPendingArt() {
   const grid = document.getElementById("portfolioGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
 
-  const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
   const { data: artworks } = await supabaseClient
     .from("artworks")
@@ -299,16 +284,16 @@ async function loadMyPendingArt() {
   }
 
   for (const art of artworks) {
-    const { data } = supabaseClient
+    const { data } = await supabaseClient
       .storage
       .from("pending-art")
-      .getPublicUrl(art.file_path);
+      .createSignedUrl(art.file_path, 3600);
 
     const card = document.createElement("div");
     card.className = "art-card";
 
     const img = document.createElement("img");
-    img.src = data.publicUrl;
+    img.src = data.signedUrl;
 
     card.appendChild(img);
     grid.appendChild(card);
