@@ -63,7 +63,8 @@
 <h2 id="profileName" style="margin:0;">Artist</h2>
 <p id="profileRole" style="margin:4px 0 12px; opacity:.85;"></p>
 
-<div id="artistActions" style="display:none; margin:12px 0;">
+<div id="artistActions" style="display:none; margin:12px 0; display:flex; flex-direction:column; gap:10px;">
+
   <button id="uploadBtn"
     style="
       width:100%;
@@ -78,6 +79,24 @@
     Upload Art
   </button>
 
+  <!-- Admin only -->
+  <a
+    id="adminPanelBtn"
+    href="/admin.html"
+    style="
+      display:none;
+      text-align:center;
+      padding:10px 16px;
+      border-radius:12px;
+      background:#111;
+      color:#00ffe1;
+      font-weight:800;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.15);
+    ">
+    Admin Panel
+  </a>
+
   <input
     id="fileInput"
     type="file"
@@ -85,6 +104,7 @@
     style="display:none"
   />
 </div>
+
 
     <hr style="margin:20px 0; opacity:.2;" />
 
