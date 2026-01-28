@@ -1,9 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  if (!window.supabaseClient) {
-    console.error("Supabase client not available");
-    return;
-  }
-document.addEventListener("DOMContentLoaded", async () => {
+  // Ensure Supabase client exists
   if (!window.supabaseClient) {
     console.error("Supabase client not available");
     return;
@@ -18,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
+    // Load pending artworks
     const { data: artworks, error } = await supabaseClient
       .from("artworks")
       .select("*")
@@ -35,8 +32,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    // Render cards
     for (const art of artworks) {
-      const { data } = await supabaseClient
+      const { data: signed } = await supabaseClient
         .storage
         .from("pending-art")
         .createSignedUrl(art.file_path, 3600);
@@ -45,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.className = "art-card";
 
       card.innerHTML = `
-        <img src="${data.signedUrl}" />
+        <img src="${signed.signedUrl}" />
         <strong>${art.title || "Untitled"}</strong>
         <p>${art.description || ""}</p>
         <button data-id="${art.id}" data-action="approve">Approve</button>
@@ -55,20 +53,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.appendChild(card);
     }
 
-container.addEventListener("click", async (e) => {
-  const btn = e.target;
-  if (!btn.dataset.id) return;
+    // Handle approve / reject
+    container.addEventListener("click", async (e) => {
+      const btn = e.target;
+      if (!btn.dataset.id) return;
 
-  const newStatus =
-    btn.dataset.action === "approve" ? "approved" : "rejected";
+      const newStatus =
+        btn.dataset.action === "approve" ? "approved" : "rejected";
 
-  try {
-    await supabaseClient
-      .from("artworks")
-      .update({ status: newStatus })
-      .eq("id", btn.dataset.id);
+      try {
+        await supabaseClient
+          .from("artworks")
+          .update({ status: newStatus })
+          .eq("id", btn.dataset.id);
 
-    location.reload();
+        location.reload();
+      } catch (err) {
+        console.error("Update failed:", err);
+        alert("Failed to update artwork status.");
+      }
+    });
   } catch (err) {
     console.error("Admin load failed:", err);
     container.innerHTML = "<p>Unexpected error.</p>";
