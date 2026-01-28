@@ -202,3 +202,48 @@ body{
   background: #222;
   color: #fff;
 }
+.home-gallery {
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-card {
+  min-width: 320px;
+  scroll-snap-align: center;
+}
+
+.gallery-card img {
+  width: 100%;
+  border-radius: 14px;
+}
+
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.gallery-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #555;
+  cursor: pointer;
+}
+
+.gallery-dots .dot.active {
+  background: #00ffff;
+}
