@@ -1,22 +1,17 @@
-// ===== SAFE SUPABASE INIT =====
-(function () {
-  if (window.__SUPABASE_READY__) return;
-
-  window.__SUPABASE_READY__ = true;
+// ===== SUPABASE GLOBAL INIT =====
 
    const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
    const SUPABASE_ANON_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 
-  if (typeof supabase === "undefined") {
-    console.warn("Supabase SDK not loaded");
-    return;
-  }
+if (typeof supabase === "undefined") {
+  console.error("Supabase SDK not loaded");
+}
 
-  window.supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-})();
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
 
 
 const REQUIRE_LOGIN_ON_HOME = false;
