@@ -301,3 +301,40 @@ async function loadMyPendingArt() {
     grid.appendChild(img);
   }
 }
+async function approveArt(art) {
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) return;
+
+  // Move file to approved-art
+  const { error: moveError } = await supabaseClient
+    .storage
+    .from("pending-art")
+    .move(art.file_path, art.file_path, {
+      destinationBucket: "approved-art"
+    });
+
+  if (moveError) {
+    console.error(moveError);
+    alert("Failed to approve image.");
+    return;
+  }
+
+  // Update DB
+  const { error: dbError } = await supabaseClient
+    .from("artworks")
+    .update({ bucket: "approved-art" })
+    .eq("id", art.id);
+
+  if (dbError) {
+    console.error(dbError);
+    alert("Database update failed.");
+    return;
+  }
+
+  alert("Art approved.");
+  loadMyPendingArt();
+}
+
