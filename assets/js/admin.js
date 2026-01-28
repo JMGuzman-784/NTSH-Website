@@ -77,12 +77,12 @@ async function loadPendingArtworks() {
    Render Admin Card
 -------------------------------- */
 async function renderArtworkCard(art, grid) {
-  const { data: signed } = await supabaseClient
+  const { data: signed, error } = await supabaseClient
     .storage
     .from("pending-art")
     .createSignedUrl(art.file_path, 60 * 60);
 
-  if (!signed?.signedUrl) return;
+  if (error || !signed?.signedUrl) return;
 
   const card = document.createElement("div");
   card.style.cssText = `
@@ -94,26 +94,57 @@ async function renderArtworkCard(art, grid) {
     gap:10px;
   `;
 
-  card.innerHTML = `
-    <img
-      src="${signed.signedUrl}"
-      style="width:100%; border-radius:10px; object-fit:cover;"
-    />
+  const img = document.createElement("img");
+  img.src = signed.signedUrl;
+  img.style.width = "100%";
+  img.style.borderRadius = "10px";
+  img.style.objectFit = "cover";
 
-    <div style="font-size:13px; opacity:.7;">
-      ${art.description || "No description provided."}
-    </div>
+  const desc = document.createElement("div");
+  desc.textContent = art.description || "No description provided.";
+  desc.style.fontSize = "13px";
+  desc.style.opacity = ".7";
 
-    <div style="display:flex; gap:8px;">
-      <button class="approveBtn">Approve</button>
-      <button class="rejectBtn">Reject</button>
-    </div>
+  const actions = document.createElement("div");
+  actions.style.display = "flex";
+  actions.style.gap = "8px";
+
+  const approveBtn = document.createElement("button");
+  approveBtn.textContent = "Approve";
+  approveBtn.style.cssText = `
+    flex:1;
+    padding:8px;
+    background:#00ffe1;
+    color:#000;
+    border:none;
+    border-radius:8px;
+    font-weight:800;
+    cursor:pointer;
   `;
 
-  card.querySelector(".approveBtn").onclick = () => approveArtwork(art);
-  card.querySelector(".rejectBtn").onclick = () => rejectArtwork(art);
+  const rejectBtn = document.createElement("button");
+  rejectBtn.textContent = "Reject";
+  rejectBtn.style.cssText = `
+    flex:1;
+    padding:8px;
+    background:#222;
+    color:#ff6b6b;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:8px;
+    font-weight:800;
+    cursor:pointer;
+  `;
 
-  styleAdminButtons(card);
+  approveBtn.onclick = () => approveArtwork(art);
+  rejectBtn.onclick = () => rejectArtwork(art);
+
+  actions.appendChild(approveBtn);
+  actions.appendChild(rejectBtn);
+
+  card.appendChild(img);
+  card.appendChild(desc);
+  card.appendChild(actions);
+
   grid.appendChild(card);
 }
 
