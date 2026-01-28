@@ -29,6 +29,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   wireMenu();
+   /*newly added*/
+   const adminBtn = document.getElementById("adminPanelBtn");
+
+if (adminBtn) {
+  adminBtn.addEventListener("click", () => {
+    window.location.href = "/admin.html";
+  });
+}
+
   wireUploadModal();
 
   const { data } = await supabaseClient.auth.getSession();
