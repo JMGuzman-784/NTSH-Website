@@ -197,26 +197,51 @@ function renderPending() {
 
 uploadBtn.addEventListener("click", () => {
   const title = document.getElementById("art-title").value;
-  const file = document.getElementById("art-file").files[0];
+  const description = document.getElementById("art-description").value;
+  const artType = document.getElementById("art-type").value;
+  const stencilType = document.getElementById("stencil-type").value;
+  const fileInput = document.getElementById("art-file");
+  const statusText = document.getElementById("upload-status");
+  const file = fileInput.files[0];
 
-  if (!title || !file) return alert("Missing fields");
+  if (!title || !artType || !file) {
+    statusText.textContent = "Please complete required fields.";
+    return;
+  }
 
   const reader = new FileReader();
   reader.onload = () => {
     const art = getArt();
+
     art.push({
       id: Date.now().toString(),
       title,
+      description,
+      artType,
+      stencilType: stencilType || "N/A",
       artist: "Raid",
       image: reader.result,
       status: "pending",
       uploadedAt: new Date().toISOString()
     });
+
     saveArt(art);
     renderPending();
+
+    // ✅ SUCCESS CONFIRMATION
+    statusText.textContent = "Submission successful ✔️ Pending approval.";
+
+    // ✅ RESET FORM
+    document.getElementById("art-title").value = "";
+    document.getElementById("art-description").value = "";
+    document.getElementById("art-type").value = "";
+    document.getElementById("stencil-type").value = "";
+    fileInput.value = "";
   };
+
   reader.readAsDataURL(file);
 });
+
 
 function approveArt(id) {
   const art = getArt().map(a =>
