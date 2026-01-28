@@ -81,7 +81,7 @@ function wireMenu(){
   });
 }
 async function loadMyPendingArt() {
-  ...
+
 }
 
 async function hydrateAccount(user){
