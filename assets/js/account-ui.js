@@ -28,9 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const user = data.session?.user;
 
   if (!user) {
-    if (REQUIRE_LOGIN_ON_HOME) {
-      window.location.href = "/";
-    }
+    if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
     return;
   }
 
@@ -152,54 +150,13 @@ function syncProfileUI(displayName, role, username) {
 }
 
 /* =========================
-   SETTINGS MODAL
-   ========================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("settingsModal");
-  const closeBtn = document.getElementById("closeSettingsBtn");
-  const saveBtn = document.getElementById("saveSettingsBtn");
-
-  closeBtn?.addEventListener("click", () => {
-    modal?.classList.add("hidden");
-  });
-
-  saveBtn?.addEventListener("click", async () => {
-    const nameInput = document.getElementById("settingsDisplayName");
-    const userInput = document.getElementById("settingsUsername");
-
-    const display_name = nameInput.value.trim();
-    const username = userInput.value.trim().toLowerCase();
-
-    if (!display_name || !username) {
-      alert("Both fields are required.");
-      return;
-    }
-
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    const { error } = await supabaseClient
-      .from("profiles")
-      .update({ display_name, username })
-      .eq("id", user.id);
-
-    if (error) {
-      alert("Username may already be taken.");
-      return;
-    }
-
-    modal.classList.add("hidden");
-    hydrateAccount(user);
-  });
-});
-
-/* =========================
-   UPLOAD ART (ARTISTS ONLY)
+   UPLOAD ART (ARTISTS)
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   const uploadBtn = document.getElementById("uploadBtn");
   const fileInput = document.getElementById("fileInput");
+  const descInput = document.getElementById("artDescription");
 
   if (!uploadBtn || !fileInput) return;
 
@@ -212,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const { data: { user } } = await supabaseClient.auth.getUser();
 
     const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
+    const description = descInput?.value.trim() || null;
 
     const { error: uploadError } = await supabaseClient
       .storage
@@ -223,19 +181,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const descriptionInput = document.getElementById("artDescription");
-const description = descriptionInput?.value.trim() || null;
-
-await supabaseClient.from("artworks").insert({
-  owner_id: user.id,
-  file_path: filePath,
-  status: "pending",
-  description
-});
-
+    await supabaseClient.from("artworks").insert({
+      owner_id: user.id,
+      file_path: filePath,
+      description,
+      status: "pending"
+    });
 
     alert("Upload successful! Pending approval.");
     fileInput.value = "";
+    if (descInput) descInput.value = "";
     loadMyPendingArt();
   });
 });
@@ -282,11 +237,11 @@ async function loadMyPendingArt() {
 }
 
 /* =========================
-   APPROVAL (ADMIN)
+   APPROVAL (ADMIN — DB ONLY)
    ========================= */
 
 async function approveArtwork(artworkId) {
-  await supabaseClient
+  const { error } = await supabaseClient
     .from("artworks")
     .update({
       status: "approved",
@@ -294,5 +249,11 @@ async function approveArtwork(artworkId) {
     })
     .eq("id", artworkId);
 
-  loadMyPendingArt();
+  if (error) {
+    console.error(error);
+    alert("Failed to approve artwork.");
+    return;
+  }
+
+  alert("Artwork approved.");
 }
