@@ -1,7 +1,9 @@
-// ===== SUPABASE GLOBAL INIT =====
+// ================================
+// SUPABASE INIT (GLOBAL, SINGLETON)
+// ================================
+const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
+const SUPABASE_ANON_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 
-   const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
-   const SUPABASE_ANON_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 
 if (typeof supabase === "undefined") {
   console.error("Supabase SDK not loaded");
@@ -12,41 +14,18 @@ const supabaseClient = supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
-
-
 const REQUIRE_LOGIN_ON_HOME = false;
 
-let supabaseClient = null;
-
-/* =========================
-   INIT
-   ========================= */
-
+// ================================
+// INIT
+// ================================
 document.addEventListener("DOMContentLoaded", async () => {
-  if (!window.supabase) {
-    console.error("Supabase SDK not loaded");
-    return;
-  }
-
-  supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
   wireMenu();
-   /*newly added*/
-   const adminBtn = document.getElementById("adminPanelBtn");
-
-if (adminBtn) {
-  adminBtn.addEventListener("click", () => {
-    window.location.href = "/admin.html";
-  });
-}
-
+  wireAdminButton();
   wireUploadModal();
 
-  const { data } = await supabaseClient.auth.getSession();
-  const user = data.session?.user;
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  const user = session?.user;
 
   if (!user) {
     if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
@@ -64,10 +43,9 @@ if (adminBtn) {
   });
 });
 
-/* =========================
-   HEADER MENU
-   ========================= */
-
+// ================================
+// HEADER MENU
+// ================================
 function wireMenu() {
   const btn = document.getElementById("accountBtn");
   const menu = document.getElementById("accountMenu");
@@ -92,10 +70,21 @@ function wireMenu() {
   });
 }
 
-/* =========================
-   ACCOUNT HYDRATION
-   ========================= */
+// ================================
+// ADMIN BUTTON
+// ================================
+function wireAdminButton() {
+  const adminBtn = document.getElementById("adminPanelBtn");
+  if (!adminBtn) return;
 
+  adminBtn.addEventListener("click", () => {
+    window.location.href = "/admin.html";
+  });
+}
+
+// ================================
+// ACCOUNT HYDRATION
+// ================================
 async function hydrateAccount(user) {
   const avatar = document.getElementById("accountAvatar");
   const nameEl = document.getElementById("accountName");
@@ -105,7 +94,6 @@ async function hydrateAccount(user) {
   if (!avatar || !nameEl || !userEl || !badge) return;
 
   const email = user.email?.toLowerCase() || "";
-  const fallbackInitial = email ? email[0].toUpperCase() : "?";
 
   const { data: profile } = await supabaseClient
     .from("profiles")
@@ -119,7 +107,7 @@ async function hydrateAccount(user) {
 
   document.body.dataset.role = role;
 
-  avatar.textContent = displayName[0]?.toUpperCase() || fallbackInitial;
+  avatar.textContent = displayName[0]?.toUpperCase() || "?";
   nameEl.textContent = displayName;
   userEl.textContent = `@${username}`;
 
@@ -132,16 +120,15 @@ async function hydrateAccount(user) {
     loadMyPendingArt();
   }
 
-  const adminBtn = document.getElementById("adminPanelBtn");
-  if (adminBtn && role === "admin") {
-    adminBtn.style.display = "block";
+  if (role === "admin") {
+    const adminBtn = document.getElementById("adminPanelBtn");
+    if (adminBtn) adminBtn.style.display = "block";
   }
 }
 
-/* =========================
-   PROFILE UI
-   ========================= */
-
+// ================================
+// PROFILE UI
+// ================================
 function syncProfileUI(displayName, role) {
   const profileName = document.getElementById("profileName");
   const profileRole = document.getElementById("profileRole");
@@ -155,16 +142,17 @@ function syncProfileUI(displayName, role) {
   }
 }
 
-/* =========================
-   UPLOAD MODAL
-   ========================= */
-
+// ================================
+// UPLOAD MODAL (PROFILE ONLY)
+// ================================
 function wireUploadModal() {
   const uploadBtn = document.getElementById("uploadBtn");
-  const modal = document.getElementById("uploadModal");
+  const modal = document.getElementById("upload-modal");
   const cancelBtn = document.getElementById("cancelUpload");
   const submitBtn = document.getElementById("submitUpload");
   const fileInput = document.getElementById("fileInput");
+  const titleInput = document.getElementById("artTitle");
+  const descInput = document.getElementById("artDescription");
 
   if (!uploadBtn || !modal) return;
 
@@ -179,10 +167,6 @@ function wireUploadModal() {
 
   submitBtn?.addEventListener("click", async () => {
     const file = fileInput.files[0];
-    const title = document.getElementById("artTitle")?.value.trim() || null;
-    const description =
-      document.getElementById("artDescription")?.value.trim() || null;
-
     if (!file) {
       alert("Please select an image.");
       return;
@@ -200,29 +184,31 @@ function wireUploadModal() {
 
     if (uploadError) {
       alert("Upload failed.");
+      console.error(uploadError);
       return;
     }
 
     await supabaseClient.from("artworks").insert({
       owner_id: user.id,
       file_path: filePath,
-      title,
-      description,
+      title: titleInput?.value || null,
+      description: descInput?.value || null,
       status: "pending"
     });
 
     modal.classList.add("hidden");
     fileInput.value = "";
-    alert("Artwork submitted for review.");
+    titleInput.value = "";
+    descInput.value = "";
 
+    alert("Artwork submitted for review.");
     loadMyPendingArt();
   });
 }
 
-/* =========================
-   PENDING ART (PROFILE)
-   ========================= */
-
+// ================================
+// PENDING ART (PROFILE)
+// ================================
 async function loadMyPendingArt() {
   const grid = document.getElementById("portfolioGrid");
   if (!grid) return;
