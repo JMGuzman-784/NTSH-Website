@@ -160,7 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!uploadBtn || !fileInput) return;
 
-  uploadBtn.addEventListener("click", () => fileInput.click());
+ uploadBtn.addEventListener("click", () => {
+  document.getElementById("uploadModal")?.classList.remove("hidden");
+});
+   
+document.getElementById("cancelUpload")?.addEventListener("click", () => {
+  document.getElementById("uploadModal")?.classList.add("hidden");
+});
+
 
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files[0];
