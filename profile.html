@@ -163,12 +163,13 @@
   </div>
 </div>
 <!-- Upload Art Modal -->
+<!-- Upload Art Modal -->
 <div id="uploadModal" class="modal hidden">
-  <div class="modal-card glass">
-    <h3>Upload Artwork</h3>
+  <div class="modal-card">
+    <h2>Upload Artwork</h2>
 
     <label>
-      Title *
+      Title
       <input id="artTitle" type="text" placeholder="Artwork title" />
     </label>
 
@@ -176,22 +177,23 @@
       Description
       <textarea
         id="artDescription"
-        placeholder="Describe this piece (optional)"
         rows="4"
+        placeholder="Describe this piece (optional)"
       ></textarea>
     </label>
 
-    <label>
-      Artwork File *
-      <input id="fileInput" type="file" accept="image/*" />
+    <label class="file-input">
+      Select Image
+      <input id="fileInput" type="file" accept="image/*" hidden />
     </label>
 
     <div class="modal-actions">
-      <button id="submitUploadBtn">Upload</button>
-      <button id="closeUploadBtn" class="ghost">Cancel</button>
+      <button id="cancelUpload" class="btn secondary">Cancel</button>
+      <button id="submitUpload" class="btn primary">Upload</button>
     </div>
   </div>
 </div>
+
 
 </body>
 </html>
