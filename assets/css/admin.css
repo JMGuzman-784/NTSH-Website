@@ -282,3 +282,143 @@ a {
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   }
 }
+
+/* =========================
+   ADMIN — NTSH
+   ========================= */
+
+body {
+  background: #000;
+  color: #eaeaea;
+}
+
+/* Header */
+
+.admin-header {
+  text-align: center;
+  padding: 24px 16px 12px;
+}
+
+.admin-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-dot {
+  width: 8px;
+  height: 8px;
+  background: cyan;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(0,255,255,0.6);
+}
+
+.admin-title h1 {
+  font-size: 18px;
+  letter-spacing: 0.3em;
+  font-weight: 600;
+}
+
+.admin-sub {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 6px;
+}
+
+/* Layout */
+
+.admin-wrap {
+  padding: 16px;
+}
+
+.admin-section {
+  margin-top: 24px;
+}
+
+.section-title {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+/* Pending Grid */
+
+.pending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+/* Pending Card */
+
+.pending-card {
+  background: #0b0b0b;
+  border-radius: 14px;
+  padding: 10px;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pending-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(0,255,255,0.2);
+}
+
+.pending-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Artist meta */
+
+.pending-meta {
+  margin-top: 8px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.pending-meta span {
+  display: block;
+}
+
+/* Ghost placeholder */
+
+.pending-card.ghost {
+  background: #050505;
+  animation: pulse 1.8s infinite ease-in-out;
+}
+
+.ghost-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background: #111;
+}
+
+.ghost-lines {
+  height: 18px;
+  margin-top: 8px;
+  background: linear-gradient(
+    90deg,
+    #111 25%,
+    #1a1a1a 37%,
+    #111 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
