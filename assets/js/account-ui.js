@@ -223,11 +223,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    await supabaseClient.from("artworks").insert({
-      owner_id: user.id,
-      file_path: filePath,
-      status: "pending"
-    });
+    const descriptionInput = document.getElementById("artDescription");
+const description = descriptionInput?.value.trim() || null;
+
+await supabaseClient.from("artworks").insert({
+  owner_id: user.id,
+  file_path: filePath,
+  status: "pending",
+  description
+});
+
 
     alert("Upload successful! Pending approval.");
     fileInput.value = "";
