@@ -9,9 +9,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
-// ===== ADMIN: REVIEW ONLY =====
 document.addEventListener("DOMContentLoaded", async () => {
+  if (!window.supabaseClient) {
+    console.error("Supabase client not available");
+    return;
+  }
+
+  const supabaseClient = window.supabaseClient;
   const container = document.getElementById("pending-art");
+
   if (!container) return;
 
   const { data: artworks, error } = await supabaseClient
@@ -21,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .order("created_at", { ascending: false });
 
   if (error) {
+    console.error(error);
     container.innerHTML = "<p>Error loading submissions.</p>";
     return;
   }
@@ -40,28 +47,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.className = "art-card";
 
     card.innerHTML = `
-      <img src="${data.signedUrl}">
+      <img src="${data.signedUrl}" />
       <strong>${art.title || "Untitled"}</strong>
       <p>${art.description || ""}</p>
-      <button data-id="${art.id}" class="approve">Approve</button>
-      <button data-id="${art.id}" class="reject">Reject</button>
+      <button data-id="${art.id}" data-action="approve">Approve</button>
+      <button data-id="${art.id}" data-action="reject">Reject</button>
     `;
 
     container.appendChild(card);
   }
 
   container.addEventListener("click", async (e) => {
-    if (!e.target.dataset.id) return;
+    const btn = e.target;
+    if (!btn.dataset.id) return;
 
-    const id = e.target.dataset.id;
-    const status = e.target.classList.contains("approve")
-      ? "approved"
-      : "rejected";
+    const newStatus =
+      btn.dataset.action === "approve" ? "approved" : "rejected";
 
     await supabaseClient
       .from("artworks")
-      .update({ status })
-      .eq("id", id);
+      .update({ status: newStatus })
+      .eq("id", btn.dataset.id);
 
     location.reload();
   });
