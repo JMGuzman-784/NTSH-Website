@@ -29,7 +29,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   wireMenu();
 
-  const { data } = await supabaseClient.auth.getSession();
+  const { data } = await supabaseClient
+  .storage
+  .from("pending-art")
+  .createSignedUrl(art.file_path, 3600);
+
   const user = data.session?.user;
 
   if (!user) {
