@@ -3,7 +3,8 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 
 // If true: users must be logged in to use /home.html
-const REQUIRE_LOGIN_ON_HOME = true;
+const REQUIRE_LOGIN_ON_HOME = false;
+
 
 let supabaseClient = null;
 
@@ -21,9 +22,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const user = data.session?.user;
 
   if (!user) {
-    if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
-    return;
+  const path = window.location.pathname;
+
+  // Only protect home + profile
+  if (path.includes("home.html") || path.includes("profile.html")) {
+    window.location.href = "/";
   }
+  return;
+}
+
 
   await hydrateAccount(user);
 
