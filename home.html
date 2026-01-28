@@ -81,20 +81,32 @@
 
      <div class="viewer glass-deep" id="viewer">
 
-
-  <!-- ART DISPLAY (hidden for now) -->
   <img id="display" alt="NTSH Art" style="display:none;" />
 
   <div class="caption" id="caption">
     Nothing To See Here — Only Art That Speaks
   </div>
 
-  <div id="reactions" class="reactions" style="display:none;">
-    <button>⭐️</button>
-    <button>🔥</button>
-    <button>💎</button>
-    <button>😍</button>
-    <button>👍</button>
+  <!-- 🔥 APPROVED ART CAROUSEL -->
+  <section class="home-gallery">
+    <div class="gallery-track" id="home-gallery"></div>
+
+    <!-- DOT INDICATORS -->
+    <div class="gallery-dots" id="gallery-dots"></div>
+  </section>
+
+  <!-- REACTIONS -->
+  <div id="reactions" class="reactions">
+    <button data-react="star">⭐️</button>
+    <button data-react="fire">🔥</button>
+    <button data-react="gem">💎</button>
+    <button data-react="love">😍</button>
+    <button data-react="like">👍</button>
   </div>
+
+</div>
+
+<script defer src="/assets/js/home.js?v=FINAL"></script>
+
 
 </div>
