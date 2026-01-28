@@ -1,8 +1,10 @@
-const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 /* =========================
-   CONFIG
+   SUPABASE CONFIG
    ========================= */
+
+const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
 
 const REQUIRE_LOGIN_ON_HOME = false;
 let supabaseClient = null;
@@ -23,17 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   wireMenu();
-   
-   // Upload modal open
-document.getElementById("uploadBtn")?.addEventListener("click", () => {
-  document.getElementById("uploadModal")?.classList.remove("hidden");
-});
-
-// Upload modal cancel
-document.getElementById("cancelUpload")?.addEventListener("click", () => {
-  document.getElementById("uploadModal")?.classList.add("hidden");
-});
-
+  wireUploadModal();
 
   const { data } = await supabaseClient.auth.getSession();
   const user = data.session?.user;
@@ -62,7 +54,6 @@ function wireMenu() {
   const btn = document.getElementById("accountBtn");
   const menu = document.getElementById("accountMenu");
   const logoutBtn = document.getElementById("logoutBtn");
-  const settingsBtn = document.getElementById("settingsBtn");
 
   if (!btn || !menu) return;
 
@@ -80,10 +71,6 @@ function wireMenu() {
   logoutBtn?.addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     window.location.href = "/";
-  });
-
-  settingsBtn?.addEventListener("click", () => {
-    document.getElementById("settingsModal")?.classList.remove("hidden");
   });
 }
 
@@ -117,8 +104,7 @@ async function hydrateAccount(user) {
   userEl.textContent = `@${username}`;
 
   badge.textContent = role;
-  badge.classList.toggle("artist", role === "artist");
-  badge.classList.toggle("admin", role === "admin");
+  badge.className = "badge " + role;
 
   syncProfileUI(displayName, role, username);
 
@@ -161,127 +147,50 @@ function syncProfileUI(displayName, role, username) {
 }
 
 /* =========================
-   UPLOAD ART (ARTISTS)
+   UPLOAD MODAL
    ========================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-  const uploadBtn = document.getElementById("uploadBtn");
-  const fileInput = document.getElementById("fileInput");
-  const descInput = document.getElementById("artDescription");
-
-  if (!uploadBtn || !fileInput) return;
-
- uploadBtn.addEventListener("click", () => {
-  document.getElementById("uploadModal")?.classList.remove("hidden");
-});
-   
-document.getElementById("cancelUpload")?.addEventListener("click", () => {
-  document.getElementById("uploadModal")?.classList.add("hidden");
-});
-
-
-  fileInput.addEventListener("change", async () => {
-    const file = fileInput.files[0];
-    if (!file) return;
-
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
-    const description = descInput?.value.trim() || null;
-
-    const { error: uploadError } = await supabaseClient
-      .storage
-      .from("pending-art")
-      .upload(filePath, file);
-
-    if (uploadError) {
-      alert("Upload failed.");
-      return;
-    }
-
-    await supabaseClient.from("artworks").insert({
-      owner_id: user.id,
-      file_path: filePath,
-      description,
-      status: "pending"
-    });
-
-    alert("Upload successful! Pending approval.");
-    fileInput.value = "";
-    if (descInput) descInput.value = "";
-    loadMyPendingArt();
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
+function wireUploadModal() {
   const uploadBtn = document.getElementById("uploadBtn");
   const modal = document.getElementById("uploadModal");
   const cancelBtn = document.getElementById("cancelUpload");
-  const submitBtn = document.getElementById("submitUpload");
+  const confirmBtn = document.getElementById("confirmUpload");
+
+  uploadBtn?.addEventListener("click", () => {
+    modal?.classList.remove("hidden");
+  });
+
+  cancelBtn?.addEventListener("click", () => {
+    modal?.classList.add("hidden");
+    resetUploadForm();
+  });
+
+  confirmBtn?.addEventListener("click", submitArtwork);
+}
+
+function resetUploadForm() {
+  document.getElementById("fileInput").value = "";
+  document.getElementById("artTitle").value = "";
+  document.getElementById("artDescription").value = "";
+}
+
+/* =========================
+   SUBMIT ARTWORK
+   ========================= */
+
+async function submitArtwork() {
   const fileInput = document.getElementById("fileInput");
-
-  if (!uploadBtn || !modal) return;
-
-  uploadBtn.addEventListener("click", () => {
-    modal.classList.remove("hidden");
-  });
-
-  cancelBtn.addEventListener("click", () => {
-    modal.classList.add("hidden");
-    fileInput.value = "";
-  });
-
-  submitBtn.addEventListener("click", async () => {
-    const file = fileInput.files[0];
-    const title = document.getElementById("artTitle").value.trim();
-    const description =
-      document.getElementById("artDescription")?.value.trim() || null;
-
-    if (!file) {
-      alert("Please select an image.");
-      return;
-    }
-
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if (!user) return;
-
-    const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
-
-    const { error: uploadError } = await supabaseClient
-      .storage
-      .from("pending-art")
-      .upload(filePath, file);
-
-    if (uploadError) {
-      alert("Upload failed.");
-      return;
-    }
-
-    await supabaseClient.from("artworks").insert({
-      owner_id: user.id,
-      file_path: filePath,
-      title: title || null,
-      description,
-      status: "pending"
-    });
-
-    modal.classList.add("hidden");
-    fileInput.value = "";
-    alert("Artwork submitted for review.");
-    loadMyPendingArt();
-  });
-});
-
-document.getElementById("confirmUpload")?.addEventListener("click", async () => {
-  const fileInput = document.getElementById("fileInput");
-  const title = document.getElementById("artTitle")?.value.trim() || null;
-  const description = document.getElementById("artDescription")?.value.trim() || null;
+  const titleInput = document.getElementById("artTitle");
+  const descInput = document.getElementById("artDescription");
 
   const file = fileInput.files[0];
   if (!file) {
     alert("Please select an image.");
     return;
   }
+
+  const title = titleInput.value.trim() || null;
+  const description = descInput.value.trim() || null;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
   if (!user) return;
@@ -295,6 +204,7 @@ document.getElementById("confirmUpload")?.addEventListener("click", async () => 
 
   if (uploadError) {
     alert("Upload failed.");
+    console.error(uploadError);
     return;
   }
 
@@ -306,12 +216,10 @@ document.getElementById("confirmUpload")?.addEventListener("click", async () => 
     status: "pending"
   });
 
-  // reset + close
-  fileInput.value = "";
   document.getElementById("uploadModal").classList.add("hidden");
-
+  resetUploadForm();
   loadMyPendingArt();
-});
+}
 
 /* =========================
    PENDING ART (PROFILE)
@@ -355,7 +263,7 @@ async function loadMyPendingArt() {
 }
 
 /* =========================
-   APPROVAL (ADMIN — DB ONLY)
+   ADMIN APPROVAL
    ========================= */
 
 async function approveArtwork(artworkId) {
@@ -368,8 +276,8 @@ async function approveArtwork(artworkId) {
     .eq("id", artworkId);
 
   if (error) {
-    console.error(error);
     alert("Failed to approve artwork.");
+    console.error(error);
     return;
   }
 
