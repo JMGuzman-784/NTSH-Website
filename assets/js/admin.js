@@ -1,3 +1,7 @@
+if (window.__ADMIN_LOADED__) return;
+window.__ADMIN_LOADED__ = true;
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   if (!window.supabaseClient) {
     console.error("Supabase client not found");
