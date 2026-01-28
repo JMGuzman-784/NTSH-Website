@@ -55,21 +55,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.appendChild(card);
     }
 
-    container.addEventListener("click", async (e) => {
-      const btn = e.target;
-      if (!btn.dataset.id) return;
+container.addEventListener("click", async (e) => {
+  const btn = e.target;
+  if (!btn.dataset.id) return;
 
-      const newStatus =
-        btn.dataset.action === "approve" ? "approved" : "rejected";
+  const newStatus =
+    btn.dataset.action === "approve" ? "approved" : "rejected";
 
-      await supabaseClient
-        .from("artworks")
-        .update({ status: newStatus })
-        .eq("id", btn.dataset.id);
+  try {
+    await supabaseClient
+      .from("artworks")
+      .update({ status: newStatus })
+      .eq("id", btn.dataset.id);
 
-      location.reload();
-    });
-   } catch (err) {
+    location.reload();
+  } catch (err) {
     console.error("Admin load failed:", err);
     container.innerHTML = "<p>Unexpected error.</p>";
   }
