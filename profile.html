@@ -11,176 +11,77 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <script defer src="assets/js/account-ui.js?v=1"></script>
 </head>
-<body>
-  <header class="site-header header-row">
-    <div class="header-left">
-   
-      <p>Profile</p>
+<!-- =========================
+     PROFILE PAGE
+========================= -->
+
+<div class="profile-page">
+
+  <!-- LEFT PANEL -->
+  <aside class="profile-card">
+    <h2 id="profileName">Loading…</h2>
+    <p id="profileRole">viewer • NTSH</p>
+
+    <div class="socials">
+      <a id="igLink" style="display:none">Instagram</a>
+      <a id="ttLink" style="display:none">TikTok</a>
     </div>
 
-    <div class="header-right">
-      <button id="accountBtn" class="account-btn" aria-haspopup="menu" aria-expanded="false">
-        <span id="accountAvatar" class="avatar">?</span>
-        <span class="account-meta">
-          <span id="accountName" class="account-name">Loading…</span>
-          <span class="account-sub">
-            <span id="accountUser" class="account-user">@—</span>
-            <span id="roleBadge" class="badge">viewer</span>
-          </span>
-        </span>
-        <span class="chev" aria-hidden="true">▾</span>
-      </button>
-      <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
-        <a class="menu-item" role="menuitem" href="/profile.html">Profile</a>
-        <button class="menu-item" role="menuitem" id="settingsBtn" type="button">Settings</button>
-        <div class="menu-sep"></div>
-        <button class="menu-item danger" role="menuitem" id="logoutBtn" type="button">Log out</button>
-      </div>
-    </div>
-  </header>
+    <h3>Artist</h3>
 
-  <main class="wrap">
-  <section class="content glass" style="padding:20px;">
+    <!-- UPLOAD BUTTON -->
+    <button id="uploadBtn" class="primary-btn">
+      Upload Your Art
+    </button>
 
-    <!-- Artist Identity -->
-    <h2 id="profileName" style="margin:0;">Artist</h2>
-    <p id="profileRole" style="margin:4px 0 12px; opacity:.85;">
-      Viewer • NTSH
-    </p>
+    <!-- ADMIN PANEL BUTTON -->
+    <button id="adminPanelBtn" class="secondary-btn" style="display:none">
+      Admin Panel
+    </button>
 
-    <!-- Social Links -->
-    <div style="display:flex; gap:14px; margin-bottom:16px;">
-      <a id="igLink" href="#" target="_blank"
-         style="color:#00ffe1; text-decoration:none; display:none;">
-        Instagram
-      </a>
-      <a id="ttLink" href="#" target="_blank"
-         style="color:#00ffe1; text-decoration:none; display:none;">
-        TikTok
-      </a>
-    </div>
+    <hr />
 
-<h2 id="profileName" style="margin:0;">Artist</h2>
-<p id="profileRole" style="margin:4px 0 12px; opacity:.85;"></p>
+    <h3>Portfolio</h3>
+    <div id="portfolioGrid" class="portfolio-grid"></div>
 
-<div id="artistActions" style="display:none; margin:12px 0; display:flex; flex-direction:column; gap:10px;">
+    <a href="/home.html" class="back-link">← Back to Home</a>
+  </aside>
 
-  <button id="uploadBtn"
-    style="
-      width:100%;
-      padding:10px 16px;
-      border-radius:12px;
-      background:#00ffe1;
-      color:#000;
-      font-weight:800;
-      border:none;
-      cursor:pointer;
-    ">
-    Upload Your Art
-  </button>
-<textarea
-  id="artDescription"
-  placeholder="Describe this piece (optional)"
-  style="
-    width:100%;
-    min-height:80px;
-    margin-bottom:12px;
-    padding:10px;
-    border-radius:10px;
-    background:#111;
-    color:#fff;
-    border:1px solid rgba(255,255,255,0.1);
-    resize:vertical;
-  "
-></textarea>
-
-  <!-- Admin only -->
-  <a
-    id="adminPanelBtn"
-    href="/admin.html"
-    style="
-      display:none;
-      text-align:center;
-      padding:10px 16px;
-      border-radius:12px;
-      background:#111;
-      color:#00ffe1;
-      font-weight:800;
-      text-decoration:none;
-      border:1px solid rgba(255,255,255,.15);
-    ">
-    Admin Panel
-  </a>
-
-  <input
-    id="fileInput"
-    type="file"
-    accept="image/*"
-    style="display:none"
-  />
 </div>
 
+<!-- =========================
+     UPLOAD MODAL
+========================= -->
 
-    <hr style="margin:20px 0; opacity:.2;" />
-
-    <!-- Portfolio -->
-    <h3 style="margin-bottom:10px;">Portfolio</h3>
-    <div id="portfolioGrid"
-         style="display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px;">
-      <!-- populated later -->
-      <div style="aspect-ratio:1/1; background:#111; border-radius:10px;"></div>
-      <div style="aspect-ratio:1/1; background:#111; border-radius:10px;"></div>
-    </div>
-
-    <p style="margin:20px 0 0;">
-      <a href="/home.html"
-         style="color:#00ffe1; font-weight:800; text-decoration:none;">
-        ← Back to Home
-      </a>
-    </p>
-
-  </section>
-</main>
-<!-- Settings Modal -->
-<div id="settingsModal" class="modal hidden">
-  <div class="modal-card glass">
-    <h3>Account Settings</h3>
-
-    <label>
-      Display name
-      <input id="settingsDisplayName" type="text" />
-    </label>
-
-    <label>
-      Username
-      <input id="settingsUsername" type="text" />
-    </label>
-
-    <div class="modal-actions">
-      <button id="saveSettingsBtn">Save</button>
-      <button id="closeSettingsBtn" class="ghost">Cancel</button>
-    </div>
-  </div>
-</div>
-<!-- Upload Art Modal -->
-<!-- Upload Art Modal -->
 <div id="uploadModal" class="modal hidden">
   <div class="modal-card">
+
     <h2>Upload Artwork</h2>
 
-    <input id="artTitle" placeholder="Title (optional)" />
-    <textarea id="artDescription" placeholder="Describe this piece (optional)"></textarea>
+    <input
+      id="artTitle"
+      type="text"
+      placeholder="Title (optional)"
+    />
 
-    <input id="fileInput" type="file" accept="image/*" />
+    <textarea
+      id="artDescription"
+      placeholder="Describe this piece (optional)"
+    ></textarea>
+
+    <!-- ⚠️ ONLY ONE FILE INPUT -->
+    <input
+      id="fileInput"
+      type="file"
+      accept="image/*"
+    />
 
     <div class="modal-actions">
-      <button id="cancelUpload" class="btn secondary">Cancel</button>
-      <button id="confirmUpload" class="btn primary">Upload</button>
+      <button id="cancelUpload" class="secondary-btn">Cancel</button>
+      <button id="confirmUpload" class="primary-btn">Upload</button>
     </div>
+
   </div>
 </div>
 
-
-
-</body>
 </html>
