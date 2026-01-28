@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     title,
     description,
     file_path: filePath,
+    bucket: "pending-art",
     status: "pending",
   });
 
@@ -89,6 +90,7 @@ if (insertError) {
   statusText.textContent = "Database error. Artwork not saved.";
   return;
 }
+
 
 
     // Success
