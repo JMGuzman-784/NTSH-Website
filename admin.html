@@ -1,65 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>NTSH — Admin Panel</title>
+  <meta charset="UTF-8" />
+  <title>NTSH • Admin</title>
 
-  <!-- Shared styles -->
-  <link rel="stylesheet" href="assets/css/gallery.css?v=1" />
-  <link rel="stylesheet" href="assets/css/account-ui.css?v=1" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/account-ui.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
 
   <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Admin logic (Phase 2) -->
-  <script defer src="assets/js/admin.js?v=1"></script>
+  <!-- Core UI Logic -->
+  <script defer src="/js/account-ui.js"></script>
+  <script defer src="/js/admin.js"></script>
 </head>
 
-<body>
-  <!-- HEADER -->
-  <header class="site-header header-row">
-    <div class="header-left">
-      <div class="brand">
-        <span class="logo-dot"></span>
-        <h1>NTSH</h1>
+<body data-role="admin">
+
+<!-- =====================
+     HEADER
+===================== -->
+<header class="site-header">
+  <div class="header-center">
+    <!-- NTSH LOGO IMAGE (TOP CENTER) -->
+    <img
+      src="/assets/Raid'sNTSHLogo.png"
+      alt="NTSH"
+      class="ntsh-logo"
+    />
+  </div>
+
+  <button id="accountBtn" class="account-btn">
+    <span id="accountAvatar">R</span>
+    <span id="accountName">Raid</span>
+    <span id="roleBadge" class="badge admin">ADMIN</span>
+  </button>
+
+  <div id="accountMenu" class="menu">
+    <a href="/profile.html">Profile</a>
+    <button id="logoutBtn">Logout</button>
+  </div>
+</header>
+
+<!-- =====================
+     ADMIN IDENTITY
+===================== -->
+<section class="admin-identity">
+  <h1>Raid</h1>
+  <p class="admin-sub">
+    nothing to see here
+  </p>
+</section>
+
+<!-- =====================
+     PENDING ARTWORKS
+===================== -->
+<section class="admin-section">
+  <h2>Pending Art</h2>
+
+  <div id="pendingArtGrid" class="art-grid">
+    <!-- JS injects pending artwork cards here -->
+
+    <!-- Example structure (DO NOT HARD CODE):
+    <div class="art-card">
+      <img src="..." />
+      <div class="art-overlay">
+        <span class="art-title">Untitled</span>
+        <span class="art-artist">@artist(pen)_003</span>
       </div>
-      <p>Admin Panel — Review Submissions</p>
-    </div>
-
-    <div class="header-right">
-      <a href="/profile.html"
-         style="color:#00ffe1; font-weight:800; text-decoration:none;">
-        ← Back to Profile
-      </a>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <main class="wrap">
-    <section class="content glass" style="padding:20px;">
-
-      <h2 style="margin-top:0;">Pending Artwork Submissions</h2>
-
-      <!-- Empty state (replaced in Phase 2) -->
-      <p id="adminEmptyState" style="opacity:.6;">
-        Loading pending submissions…
-      </p>
-
-      <!-- Admin review grid -->
-      <div
-        id="adminArtGrid"
-        style="
-          display:grid;
-          grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-          gap:16px;
-          margin-top:20px;
-        "
-      >
-        <!-- Cards injected in Phase 2 -->
+      <div class="art-actions">
+        <button class="approve">Approve</button>
+        <button class="reject">Reject</button>
       </div>
+    </div>
+    -->
 
-    </section>
-  </main>
+  </div>
+</section>
+
+<!-- =====================
+     PENDING ARTISTS
+===================== -->
+<section class="admin-section">
+  <h2>Pending Artists</h2>
+
+  <div id="pendingArtistList" class="pending-artists">
+    <!-- JS injects artist pending rows -->
+
+    <!-- Example structure:
+    <div class="artist-row">
+      <span class="artist-id">artist(pen)_004</span>
+      <span class="artist-meta">3 uploads</span>
+      <div class="artist-actions">
+        <button class="approve">Approve</button>
+        <button class="reject">Reject</button>
+      </div>
+    </div>
+    -->
+
+  </div>
+</section>
+
+<!-- =====================
+     FOOTER / EASTER EGG
+===================== -->
+<footer class="site-footer">
+  <!-- Favicon Easter Egg -->
+  <img
+    src="/assets/Raid'sNTSHLogo.png"
+    alt="NTSH Favicon"
+    id="easterEggIcon"
+    class="easter-egg"
+  />
+</footer>
+
 </body>
 </html>
