@@ -22,12 +22,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const role = document.body.dataset.role;
-  if (role !== "admin") {
-    alert("Admin access only.");
-    window.location.href = "/profile.html";
-    return;
-  }
+  const { data: profile, error } = await supabaseClient
+  .from("profiles")
+  .select("role")
+  .eq("id", user.id)
+  .single();
+
+if (error || profile?.role !== "admin") {
+  alert("Admin access only.");
+  window.location.href = "/profile.html";
+  return;
+}
+
 
   loadPendingArtworks();
 });
