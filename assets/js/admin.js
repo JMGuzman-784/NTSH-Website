@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const role = document.body.dataset.role;
-
   if (role !== "admin") {
     alert("Admin access only.");
     window.location.href = "/profile.html";
@@ -33,9 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadPendingArtworks();
 });
 
-/* -----------------------------
-   Load Pending Art (ADMIN)
--------------------------------- */
 async function loadPendingArtworks() {
   const grid = document.getElementById("adminArtGrid");
   const empty = document.getElementById("adminEmptyState");
@@ -45,13 +41,7 @@ async function loadPendingArtworks() {
 
   const { data: artworks, error } = await supabaseClient
     .from("artworks")
-    .select(`
-      id,
-      file_path,
-      description,
-      owner_id,
-      created_at
-    `)
+    .select("id, file_path, description, created_at")
     .eq("bucket", "pending-art")
     .order("created_at", { ascending: false });
 
@@ -73,37 +63,31 @@ async function loadPendingArtworks() {
   }
 }
 
-/* -----------------------------
-   Render Admin Card
--------------------------------- */
 async function renderArtworkCard(art, grid) {
-  const { data: signed, error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .storage
     .from("pending-art")
-    .createSignedUrl(art.file_path, 60 * 60);
+    .createSignedUrl(art.file_path, 3600);
 
-  if (error || !signed?.signedUrl) return;
+  if (error || !data?.signedUrl) return;
 
   const card = document.createElement("div");
-  card.style.cssText = `
-    background:#111;
-    border-radius:14px;
-    padding:12px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  `;
+  card.style.background = "#111";
+  card.style.borderRadius = "14px";
+  card.style.padding = "12px";
+  card.style.display = "flex";
+  card.style.flexDirection = "column";
+  card.style.gap = "10px";
 
   const img = document.createElement("img");
-  img.src = signed.signedUrl;
+  img.src = data.signedUrl;
   img.style.width = "100%";
   img.style.borderRadius = "10px";
-  img.style.objectFit = "cover";
 
   const desc = document.createElement("div");
   desc.textContent = art.description || "No description provided.";
   desc.style.fontSize = "13px";
-  desc.style.opacity = ".7";
+  desc.style.opacity = "0.7";
 
   const actions = document.createElement("div");
   actions.style.display = "flex";
@@ -111,29 +95,24 @@ async function renderArtworkCard(art, grid) {
 
   const approveBtn = document.createElement("button");
   approveBtn.textContent = "Approve";
-  approveBtn.style.cssText = `
-    flex:1;
-    padding:8px;
-    background:#00ffe1;
-    color:#000;
-    border:none;
-    border-radius:8px;
-    font-weight:800;
-    cursor:pointer;
-  `;
+  approveBtn.style.flex = "1";
+  approveBtn.style.padding = "8px";
+  approveBtn.style.background = "#00ffe1";
+  approveBtn.style.border = "none";
+  approveBtn.style.borderRadius = "8px";
+  approveBtn.style.fontWeight = "800";
+  approveBtn.style.cursor = "pointer";
 
   const rejectBtn = document.createElement("button");
   rejectBtn.textContent = "Reject";
-  rejectBtn.style.cssText = `
-    flex:1;
-    padding:8px;
-    background:#222;
-    color:#ff6b6b;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:8px;
-    font-weight:800;
-    cursor:pointer;
-  `;
+  rejectBtn.style.flex = "1";
+  rejectBtn.style.padding = "8px";
+  rejectBtn.style.background = "#222";
+  rejectBtn.style.color = "#ff6b6b";
+  rejectBtn.style.border = "1px solid rgba(255,255,255,.15)";
+  rejectBtn.style.borderRadius = "8px";
+  rejectBtn.style.fontWeight = "800";
+  rejectBtn.style.cursor = "pointer";
 
   approveBtn.onclick = () => approveArtwork(art);
   rejectBtn.onclick = () => rejectArtwork(art);
@@ -148,42 +127,37 @@ async function renderArtworkCard(art, grid) {
   grid.appendChild(card);
 }
 
-/* -----------------------------
-   Button Styling
--------------------------------- */
-function styleAdminButtons(card) {
-  const approve = card.querySelector(".approveBtn");
-  const reject = card.querySelector(".rejectBtn");
-
-  approve.style.cssText = `
-    flex:1;
-    padding:8px;
-    background:#00ffe1;
-    color:#000;
-    border:none;
-    border-radius:8px;
-    font-weight:800;
-    cursor:pointer;
-  `;
-
-  reject.style.cssText = `
-    flex:1;
-    padding:8px;
-    background:#222;
-    color:#ff6b6b;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:8px;
-    font-weight:800;
-    cursor:pointer;
-  `;
-}
-
-/* -----------------------------
-   Approve
--------------------------------- */
 async function approveArtwork(art) {
-  const move = await supabaseClient
-    .storage
+  const move = await supabaseClient.storage
     .from("pending-art")
     .move(art.file_path, art.file_path, {
-      destinationBucket: "
+      destinationBucket: "approved-art"
+    });
+
+  if (move.error) {
+    alert("Failed to approve artwork.");
+    return;
+  }
+
+  await supabaseClient
+    .from("artworks")
+    .update({ bucket: "approved-art" })
+    .eq("id", art.id);
+
+  loadPendingArtworks();
+}
+
+async function rejectArtwork(art) {
+  if (!confirm("Reject this artwork?")) return;
+
+  await supabaseClient.storage
+    .from("pending-art")
+    .remove([art.file_path]);
+
+  await supabaseClient
+    .from("artworks")
+    .delete()
+    .eq("id", art.id);
+
+  loadPendingArtworks();
+}
