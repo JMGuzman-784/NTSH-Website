@@ -1,5 +1,5 @@
 /* =========================
-   SUPABASE CONFIG
+   CONFIG
    ========================= */
 
 const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
@@ -15,7 +15,7 @@ let supabaseClient = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (!window.supabase) {
-    console.error("Supabase SDK not loaded.");
+    console.error("Supabase SDK not loaded");
     return;
   }
 
@@ -54,6 +54,7 @@ function wireMenu() {
   const btn = document.getElementById("accountBtn");
   const menu = document.getElementById("accountMenu");
   const logoutBtn = document.getElementById("logoutBtn");
+  const settingsBtn = document.getElementById("settingsBtn");
 
   if (!btn || !menu) return;
 
@@ -72,6 +73,10 @@ function wireMenu() {
     await supabaseClient.auth.signOut();
     window.location.href = "/";
   });
+
+  settingsBtn?.addEventListener("click", () => {
+    document.getElementById("settingsModal")?.classList.remove("hidden");
+  });
 }
 
 /* =========================
@@ -84,37 +89,37 @@ async function hydrateAccount(user) {
   const userEl = document.getElementById("accountUser");
   const badge = document.getElementById("roleBadge");
 
-  const email = user.email?.toLowerCase() || "";
-  const fallbackInitial = email ? email[0].toUpperCase() : "?";
-
   const { data: profile } = await supabaseClient
     .from("profiles")
     .select("display_name, username, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  const displayName = profile?.display_name || email.split("@")[0] || "User";
-  const username = profile?.username || "user_000";
+  const displayName =
+    profile?.display_name || user.email?.split("@")[0] || "User";
+  const username = profile?.username || "user";
   const role = (profile?.role || "viewer").toLowerCase();
 
   document.body.dataset.role = role;
 
-  avatar.textContent = displayName[0]?.toUpperCase() || fallbackInitial;
-  nameEl.textContent = displayName;
-  userEl.textContent = `@${username}`;
-
-  badge.textContent = role;
-  badge.className = "badge " + role;
+  if (avatar) avatar.textContent = displayName[0]?.toUpperCase() || "?";
+  if (nameEl) nameEl.textContent = displayName;
+  if (userEl) userEl.textContent = `@${username}`;
+  if (badge) {
+    badge.textContent = role;
+    badge.classList.toggle("artist", role === "artist");
+    badge.classList.toggle("admin", role === "admin");
+  }
 
   syncProfileUI(displayName, role, username);
 
-  if (role === "artist") {
+  if (role === "artist" || role === "admin") {
     loadMyPendingArt();
   }
 
   const adminBtn = document.getElementById("adminPanelBtn");
-  if (adminBtn && role === "admin") {
-    adminBtn.style.display = "block";
+  if (adminBtn) {
+    adminBtn.style.display = role === "admin" ? "block" : "none";
   }
 }
 
@@ -130,8 +135,9 @@ function syncProfileUI(displayName, role, username) {
   if (profileName) profileName.textContent = displayName;
   if (profileRole) profileRole.textContent = `${role} • NTSH`;
 
-  if (artistActions && (role === "artist" || role === "admin")) {
-    artistActions.style.display = "block";
+  if (artistActions) {
+    artistActions.style.display =
+      role === "artist" || role === "admin" ? "block" : "none";
   }
 
   if (username === "raid") {
@@ -151,78 +157,79 @@ function syncProfileUI(displayName, role, username) {
    ========================= */
 
 function wireUploadModal() {
-  const uploadBtn = document.getElementById("uploadBtn");
+  const openBtn = document.getElementById("uploadBtn");
   const modal = document.getElementById("uploadModal");
   const cancelBtn = document.getElementById("cancelUpload");
-  const confirmBtn = document.getElementById("confirmUpload");
+  const submitBtn = document.getElementById("submitUpload");
 
-  uploadBtn?.addEventListener("click", () => {
-    modal?.classList.remove("hidden");
+  if (!openBtn || !modal) return;
+
+  openBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
   });
 
   cancelBtn?.addEventListener("click", () => {
-    modal?.classList.add("hidden");
+    modal.classList.add("hidden");
     resetUploadForm();
   });
 
-  confirmBtn?.addEventListener("click", submitArtwork);
+  submitBtn?.addEventListener("click", handleUploadSubmit);
 }
 
 function resetUploadForm() {
-  document.getElementById("fileInput").value = "";
-  document.getElementById("artTitle").value = "";
-  document.getElementById("artDescription").value = "";
-}
-
-/* =========================
-   SUBMIT ARTWORK
-   ========================= */
-
-async function submitArtwork() {
   const fileInput = document.getElementById("fileInput");
   const titleInput = document.getElementById("artTitle");
   const descInput = document.getElementById("artDescription");
 
-  const file = fileInput.files[0];
+  if (fileInput) fileInput.value = "";
+  if (titleInput) titleInput.value = "";
+  if (descInput) descInput.value = "";
+}
+
+/* =========================
+   HANDLE UPLOAD
+   ========================= */
+
+async function handleUploadSubmit() {
+  const fileInput = document.getElementById("fileInput");
+  const titleInput = document.getElementById("artTitle");
+  const descInput = document.getElementById("artDescription");
+
+  const file = fileInput?.files[0];
   if (!file) {
     alert("Please select an image.");
     return;
   }
-
-  const title = titleInput.value.trim() || null;
-  const description = descInput.value.trim() || null;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
   if (!user) return;
 
   const filePath = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
 
-  const { error: uploadError } = await supabaseClient
-    .storage
+  const { error: uploadError } = await supabaseClient.storage
     .from("pending-art")
     .upload(filePath, file);
 
   if (uploadError) {
     alert("Upload failed.");
-    console.error(uploadError);
     return;
   }
 
   await supabaseClient.from("artworks").insert({
     owner_id: user.id,
     file_path: filePath,
-    title,
-    description,
+    title: titleInput?.value.trim() || null,
+    description: descInput?.value.trim() || null,
     status: "pending"
   });
 
-  document.getElementById("uploadModal").classList.add("hidden");
+  document.getElementById("uploadModal")?.classList.add("hidden");
   resetUploadForm();
   loadMyPendingArt();
 }
 
 /* =========================
-   PENDING ART (PROFILE)
+   LOAD PENDING ART
    ========================= */
 
 async function loadMyPendingArt() {
@@ -246,8 +253,7 @@ async function loadMyPendingArt() {
   }
 
   for (const art of artworks) {
-    const { data } = await supabaseClient
-      .storage
+    const { data } = await supabaseClient.storage
       .from("pending-art")
       .createSignedUrl(art.file_path, 3600);
 
@@ -277,7 +283,6 @@ async function approveArtwork(artworkId) {
 
   if (error) {
     alert("Failed to approve artwork.");
-    console.error(error);
     return;
   }
 
