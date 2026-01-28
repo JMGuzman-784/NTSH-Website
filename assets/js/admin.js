@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  // Ensure Supabase client exists
   if (!window.supabaseClient) {
     console.error("Supabase client not available");
     return;
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // Load pending artworks
     const { data: artworks, error } = await supabaseClient
       .from("artworks")
       .select("*")
@@ -32,7 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Render cards
     for (const art of artworks) {
       const { data: signed } = await supabaseClient
         .storage
@@ -42,21 +39,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       const card = document.createElement("div");
       card.className = "art-card";
 
-     card.innerHTML = `
-    <img class="art-thumb" src="${signed.signedUrl}" />
-    <strong>${art.title || "Untitled"}</strong>
-    <p>${art.description || ""}</p>
-    <div class="admin-actions">
-      <button data-id="${art.id}" data-action="approve">Approve</button>
-      <button data-id="${art.id}" data-action="reject">Reject</button>
-    </div>
-  `;
-
+      card.innerHTML = `
+        <img class="art-thumb" src="${signed.signedUrl}" />
+        <strong>${art.title || "Untitled"}</strong>
+        <p>${art.description || ""}</p>
+        <div class="admin-actions">
+          <button data-id="${art.id}" data-action="approve">Approve</button>
+          <button data-id="${art.id}" data-action="reject">Reject</button>
+        </div>
+      `;
 
       container.appendChild(card);
     }
 
-    // Handle approve / reject
     container.addEventListener("click", async (e) => {
       const btn = e.target;
       if (!btn.dataset.id) return;
