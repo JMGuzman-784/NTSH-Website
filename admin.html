@@ -8,9 +8,15 @@
   <!-- STYLES -->
   <link rel="stylesheet" href="/assets/css/account-ui.css" />
   <link rel="stylesheet" href="/assets/css/gallery.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="/assets/js/account-ui.js"></script>
-  <script defer src="/assets/js/admin.js?v=FINAL1"></script>
+  <!-- Supabase CDN FIRST -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Your shared supabase init -->
+<script src="/assets/js/account-ui.js"></script>
+
+<!-- Page-specific JS LAST -->
+<script defer src="/assets/js/admin.js?v=FINAL"></script>
+
 
 
 
