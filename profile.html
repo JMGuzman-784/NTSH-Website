@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NTSH • Profile</title>
 
   <!-- STYLES -->
   <link rel="stylesheet" href="/assets/css/account-ui.css" />
   <link rel="stylesheet" href="/assets/css/gallery.css" />
 
-  <!-- SUPABASE -->
+  <!-- SUPABASE (future use) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- LOGIC -->
+  <!-- ACCOUNT / AUTH LOGIC -->
   <script defer src="/assets/js/account-ui.js"></script>
-<link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
 
 <body>
@@ -31,13 +34,14 @@
   </div>
 </header>
 
-<!-- PROFILE -->
+<!-- PROFILE CARD -->
 <section class="profile-card">
   <span id="accountUser">@user</span>
 
   <h1 id="profileName">Loading…</h1>
   <p id="profileRole">viewer • NTSH</p>
 
+  <!-- ARTIST / ADMIN ACTIONS -->
   <div id="artistActions" style="display:none;">
     <button id="uploadBtn">Upload Your Art</button>
     <button id="adminPanelBtn" style="display:none;">Admin Panel</button>
@@ -50,9 +54,7 @@
   <div id="portfolioGrid"></div>
 </section>
 
-<!-- UPLOAD MODAL -->
-<button id="open-upload">Upload Your Art</button>
-
+<!-- UPLOAD MODAL (PROFILE ONLY) -->
 <div id="upload-modal" class="modal hidden">
   <div class="modal-box">
     <h2>Submit Art</h2>
@@ -78,16 +80,17 @@
 
     <input type="file" id="art-file" accept="image/*">
 
-    <button id="submit-art">Submit</button>
-    <button id="close-upload">Cancel</button>
+    <div class="modal-actions">
+      <button id="submit-art">Submit</button>
+      <button id="close-upload">Cancel</button>
+    </div>
 
     <p id="upload-status"></p>
   </div>
 </div>
 
-<script src="profile.js"></script>
-
-<script src="profile.js"></script>
+<!-- PROFILE LOGIC -->
+<script src="/assets/js/profile.js"></script>
 
 </body>
 </html>
