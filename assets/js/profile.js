@@ -1,3 +1,5 @@
+document.getElementById("artistActions").style.display = "block";
+
 // ===== UPLOAD MODAL CONTROLS =====
 const modal = document.getElementById("upload-modal");
 const openBtn = document.getElementById("uploadBtn"); // FIXED ID
