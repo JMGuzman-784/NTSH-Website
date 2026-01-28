@@ -45,21 +45,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-
-
-
-  await hydrateAccount(user);
-
-  supabaseClient.auth.onAuthStateChange(async (_evt, session) => {
-    if (!session?.user) {
-      if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
-      return;
-    }
-    await hydrateAccount(session.user);
-  });
-});
-
-
 /* =========================
    HEADER MENU
    ========================= */
