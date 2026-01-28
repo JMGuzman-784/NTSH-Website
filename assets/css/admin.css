@@ -1,6 +1,9 @@
 /* =========================
    ROOT / THEME
 ========================= */
+html, body {
+  background: #000 !important;
+}
 
 :root {
   --bg-black: #050505;
