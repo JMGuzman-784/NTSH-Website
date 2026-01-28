@@ -12,6 +12,9 @@ let supabaseClient = null;
 /* =========================
    INIT
    ========================= */
+/* =========================
+   INIT
+   ========================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (!window.supabase) {
@@ -29,8 +32,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { data } = await supabaseClient.auth.getSession();
   const user = data.session?.user;
 
+  if (!user) {
+    if (REQUIRE_LOGIN_ON_HOME) {
+      window.location.href = "/";
+    }
+    return;
+  }
 
-}
+  await hydrateAccount(user);
+
+  supabaseClient.auth.onAuthStateChange(async (_evt, session) => {
+    if (!session?.user) {
+      if (REQUIRE_LOGIN_ON_HOME) window.location.href = "/";
+      return;
+    }
+    await hydrateAccount(session.user);
+  });
+});
+
 
 
   await hydrateAccount(user);
@@ -116,11 +135,11 @@ async function hydrateAccount(user) {
 
   syncProfileUI(displayName, role, username);
 
-  if (role === "artist" || role === "admin") {
-    loadMyPendingArt();
+if (role === "artist") {
+  loadMyPendingArt();
+}
 
-     const adminBtn = document.getElementById("adminPanelBtn");
-
+const adminBtn = document.getElementById("adminPanelBtn");
 if (adminBtn && role === "admin") {
   adminBtn.style.display = "block";
 }
