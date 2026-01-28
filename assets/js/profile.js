@@ -22,8 +22,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!submitBtn) return;
 
-  submitBtn.onclick = async () => {
-    statusText.textContent = "";
+  submitBtn.onclick = async (e) => {
+  e.preventDefault(); // 👈 CRITICAL
+
+  statusText.textContent = "Uploading...";
+
+  // rest of your upload code
+};
+
 
     const title = document.getElementById("art-title").value.trim();
     const description = document.getElementById("art-description").value.trim();
