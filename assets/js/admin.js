@@ -69,11 +69,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       location.reload();
     });
-  } catch (err) {
+   } catch (err) {
     console.error("Admin load failed:", err);
     container.innerHTML = "<p>Unexpected error.</p>";
-  }
-       location.reload();
-    });
   }
 });
