@@ -1,87 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>NTSH — Profile</title>
-
-  <link rel="stylesheet" href="assets/css/gallery.css?v=1" />
-  <link rel="stylesheet" href="assets/css/account-ui.css?v=1" />
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
-  <script defer src="assets/js/account-ui.js?v=1"></script>
+  <meta charset="UTF-8" />
+  <title>NTSH • Profile</title>
+  <link rel="stylesheet" href="/css/account-ui.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="/js/account-ui.js"></script>
 </head>
-<!-- =========================
-     PROFILE PAGE
-========================= -->
 
-<div class="profile-page">
+<body>
 
-  <!-- LEFT PANEL -->
-  <aside class="profile-card">
-    <h2 id="profileName">Loading…</h2>
-    <p id="profileRole">viewer • NTSH</p>
+<!-- HEADER -->
+<header>
+  <button id="accountBtn">
+    <span id="accountAvatar">?</span>
+    <span id="accountName">Loading</span>
+    <span id="roleBadge">viewer</span>
+  </button>
 
-    <div class="socials">
-      <a id="igLink" style="display:none">Instagram</a>
-      <a id="ttLink" style="display:none">TikTok</a>
-    </div>
+  <div id="accountMenu" class="menu">
+    <button id="logoutBtn">Logout</button>
+  </div>
+</header>
 
-    <h3>Artist</h3>
+<!-- PROFILE CARD -->
+<section>
+  <h1 id="profileName">Loading...</h1>
+  <p id="profileRole">viewer • NTSH</p>
 
-    <!-- UPLOAD BUTTON -->
-    <button id="uploadBtn" class="primary-btn">
-      Upload Your Art
-    </button>
+  <div id="artistActions" style="display:none;">
+    <button id="uploadBtn">Upload Your Art</button>
+    <button id="adminPanelBtn" style="display:none;">Admin Panel</button>
+  </div>
+</section>
 
-    <!-- ADMIN PANEL BUTTON -->
-    <button id="adminPanelBtn" class="secondary-btn" style="display:none">
-      Admin Panel
-    </button>
+<!-- PORTFOLIO -->
+<section>
+  <h2>Portfolio</h2>
+  <div id="portfolioGrid"></div>
+</section>
 
-    <hr />
-
-    <h3>Portfolio</h3>
-    <div id="portfolioGrid" class="portfolio-grid"></div>
-
-    <a href="/home.html" class="back-link">← Back to Home</a>
-  </aside>
-
-</div>
-
-<!-- =========================
-     UPLOAD MODAL
-========================= -->
-
+<!-- UPLOAD MODAL -->
 <div id="uploadModal" class="modal hidden">
-  <div class="modal-card">
+  <div class="modal-content">
+    <h3>Upload Artwork</h3>
 
-    <h2>Upload Artwork</h2>
-
-    <input
-      id="artTitle"
-      type="text"
-      placeholder="Title (optional)"
-    />
-
-    <textarea
-      id="artDescription"
-      placeholder="Describe this piece (optional)"
-    ></textarea>
-
-    <!-- ⚠️ ONLY ONE FILE INPUT -->
-    <input
-      id="fileInput"
-      type="file"
-      accept="image/*"
-    />
+    <input id="fileInput" type="file" accept="image/*" />
+    <input id="artTitle" type="text" placeholder="Title (optional)" />
+    <textarea id="artDescription" placeholder="Description (optional)"></textarea>
 
     <div class="modal-actions">
-      <button id="cancelUpload" class="secondary-btn">Cancel</button>
-      <button id="confirmUpload" class="primary-btn">Upload</button>
+      <button id="confirmUpload">Submit</button>
+      <button id="cancelUpload">Cancel</button>
     </div>
-
   </div>
 </div>
 
+</body>
 </html>
