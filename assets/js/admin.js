@@ -167,3 +167,71 @@ async function rejectArtwork(art) {
 
   loadPendingArtworks();
 }
+const uploadBtn = document.getElementById("upload-btn");
+const pendingContainer = document.getElementById("pending-art");
+
+function getArt() {
+  return JSON.parse(localStorage.getItem("ntsh_art")) || [];
+}
+
+function saveArt(art) {
+  localStorage.setItem("ntsh_art", JSON.stringify(art));
+}
+
+function renderPending() {
+  const art = getArt();
+  pendingContainer.innerHTML = "";
+
+  art.filter(a => a.status === "pending").forEach(item => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <img src="${item.image}" width="150"><br>
+      <strong>${item.title}</strong><br>
+      <button onclick="approveArt('${item.id}')">Approve</button>
+      <button onclick="rejectArt('${item.id}')">Reject</button>
+      <hr>
+    `;
+    pendingContainer.appendChild(div);
+  });
+}
+
+uploadBtn.addEventListener("click", () => {
+  const title = document.getElementById("art-title").value;
+  const file = document.getElementById("art-file").files[0];
+
+  if (!title || !file) return alert("Missing fields");
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const art = getArt();
+    art.push({
+      id: Date.now().toString(),
+      title,
+      artist: "Raid",
+      image: reader.result,
+      status: "pending",
+      uploadedAt: new Date().toISOString()
+    });
+    saveArt(art);
+    renderPending();
+  };
+  reader.readAsDataURL(file);
+});
+
+function approveArt(id) {
+  const art = getArt().map(a =>
+    a.id === id ? { ...a, status: "approved" } : a
+  );
+  saveArt(art);
+  renderPending();
+}
+
+function rejectArt(id) {
+  const art = getArt().map(a =>
+    a.id === id ? { ...a, status: "rejected" } : a
+  );
+  saveArt(art);
+  renderPending();
+}
+
+renderPending();
