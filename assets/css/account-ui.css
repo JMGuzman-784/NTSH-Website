@@ -193,3 +193,171 @@ button.ghost {
   color: #fff;
 }
 
+/* =========================
+   NTSH THEME CORE
+   ========================= */
+
+:root {
+  --bg-main: radial-gradient(1200px 600px at 10% 10%, #0f1b1f, #050708);
+  --panel: rgba(20, 26, 30, 0.85);
+  --border-soft: rgba(255,255,255,0.06);
+  --cyan: #00ffe1;
+  --magenta: #ff2bd6;
+  --text-main: #e7f6f4;
+  --text-dim: #9fb6b2;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+/* =========================
+   PROFILE LAYOUT
+   ========================= */
+
+.profile-wrapper {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.profile-card {
+  background: var(--panel);
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid var(--border-soft);
+}
+
+.profile-card h1 {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.profile-card .role {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--cyan), #00cbb7);
+  color: #001a18;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+}
+
+.btn-danger {
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+
+/* =========================
+   UPLOAD MODAL
+   ========================= */
+
+#uploadModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+#uploadModal.hidden {
+  display: none;
+}
+
+.upload-panel {
+  width: 420px;
+  background: var(--panel);
+  border-radius: 20px;
+  padding: 22px;
+  border: 1px solid var(--border-soft);
+}
+
+.upload-panel h2 {
+  margin-bottom: 14px;
+}
+
+.upload-panel input,
+.upload-panel textarea {
+  width: 100%;
+  background: #0c1214;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   PORTFOLIO GRID
+   ========================= */
+
+#portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 18px;
+}
+
+.art-card {
+  background: #0b0f11;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+}
+
+.art-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.art-card .meta {
+  padding: 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* =========================
+   ADMIN ACTIONS
+   ========================= */
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
