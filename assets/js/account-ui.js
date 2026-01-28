@@ -410,3 +410,39 @@ async function loadMyPendingArt() {
     grid.appendChild(card);
   }
 }
+async function approveArt(art) {
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) return;
+
+  // Move image to approved-art bucket
+  const { error: moveError } = await supabaseClient
+    .storage
+    .from("pending-art")
+    .move(art.file_path, art.file_path, {
+      destinationBucket: "approved-art"
+    });
+
+  if (moveError) {
+    console.error(moveError);
+    alert("Failed to move image.");
+    return;
+  }
+
+  // Update DB record
+  const { error: dbError } = await supabaseClient
+    .from("artworks")
+    .update({ bucket: "approved-art" })
+    .eq("id", art.id);
+
+  if (dbError) {
+    console.error(dbError);
+    alert("Failed to update database.");
+    return;
+  }
+
+  alert("Art approved.");
+  loadMyPendingArt();
+}
