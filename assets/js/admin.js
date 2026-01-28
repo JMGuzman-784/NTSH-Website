@@ -184,13 +184,17 @@ function renderPending() {
 
   art.filter(a => a.status === "pending").forEach(item => {
     const div = document.createElement("div");
-    div.innerHTML = `
-      <img src="${item.image}" width="150"><br>
-      <strong>${item.title}</strong><br>
-      <button onclick="approveArt('${item.id}')">Approve</button>
-      <button onclick="rejectArt('${item.id}')">Reject</button>
-      <hr>
-    `;
+   div.innerHTML = `
+  <img src="${item.image}" width="100%"><br>
+  <strong>${item.title}</strong><br>
+  <em>${item.artType}</em><br>
+  <small>Stencil: ${item.stencilType}</small><br>
+  <p>${item.description || ""}</p>
+  <button onclick="approveArt('${item.id}')">Approve</button>
+  <button onclick="rejectArt('${item.id}')">Reject</button>
+  <hr>
+`;
+
     pendingContainer.appendChild(div);
   });
 }
