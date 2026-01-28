@@ -340,3 +340,73 @@ async function approveArt(art) {
 
 approveBtn.onclick = () => approveArt(art);
 
+async function loadMyPendingArt() {
+  const grid = document.getElementById("portfolioGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) return;
+
+  const { data: artworks, error } = await supabaseClient
+    .from("artworks")
+    .select("*")
+    .eq("owner_id", user.id)
+    .eq("bucket", "pending-art")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Pending art fetch failed:", error);
+    return;
+  }
+
+  if (!artworks || artworks.length === 0) {
+    grid.innerHTML = `
+      <p style="opacity:.6;">No pending uploads.</p>
+    `;
+    return;
+  }
+
+  for (const art of artworks) {
+    const { data } = supabaseClient
+      .storage
+      .from("pending-art")
+      .getPublicUrl(art.file_path);
+
+    const card = document.createElement("div");
+    card.style.cssText = `
+      background:#111;
+      border-radius:10px;
+      padding:8px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    `;
+
+    const img = document.createElement("img");
+    img.src = data.publicUrl;
+    img.style.width = "100%";
+    img.style.borderRadius = "8px";
+
+    const approveBtn = document.createElement("button");
+    approveBtn.textContent = "Approve";
+    approveBtn.style.cssText = `
+      padding:8px;
+      border:none;
+      border-radius:8px;
+      background:#00ffe1;
+      font-weight:800;
+      cursor:pointer;
+    `;
+
+    approveBtn.onclick = () => approveArt(art);
+
+    card.appendChild(img);
+    card.appendChild(approveBtn);
+    grid.appendChild(card);
+  }
+}
