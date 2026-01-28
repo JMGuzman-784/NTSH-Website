@@ -3,17 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <title>NTSH • Profile</title>
-  <image src="/assets/images/NTSH title site logo"></image>
-  <link rel="stylesheet" href="/assets/css/account-ui.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/account-ui.css" />
+  <link rel="stylesheet" href="/css/gallery.css" />
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="/assets/js/account-ui.js"></script>
+
+  <!-- App JS -->
+  <script defer src="/js/account-ui.js"></script>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header>
-  <button id="accountBtn">
+<!-- =========================
+     HEADER
+========================= -->
+<header class="top-bar">
+  <button id="accountBtn" class="account-pill">
     <span id="accountAvatar">?</span>
     <span id="accountName">Loading</span>
     <span id="roleBadge">viewer</span>
@@ -24,38 +32,73 @@
   </div>
 </header>
 
-<!-- PROFILE CARD -->
-<section>
-  <span id="accountUser"></span>
+<!-- =========================
+     PROFILE + CONTENT
+========================= -->
+<div class="profile-wrapper">
 
-  <h1 id="profileName">Loading...</h1>
-  <p id="profileRole">viewer • NTSH</p>
+  <!-- LEFT: PROFILE CARD -->
+  <aside class="profile-card">
+    <span id="accountUser">@user</span>
 
-  <div id="artistActions" style="display:none;">
-    <button id="uploadBtn">Upload Your Art</button>
-    <button id="adminPanelBtn" style="display:none;">Admin Panel</button>
-  </div>
-</section>
+    <h1 id="profileName">Loading...</h1>
+    <p id="profileRole">viewer • NTSH</p>
 
-<!-- PORTFOLIO -->
-<section>
-  <h2>Portfolio</h2>
-  <div id="portfolioGrid"></div>
-</section>
+    <div id="artistActions" style="display:none;">
+      <button id="uploadBtn" class="btn btn-primary">
+        Upload Your Art
+      </button>
 
-<!-- UPLOAD MODAL -->
+      <button id="adminPanelBtn"
+              class="btn btn-secondary"
+              style="display:none;">
+        Admin Panel
+      </button>
+    </div>
+  </aside>
+
+  <!-- RIGHT: PORTFOLIO -->
+  <main class="profile-content">
+    <h2>Portfolio</h2>
+    <div id="portfolioGrid" class="gallery-grid"></div>
+  </main>
+
+</div>
+
+<!-- =========================
+     UPLOAD MODAL
+========================= -->
 <div id="uploadModal" class="modal hidden">
   <div class="modal-content">
+
     <h3>Upload Artwork</h3>
 
-    <input id="fileInput" type="file" accept="image/*" />
-    <input id="artTitle" type="text" placeholder="Title (optional)" />
-    <textarea id="artDescription" placeholder="Description (optional)"></textarea>
+    <input
+      id="fileInput"
+      type="file"
+      accept="image/*"
+    />
+
+    <input
+      id="artTitle"
+      type="text"
+      placeholder="Title (optional)"
+    />
+
+    <textarea
+      id="artDescription"
+      placeholder="Description (optional)"
+    ></textarea>
 
     <div class="modal-actions">
-      <button id="confirmUpload">Submit</button>
-      <button id="cancelUpload">Cancel</button>
+      <button id="confirmUpload" class="btn btn-primary">
+        Submit
+      </button>
+      <button id="cancelUpload" class="btn btn-secondary">
+        Cancel
+      </button>
     </div>
+
   </div>
 </div>
 
