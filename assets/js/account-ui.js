@@ -29,9 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { data } = await supabaseClient.auth.getSession();
   const user = data.session?.user;
 
-  if (window.location.pathname.includes("admin.html") && role !== "admin") {
-  alert("Admin access only.");
-  window.location.href = "/profile.html";
+
 }
 
 
