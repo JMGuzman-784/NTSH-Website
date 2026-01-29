@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.className = "art-card";
     card.innerHTML = `
       <img src="${art.public_url}" alt="${art.title}">
-      <div class="reaction-count">${art.reactions || 0}</div>
+      <div class="reaction-count">${art.reactions_count ?? 0}</div>
+
       <strong>${art.title}</strong>
     `;
     card.onclick = () => openArtModal(art);
