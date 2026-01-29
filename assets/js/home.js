@@ -103,6 +103,22 @@ egg.onclick = () => {
     clicks = 0;
   }
 };
+// ===== EASTER EGG =====
+let eggClicks = 0;
+const egg = document.getElementById("easterEgg");
+
+if (egg) {
+  egg.addEventListener("click", () => {
+    eggClicks++;
+
+    if (eggClicks === 10) {
+      document.body.classList.toggle("theme-shift");
+      eggClicks = 0;
+
+      console.log("🐣 Easter Egg Activated");
+    }
+  });
+}
 
   });
 })();
