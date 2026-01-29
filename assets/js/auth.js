@@ -1,41 +1,28 @@
-// /assets/js/auth.js
-document.addEventListener("DOMContentLoaded", async () => {
-  if (!window.supabase) {
-    console.error("Supabase not loaded");
+(async () => {
+  const supabase = window.supabaseClient;
+  const { data } = await supabase.auth.getSession();
+
+  if (data?.session?.user) {
+    const email = data.session.user.email;
+
+    sessionStorage.setItem("ntsh_uid", data.session.user.id);
+    sessionStorage.setItem("ntsh_user", email);
+
+    // ADMIN DETECTION (LOCKED)
+    if (email === "ntshbusiness@gmail.com") {
+      sessionStorage.setItem("ntsh_role", "admin");
+    } else {
+      sessionStorage.setItem("ntsh_role", "artist");
+    }
+
+    console.log("[NTSH Auth]", {
+      role: sessionStorage.getItem("ntsh_role"),
+      user: email
+    });
+
     return;
   }
 
-  const supabaseUrl = "https://lworwldpziimhmcavjju.supabase.co";
-  const supabaseKey = "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP"; // sb_publishable_...
-
-  if (!window.supabaseClient) {
-    window.supabaseClient = window.supabase.createClient(
-      supabaseUrl,
-      supabaseKey
-    );
-    console.log("[Supabase] client ready");
-  }
-
-  const { data } = await window.supabaseClient.auth.getSession();
-  const session = data?.session;
-
-  if (!session) {
-    console.log("[Auth] No session");
-    return;
-  }
-
- const user = data.session.user;
-
-const email = user.email;
-const isAdmin = email === "ntshbusiness@gmail.com";
-
-sessionStorage.setItem("ntsh_uid", user.id);
-sessionStorage.setItem("ntsh_user", user.user_metadata?.username || email);
-sessionStorage.setItem("ntsh_role", isAdmin ? "admin" : "artist");
-
-console.log("[NTSH Auth]", {
-  role: isAdmin ? "admin" : "artist",
-  user: user.email
-});
-
-});
+  // ❗ NO SESSION → DO NOT OVERRIDE EXISTING ROLE
+  console.log("[Auth] No session — using gate role");
+})();
