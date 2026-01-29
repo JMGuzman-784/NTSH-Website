@@ -17,7 +17,12 @@
 
 
 <body>
-  
+  <script>
+  if (!sessionStorage.getItem("ntsh_role")) {
+    window.location.href = "/index.html";
+  }
+</script>
+
 <div id="easterEgg"></div>
 <div id="artModal" class="hidden"></div>
 
