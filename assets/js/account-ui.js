@@ -1,18 +1,28 @@
+// /assets/js/account-ui.js
 document.addEventListener("DOMContentLoaded", () => {
-  const role = NTSH.role;
-  const user = NTSH.user;
+  const role = sessionStorage.getItem("ntsh_role") || "viewer";
+  const user = sessionStorage.getItem("ntsh_user") || "viewer_001";
 
-  if (!role || !user) return;
+  const nameEl = document.getElementById("accountName");
+  const userEl = document.getElementById("accountUser");
+  const roleBadge = document.getElementById("roleBadge");
 
-  document.getElementById("accountName")?.textContent = user;
-  document.getElementById("accountUser")?.textContent = `@${user}`;
+  if (nameEl) nameEl.textContent = user;
+  if (userEl) userEl.textContent = `@${user}`;
 
   const roleMap = {
     viewer: "👀 viewer",
     guest: "🧍 guest",
     artist: "🎨 artist",
-    admin: "🖥 admin",
+    admin: "🖥 admin"
   };
 
-  document.getElementById("roleBadge")?.textContent = roleMap[role];
+  if (roleBadge) {
+    roleBadge.textContent = roleMap[role] || role;
+  }
+
+  // Admin-only cleanup
+  if (role === "admin") {
+    document.querySelectorAll(".request-guest").forEach(el => el.remove());
+  }
 });
