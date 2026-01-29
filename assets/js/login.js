@@ -1,7 +1,6 @@
-// /assets/js/login.js
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
-  const supabase = window.supabaseClient;
+  const form = document.getElementById("loginForm");
+  if (!form) return;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -9,15 +8,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+    console.log("[LOGIN ATTEMPT]", email);
+
+    const { data, error } =
+      await window.supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
 
     if (error) {
       alert(error.message);
       return;
     }
+
+    console.log("[LOGIN SUCCESS]", data.user.email);
 
     window.location.href = "/home.html";
   });
