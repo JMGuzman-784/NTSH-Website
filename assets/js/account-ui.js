@@ -25,3 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".request-guest").forEach(b => b.remove());
   }
 });
+if (role === "admin") {
+  document.querySelectorAll(".admin-only").forEach(el => {
+    el.style.display = "block";
+  });
+}
