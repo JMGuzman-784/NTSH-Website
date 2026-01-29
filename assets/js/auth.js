@@ -1,26 +1,47 @@
 // /assets/js/auth.js
 document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = window.supabaseClient;
-  if (!supabase) return;
+  if (!window.supabase) {
+    console.error("Supabase not loaded");
+    return;
+  }
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const supabaseUrl = "https://lworwldpziimhmcavjju.supabase.co";
+  const supabaseKey = "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP"; // sb_publishable_...
 
-  if (!session) return;
+  if (!window.supabaseClient) {
+    window.supabaseClient = window.supabase.createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+    console.log("[Supabase] client ready");
+  }
+
+  const { data } = await window.supabaseClient.auth.getSession();
+  const session = data?.session;
+
+  if (!session) {
+    console.log("[Auth] No session");
+    return;
+  }
 
   const user = session.user;
+  const email = user.email;
 
-  // Admin hard-lock (Raid only)
-  const isAdmin = user.email === "YOUR_ADMIN_EMAIL@HERE";
+  // 🔐 ADMIN CHECK (OPTION A)
+  let role = "user";
+  let username = "user_001";
 
-  sessionStorage.setItem("ntsh_uid", user.id);
-  sessionStorage.setItem("ntsh_user", user.user_metadata?.username || "user");
-  sessionStorage.setItem(
-    "ntsh_role",
-    isAdmin ? "admin" : (user.user_metadata?.role || "guest")
-  );
+  if (email === "ntshbusiness@gmail.com") {
+    role = "admin";
+    username = "Raid";
+  }
+
+  sessionStorage.setItem("ntsh_role", role);
+  sessionStorage.setItem("ntsh_user", username);
 
   console.log("[NTSH Auth]", {
-    role: sessionStorage.getItem("ntsh_role"),
-    user: sessionStorage.getItem("ntsh_user")
+    role,
+    user: username,
+    email,
   });
 });
