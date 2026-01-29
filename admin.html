@@ -26,6 +26,12 @@
 <body>
   <script>
   if (sessionStorage.getItem("ntsh_role") !== "admin") {
+    window.location.href = "/index.html";
+  }
+</script>
+
+  <script>
+  if (sessionStorage.getItem("ntsh_role") !== "admin") {
     alert("Admins only.");
     window.location.href = "/index.html";
   }
