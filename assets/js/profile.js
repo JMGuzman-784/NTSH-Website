@@ -1,5 +1,4 @@
 // /assets/js/profile.js
-
 document.addEventListener("DOMContentLoaded", async () => {
   const role = sessionStorage.getItem("ntsh_role");
   const uid = sessionStorage.getItem("ntsh_uid");
