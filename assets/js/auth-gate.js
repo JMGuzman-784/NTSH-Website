@@ -1,5 +1,4 @@
 // /assets/js/auth-gate.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("ntsh_role");
   const page = document.body.dataset.page;
