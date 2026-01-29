@@ -1,25 +1,17 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = window.supabaseClient;
-  if (!supabase) return;
+// /assets/js/auth.js
+// Phase A: NO Supabase auth yet
 
-  const { data, error } = await supabase.auth.getSession();
+(function () {
+  if (window.NTSH_AUTH_LOADED) return;
+  window.NTSH_AUTH_LOADED = true;
 
-  if (!data?.session) {
-    // NO SESSION = do nothing
-    // index.html stays reachable
-    sessionStorage.clear();
-    return;
-  }
+  const role = sessionStorage.getItem("ntsh_role");
+  const user = sessionStorage.getItem("ntsh_user");
 
-  const user = data.session.user;
-
-  sessionStorage.setItem("ntsh_uid", user.id);
-  sessionStorage.setItem(
-    "ntsh_user",
-    user.user_metadata?.username || user.email
-  );
-  sessionStorage.setItem(
-    "ntsh_role",
-    user.user_metadata?.role || "viewer"
-  );
-});
+  // No auto-login, no redirects
+  window.NTSH = {
+    role: role || null,
+    user: user || null,
+    ready: true
+  };
+})();
