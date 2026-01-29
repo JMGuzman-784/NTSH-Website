@@ -1,1 +1,8 @@
 
+<button onclick="logout()">Logout</button>
+<script>
+function logout() {
+  sessionStorage.clear();
+  window.location.href = "/login.html";
+}
+</script>
