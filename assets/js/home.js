@@ -93,6 +93,16 @@ async function loadArt() {
 }
 
 loadArt();
+let clicks = 0;
+const egg = document.getElementById("easterEgg");
+
+egg.onclick = () => {
+  clicks++;
+  if (clicks === 10) {
+    document.body.classList.toggle("alt-theme");
+    clicks = 0;
+  }
+};
 
   });
 })();
