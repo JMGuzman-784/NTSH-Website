@@ -67,7 +67,8 @@
       if (dots[index]) dots[index].classList.add("active");
     });
     // /assets/js/home.js
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+const supabase = window.supabaseClient;
+
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const gallery = document.getElementById("artGallery");
