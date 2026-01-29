@@ -270,3 +270,6 @@ body{
   --accent: #ff6ec7;
   --bg-glow: #00ffd5;
 }
+.alt-theme {
+  filter: hue-rotate(120deg);
+}
