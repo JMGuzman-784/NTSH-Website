@@ -25,17 +25,10 @@
       <p class="tagline">Nothing To See Here — Only Art That Speaks</p>
 
       <div class="choices">
-        <button id="viewerBtn" class="choice">
-          👀 Continue as Viewer
-        </button>
+        <button onclick="enterAs('viewer')">👀 Continue as Viewer</button>
+<button onclick="enterAs('guest')">🧍 Continue as Guest</button>
+<button onclick="enterAs('admin')">🖥 Admin</button>
 
-        <button id="guestBtn" class="choice">
-          🧍 Continue as Guest
-        </button>
-
-        <button id="loginBtn" class="choice primary">
-          🔐 Log In
-        </button>
       </div>
 
       <p class="hint">
@@ -67,5 +60,28 @@
 </script>
 
   </main>
+  <script>
+  function enterAs(role) {
+    sessionStorage.clear();
+
+    if (role === "viewer") {
+      sessionStorage.setItem("ntsh_role", "viewer");
+      sessionStorage.setItem("ntsh_user", "viewer_001");
+    }
+
+    if (role === "guest") {
+      sessionStorage.setItem("ntsh_role", "guest");
+      sessionStorage.setItem("ntsh_user", "guest_001");
+    }
+
+    if (role === "admin") {
+      sessionStorage.setItem("ntsh_role", "admin");
+      sessionStorage.setItem("ntsh_user", "Raid");
+    }
+
+    window.location.href = "/home.html";
+  }
+</script>
+
 </body>
 </html>
