@@ -144,3 +144,20 @@ function refreshButtons(){
     uploadBtn.onclick = () => showToast("Request verification to upload.");
   }
 }
+
+// /assets/js/auth.js
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Viewer entry
+const viewerBtn = document.getElementById("viewerBtn");
+
+if (viewerBtn) {
+  viewerBtn.addEventListener("click", () => {
+    const id = Math.floor(Math.random() * 1000);
+    sessionStorage.setItem("ntsh_role", "viewer");
+    sessionStorage.setItem("ntsh_user", `viewer_${id}`);
+    window.location.href = "/home.html";
+  });
+}
