@@ -1,3 +1,5 @@
+<script src="/assets/js/auth-gate.js"></script>
+
 // /assets/js/auth-gate.js
 document.addEventListener("DOMContentLoaded", () => {
   const viewerBtn = document.getElementById("enterViewer");
