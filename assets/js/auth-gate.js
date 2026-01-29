@@ -1,4 +1,4 @@
-<script src="/assets/js/auth-gate.js"></script>
+console.log("🔥 auth-gate.js LOADED");
 
 // /assets/js/auth-gate.js
 document.addEventListener("DOMContentLoaded", () => {
