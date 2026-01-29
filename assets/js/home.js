@@ -1,138 +1,34 @@
-(() => {
-  if (window.__HOME_LOADED__) return;
-  window.__HOME_LOADED__ = true;
+// /assets/js/home.js
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    if (!window.supabaseClient) return;
+document.addEventListener("DOMContentLoaded", async () => {
+  const supabase = window.supabaseClient;
+  if (!supabase) return;
 
-    const supabase = window.supabaseClient;
-    const track = document.getElementById("home-gallery");
-    const dotsWrap = document.getElementById("gallery-dots");
+  const container = document.getElementById("home-gallery");
+  if (!container) return;
 
-    if (!track) return;
-
-    const { data: artworks } = await supabase
-      .from("artworks")
-      .select("*")
-      .eq("status", "approved")
-      .order("created_at", { ascending: false });
-
-    if (!artworks || artworks.length === 0) {
-      track.innerHTML = "<p style='opacity:.6'>No approved art yet.</p>";
-      return;
-    }
-    let eggClicks = 0;
-const egg = document.getElementById("easterEgg");
-
-if (egg) {
-  egg.addEventListener("click", () => {
-    eggClicks++;
-    if (eggClicks === 10) {
-      document.body.classList.toggle("alt-theme");
-      eggClicks = 0;
-    }
-  });
-}
-
-
-    track.innerHTML = "";
-    dotsWrap.innerHTML = "";
-
-    artworks.forEach(async (art, index) => {
-      const { data } = await supabase
-        .storage
-        .from("pending-art")
-        .createSignedUrl(art.file_path, 3600);
-
-      if (!data?.signedUrl) return;
-
-      // CARD
-      const card = document.createElement("div");
-      card.className = "gallery-card";
-      card.innerHTML = `<img src="${data.signedUrl}" alt="${art.title || ""}" />`;
-      track.appendChild(card);
-
-      // DOT
-      const dot = document.createElement("span");
-      dot.className = "dot";
-      if (index === 0) dot.classList.add("active");
-
-      dot.onclick = () => {
-        track.scrollTo({
-          left: card.offsetLeft,
-          behavior: "smooth"
-        });
-      };
-
-      dotsWrap.appendChild(dot);
-    });
-
-    // Sync dots on scroll
-    track.addEventListener("scroll", () => {
-      const cards = [...track.children];
-      const dots = [...dotsWrap.children];
-
-      const index = cards.findIndex(
-        c => c.offsetLeft >= track.scrollLeft - 10
-      );
-
-      dots.forEach(d => d.classList.remove("active"));
-      if (dots[index]) dots[index].classList.add("active");
-    });
-    // /assets/js/home.js
-const supabase = window.supabaseClient;
-
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const gallery = document.getElementById("artGallery");
-
-async function loadArt() {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("artworks")
     .select("*")
-    .eq("status", "approved");
+    .eq("status", "approved")
+    .order("created_at", { ascending: false });
 
-  gallery.innerHTML = "";
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  container.innerHTML = "";
 
   data.forEach(art => {
     const card = document.createElement("div");
     card.className = "art-card";
     card.innerHTML = `
-      <img src="${art.image_url}" />
-      <div class="reaction-counts">${art.reactions || ""}</div>
+      <img src="${art.public_url}" />
+      <div class="reaction-count">${art.reactions || 0}</div>
+      <strong>${art.title}</strong>
     `;
-    card.onclick = () => openModal(art);
-    gallery.appendChild(card);
+    card.onclick = () => openArtModal(art);
+    container.appendChild(card);
   });
-}
-
-loadArt();
-let clicks = 0;
-const egg = document.getElementById("easterEgg");
-
-egg.onclick = () => {
-  clicks++;
-  if (clicks === 10) {
-    document.body.classList.toggle("alt-theme");
-    clicks = 0;
-  }
-};
-// ===== EASTER EGG =====
-let eggClicks = 0;
-const egg = document.getElementById("easterEgg");
-
-if (egg) {
-  egg.addEventListener("click", () => {
-    eggClicks++;
-
-    if (eggClicks === 10) {
-      document.body.classList.toggle("theme-shift");
-      eggClicks = 0;
-
-      console.log("🐣 Easter Egg Activated");
-    }
-  });
-}
-
-  });
-})();
+});
