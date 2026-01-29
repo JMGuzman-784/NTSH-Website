@@ -1,27 +1,34 @@
-// /assets/js/auth-gate.js
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = window.supabase.createClient(
-    "https://lworwldpziimhmcavjju.supabase.co",
-    "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP";
-  );
+ // /assets/js/auth-gate.js
 
-  // 🔎 Check real auth session FIRST
-  const { data } = await supabase.auth.getSession();
+document.addEventListener("DOMContentLoaded", () => {
+  const supabaseUrl = "https://lworwldpziimhmcavjju.supabase.co";
+  const supabaseKey = "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP"; // sb_publishable_...
 
-  if (data.session) {
-    // ✅ REAL USER EXISTS → go home
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  const viewerBtn = document.getElementById("viewerBtn");
+  const guestBtn = document.getElementById("guestBtn");
+  const loginBtn = document.getElementById("loginBtn");
+
+  // ---- VIEWER ----
+  viewerBtn.onclick = () => {
+    sessionStorage.clear();
+    sessionStorage.setItem("ntsh_role", "viewer");
+    sessionStorage.setItem("ntsh_user", `viewer_${Math.floor(Math.random() * 1000)}`);
     window.location.href = "/home.html";
-    return;
-  }
+  };
 
-document.getElementById("viewerBtn")?.addEventListener("click", () => {
-  sessionStorage.setItem("ntsh_role", "viewer");
-  sessionStorage.setItem("ntsh_user", "viewer_001");
-  window.location.href = "/home.html";
-});
+  // ---- GUEST ----
+  guestBtn.onclick = () => {
+    sessionStorage.clear();
+    sessionStorage.setItem("ntsh_role", "guest");
+    sessionStorage.setItem("ntsh_user", `guest_${Math.floor(Math.random() * 1000)}`);
+    window.location.href = "/home.html";
+  };
 
-  
-  // ❌ NO AUTO VIEWER MODE HERE
-  // Viewer is ONLY triggered by button click
+  // ---- LOGIN (real auth later) ----
+  loginBtn.onclick = () => {
+    window.location.href = "/login.html"; // Phase B
+  };
 });
