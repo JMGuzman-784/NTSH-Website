@@ -32,15 +32,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.appendChild(card);
   });
 });
-let eggCount = 0;
-const egg = document.getElementById("ntsh-easter-egg");
-
-if (egg) {
-  egg.onclick = () => {
-    eggCount++;
-    if (eggCount === 10) {
-      document.body.classList.toggle("alt-theme");
-      eggCount = 0;
-    }
-  };
-}
