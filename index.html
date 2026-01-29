@@ -1,105 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NTSH — Enter</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/auth-gate.css" />
+
+  <!-- Supabase (UMD only) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>NTSH</title>
+  <!-- Auth Gate Logic -->
+  <script defer src="/assets/js/auth-gate.js"></script>
 
-  <link rel="stylesheet" href="/assets/css/auth-gate.css?v=1" />
-
-  <!-- ✅ Supabase UMD build (required for window.supabase) -->
-
-
-  <script defer src="/assets/js/auth-gate.js?v=1"></script>
-  <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
+  <link rel="icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
-<body data-page="admin">
 
+<body>
   <main class="gate">
+
     <section class="card">
-      <div class="logo-wrap">
-        <div class="ntsh" aria-label="NTSH logo">NTSH</div>
-        <div class="tagline">Nothing To See Here — Only Art That Speaks</div>
+      <h1 class="logo">NTSH</h1>
+      <p class="tagline">Nothing To See Here — Only Art That Speaks</p>
+
+      <div class="choices">
+        <button id="viewerBtn" class="choice">
+          👀 Continue as Viewer
+        </button>
+
+        <button id="guestBtn" class="choice">
+          🧍 Continue as Guest
+        </button>
+
+        <button id="loginBtn" class="choice primary">
+          🔐 Log In
+        </button>
       </div>
 
-      <div class="actions">
-        <button id="openLogin" class="btn primary">Log In</button>
-        <button id="openSignup" class="btn ghost">Sign Up</button>
-      </div>
-<body data-page="admin">
-
-      <div class="mini">
-        <span class="muted">Viewers can browse without an account.</span>
-        <span class="muted">Accounts unlock reactions + personalization.</span>
-      </div>
+      <p class="hint">
+        Viewers browse only • Guests react & comment • Artists upload
+      </p>
     </section>
+
   </main>
-
-  <!-- Modal -->
-  <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-top">
-        <h2 id="modalTitle">Welcome</h2>
-        <button id="closeModal" class="icon-btn" aria-label="Close">✕</button>
-      </div>
-
-      <!-- LOGIN FORM -->
-      <form id="loginForm" class="form" hidden>
-        <label class="label">Email or Username</label>
-        <input id="loginIdentity" type="text" autocomplete="username" placeholder="email@domain.com or jg_001" required />
-
-        <label class="label">Password</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" required />
-
-        <button type="submit" class="btn primary full">Log In</button>
-
-        <p class="switch muted">
-          No account? <button type="button" id="toSignup" class="link">Sign Up</button>
-          <button id="loginBtn">Sign In</button>
-    <button id="signupBtn">Sign Up</button>
-    <button id="viewerBtn">Continue as Viewer</button>
-
-        </p>
-      </form>
-
-      <!-- SIGNUP FORM -->
-      <form id="signupForm" class="form" hidden>
-        <div class="grid2">
-          <div>
-            <label class="label">First Name</label>
-            <input id="firstName" type="text" autocomplete="given-name" placeholder="Jose" required />
-          </div>
-          <div>
-            <label class="label">Last Name</label>
-            <input id="lastName" type="text" autocomplete="family-name" placeholder="Guzman" required />
-          </div>
-        </div>
-
-        <label class="label">Email</label>
-        <input id="email" type="email" autocomplete="email" placeholder="email@domain.com" required />
-
-        <label class="label">Password (8–10 characters)</label>
-        <input id="password" type="password" autocomplete="new-password" placeholder="8–10 characters" required minlength="8" maxlength="10" />
-
-        <label class="label">Confirm Password</label>
-        <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Must match password" required minlength="8" maxlength="10" />
-
-        <button type="submit" class="btn primary full">Create Account</button>
-
-        <p class="switch muted">
-          Already have an account? <button type="button" id="toLogin" class="link">Log In</button>
-        </p>
-      </form>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  
-<script src="/assets/js/auth.js"></script>
-
 </body>
 </html>
