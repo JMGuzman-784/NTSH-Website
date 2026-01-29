@@ -24,24 +24,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const user = session.user;
-  const email = user.email;
+ const user = data.session.user;
 
-  // 🔐 ADMIN CHECK (OPTION A)
-  let role = "user";
-  let username = "user_001";
+const email = user.email;
+const isAdmin = email === "ntshbusiness@gmail.com";
 
-  if (email === "ntshbusiness@gmail.com") {
-    role = "admin";
-    username = "Raid";
-  }
+sessionStorage.setItem("ntsh_uid", user.id);
+sessionStorage.setItem("ntsh_user", user.user_metadata?.username || email);
+sessionStorage.setItem("ntsh_role", isAdmin ? "admin" : "artist");
 
-  sessionStorage.setItem("ntsh_role", role);
-  sessionStorage.setItem("ntsh_user", username);
+console.log("[NTSH Auth]", {
+  role: isAdmin ? "admin" : "artist",
+  user: user.email
+});
 
-  console.log("[NTSH Auth]", {
-    role,
-    user: username,
-    email,
-  });
 });
