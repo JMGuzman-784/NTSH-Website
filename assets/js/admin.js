@@ -70,4 +70,21 @@
       container.innerHTML = "<p>Unexpected error.</p>";
     }
   });
+  // /assets/js/admin.js
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function loadPending() {
+  const { data } = await supabase
+    .from("artworks")
+    .select("*")
+    .eq("status", "pending");
+
+  data.forEach(art => {
+    // render approve / deny buttons
+  });
+}
+
+loadPending();
+
 })();
