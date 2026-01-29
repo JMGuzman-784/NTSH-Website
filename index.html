@@ -3,85 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NTSH — Enter</title>
+  <title>NTSH</title>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/auth-gate.css" />
-
-  <!-- Supabase (UMD only) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-  <!-- Auth Gate Logic -->
-  <script defer src="/assets/js/auth-gate.js"></script>
-
   <link rel="icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
 
 <body>
   <main class="gate">
-
     <section class="card">
       <h1 class="logo">NTSH</h1>
       <p class="tagline">Nothing To See Here — Only Art That Speaks</p>
 
       <div class="choices">
         <button onclick="enterAs('viewer')">👀 Continue as Viewer</button>
-<button onclick="enterAs('guest')">🧍 Continue as Guest</button>
-<button onclick="enterAs('admin')">🖥 Admin</button>
-
+        <button onclick="enterAs('guest')">🧍 Continue as Guest</button>
+        <button onclick="enterAs('admin')">🖥 Admin</button>
       </div>
 
       <p class="hint">
-        Viewers browse only • Guests react & comment • Artists upload
+        Viewers browse • Guests react • Artists upload
       </p>
     </section>
-    
-<script>
-  function enterAs(role) {
-    sessionStorage.clear();
-
-    if (role === "viewer") {
-      sessionStorage.setItem("ntsh_role", "viewer");
-      sessionStorage.setItem("ntsh_user", "viewer_001");
-    }
-
-    if (role === "guest") {
-      sessionStorage.setItem("ntsh_role", "guest");
-      sessionStorage.setItem("ntsh_user", "guest_001");
-    }
-
-    if (role === "admin") {
-      sessionStorage.setItem("ntsh_role", "admin");
-      sessionStorage.setItem("ntsh_user", "Raid");
-    }
-
-    window.location.href = "/home.html";
-  }
-</script>
-
   </main>
+
   <script>
-  function enterAs(role) {
-    sessionStorage.clear();
+    function enterAs(role) {
+      sessionStorage.clear();
 
-    if (role === "viewer") {
-      sessionStorage.setItem("ntsh_role", "viewer");
-      sessionStorage.setItem("ntsh_user", "viewer_001");
+      const map = {
+        viewer: { role: "viewer", user: "viewer_001" },
+        guest:  { role: "guest",  user: "guest_001" },
+        admin:  { role: "admin",  user: "Raid" }
+      };
+
+      sessionStorage.setItem("ntsh_role", map[role].role);
+      sessionStorage.setItem("ntsh_user", map[role].user);
+
+      window.location.href = "/home.html";
     }
-
-    if (role === "guest") {
-      sessionStorage.setItem("ntsh_role", "guest");
-      sessionStorage.setItem("ntsh_user", "guest_001");
-    }
-
-    if (role === "admin") {
-      sessionStorage.setItem("ntsh_role", "admin");
-      sessionStorage.setItem("ntsh_user", "Raid");
-    }
-
-    window.location.href = "/home.html";
-  }
-</script>
-
+  </script>
 </body>
 </html>
