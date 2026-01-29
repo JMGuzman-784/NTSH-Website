@@ -65,6 +65,39 @@ document.addEventListener("DOMContentLoaded", async () => {
       statusText.textContent = "Image upload failed.";
       return;
     }
+// Elements
+const requestGuestBtn = document.getElementById("requestGuestBtn");
+const uploadBtn = document.getElementById("uploadBtn");
+const adminPanelBtn = document.getElementById("adminPanelBtn");
+
+// role comes from your profile table
+const role = userProfile.role;
+
+// Hide everything by default
+if (requestGuestBtn) requestGuestBtn.style.display = "none";
+if (uploadBtn) uploadBtn.style.display = "none";
+if (adminPanelBtn) adminPanelBtn.style.display = "none";
+
+// Viewer
+if (role === "viewer") {
+  if (requestGuestBtn) requestGuestBtn.style.display = "block";
+}
+
+// Guest
+if (role === "guest") {
+  // no upload, no request
+}
+
+// Artist
+if (role === "artist") {
+  if (uploadBtn) uploadBtn.style.display = "block";
+}
+
+// Admin
+if (role === "admin") {
+  if (uploadBtn) uploadBtn.style.display = "block";
+  if (adminPanelBtn) adminPanelBtn.style.display = "block";
+}
 
     // Insert DB row (THIS FIXES YOUR BUCKET ERROR)
     const { error: insertError } = await supabase
