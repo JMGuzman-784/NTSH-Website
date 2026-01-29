@@ -50,6 +50,12 @@
     <button id="uploadBtn">Upload Your Art</button>
     <button id="adminPanelBtn" style="display:none;">Admin Panel</button>
   </div>
+  <h1 id="profileName"></h1>
+<p id="profileRole"></p>
+<button id="requestGuest">Request Guest Access</button>
+
+<script src="/assets/js/viewer.js"></script>
+
 </section>
 
 <!-- PORTFOLIO -->
@@ -91,11 +97,17 @@
     </div>
 
     <p id="upload-status"></p>
+
+    
   </div>
 </div>
 
 <!-- PROFILE LOGIC -->
 <script defer src="/assets/js/profile.js?v=FINAL"></script>
+<script>
+document.getElementById("profileName").textContent = NTSH.user;
+document.getElementById("profileRole").textContent = NTSH.role;
+</script>
 
 
 </body>
