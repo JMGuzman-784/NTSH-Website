@@ -27,6 +27,14 @@
 </head>
 
 <body>
+  <script>
+  const role = sessionStorage.getItem("ntsh_role");
+  if (role !== "admin") {
+    alert("Access denied.");
+    window.location.href = "/index.html";
+  }
+</script>
+
 
 <!-- HEADER -->
 <header class="account-header">
