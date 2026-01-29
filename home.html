@@ -1,21 +1,25 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Supabase FIRST -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <meta charset="utf-8" />
-  
-<script src="/assets/js/auth.js"></script>
+
+  <!-- Auth SECOND -->
+  <script src="/assets/js/auth.js"></script>
 
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>NTSH — Home</title>
 
   <link rel="stylesheet" href="/assets/css/gallery.css?v=1" />
   <link rel="stylesheet" href="/assets/css/account-ui.css?v=1" />
+  <!-- Shared UI -->
   <script defer src="/assets/js/account-ui.js"></script>
-<script defer src="/assets/js/home.js"></script>
-<script defer src="/assets/js/viewer.js"></script>
-<script defer src="/assets/js/modal.js"></script>
+  <!-- Page-specific -->
+  <script defer src="/assets/js/home.js"></script>
+  <script defer src="/assets/js/viewer.js"></script>
+  <script defer src="/assets/js/modal.js"></script>
 
 <script>
   const REQUIRE_LOGIN_ON_HOME = false;
