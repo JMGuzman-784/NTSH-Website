@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+document.getElementById("viewerBtn")?.addEventListener("click", () => {
+  sessionStorage.setItem("ntsh_role", "viewer");
+  sessionStorage.setItem("ntsh_user", "viewer_001");
+  window.location.href = "/home.html";
+});
+
+  
   // ❌ NO AUTO VIEWER MODE HERE
   // Viewer is ONLY triggered by button click
 });
