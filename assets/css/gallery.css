@@ -276,3 +276,6 @@ body{
 .alt-theme {
   filter: hue-rotate(120deg);
 }
+<section class="home-gallery">
+  <div class="gallery-grid" id="home-gallery"></div>
+</section>
