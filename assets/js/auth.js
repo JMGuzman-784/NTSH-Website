@@ -1,9 +1,19 @@
 // /assets/js/auth.js
-document.addEventListener("DOMContentLoaded", () => {
-  if (!window.supabase) {
-    console.error("Supabase library not loaded");
-    return;
-  }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const supabase = window.supabaseClient;
+  if (!supabase) return;
+
+  const { data, error } = await supabase.auth.getSession();
+  if (error || !data.session) return;
+
+  const user = data.session.user;
+
+  sessionStorage.setItem("ntsh_uid", user.id);
+  sessionStorage.setItem("ntsh_user", user.user_metadata?.username || user.email);
+  sessionStorage.setItem("ntsh_role", user.user_metadata?.role || "guest");
+});
+
 
   if (window.supabaseClient) return;
 
