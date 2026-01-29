@@ -5,19 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NTSH • Admin Panel</title>
-
-  <!-- ✅ Supabase FIRST (UMD, not defer) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-  <!-- ✅ Auth SECOND (not defer) -->
-  <script src="/assets/js/auth.js"></script>
-
-  <!-- ✅ Shared account UI -->
-  <script defer src="/assets/js/account-ui.js"></script>
-
-  <!-- ✅ Admin logic LAST -->
-  <script defer src="/assets/js/admin.js?v=FINAL"></script>
-
+  
   <!-- STYLES -->
   <link rel="stylesheet" href="/assets/css/account-ui.css" />
   <link rel="stylesheet" href="/assets/css/gallery.css" />
@@ -26,18 +14,9 @@
   <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
 
-<body>
-  <script>
+<body><script>
   if (sessionStorage.getItem("ntsh_role") !== "admin") {
     alert("Admins only.");
-    window.location.href = "/index.html";
-  }
-</script>
-
-  <script>
-  const role = sessionStorage.getItem("ntsh_role");
-  if (role !== "admin") {
-    alert("Access denied.");
     window.location.href = "/index.html";
   }
 </script>
