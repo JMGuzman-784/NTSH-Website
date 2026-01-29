@@ -1,5 +1,4 @@
 // /assets/js/account-ui.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("ntsh_role") || "viewer";
   const user = sessionStorage.getItem("ntsh_user") || "viewer_001";
@@ -25,8 +24,3 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".request-guest").forEach(b => b.remove());
   }
 });
-if (role === "admin") {
-  document.querySelectorAll(".admin-only").forEach(el => {
-    el.style.display = "block";
-  });
-}
