@@ -247,3 +247,22 @@ body{
 .gallery-dots .dot.active {
   background: #00ffff;
 }
+.easter-egg {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 28px;
+  opacity: 0.35;
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.easter-egg:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.theme-shift {
+  filter: hue-rotate(160deg) saturate(1.2);
+}
