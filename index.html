@@ -26,22 +26,28 @@
       </p>
     </section>
   </main>
+<script>
+function enterAs(role) {
+  sessionStorage.clear();
 
-  <script>
-    function enterAs(role) {
-      sessionStorage.clear();
+  if (role === "viewer") {
+    sessionStorage.setItem("ntsh_role", "viewer");
+    sessionStorage.setItem("ntsh_user", "viewer_001");
+  }
 
-      const map = {
-        viewer: { role: "viewer", user: "viewer_001" },
-        guest:  { role: "guest",  user: "guest_001" },
-        admin:  { role: "admin",  user: "Raid" }
-      };
+  if (role === "guest") {
+    sessionStorage.setItem("ntsh_role", "guest");
+    sessionStorage.setItem("ntsh_user", "guest_001");
+  }
 
-      sessionStorage.setItem("ntsh_role", map[role].role);
-      sessionStorage.setItem("ntsh_user", map[role].user);
+  if (role === "admin") {
+    sessionStorage.setItem("ntsh_role", "admin");
+    sessionStorage.setItem("ntsh_user", "Raid");
+  }
 
-      window.location.href = "/home.html";
-    }
-  </script>
+  window.location.href = "/home.html";
+}
+</script>
+
 </body>
 </html>
