@@ -26,3 +26,10 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
     );
   });
 });
+setTimeout(() => {
+  console.log("AUTH STATE:", {
+    role: sessionStorage.getItem("ntsh_role"),
+    user: sessionStorage.getItem("ntsh_user"),
+    uid: sessionStorage.getItem("ntsh_uid"),
+  });
+}, 500);
