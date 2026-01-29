@@ -42,6 +42,29 @@
         Viewers browse only • Guests react & comment • Artists upload
       </p>
     </section>
+    
+<script>
+  function enterAs(role) {
+    sessionStorage.clear();
+
+    if (role === "viewer") {
+      sessionStorage.setItem("ntsh_role", "viewer");
+      sessionStorage.setItem("ntsh_user", "viewer_001");
+    }
+
+    if (role === "guest") {
+      sessionStorage.setItem("ntsh_role", "guest");
+      sessionStorage.setItem("ntsh_user", "guest_001");
+    }
+
+    if (role === "admin") {
+      sessionStorage.setItem("ntsh_role", "admin");
+      sessionStorage.setItem("ntsh_user", "Raid");
+    }
+
+    window.location.href = "/home.html";
+  }
+</script>
 
   </main>
 </body>
