@@ -1,6 +1,8 @@
 // ---- Supabase init (fill these in) ----
 // /assets/js/auth.js
 
+// /assets/js/auth.js
+
 document.addEventListener("DOMContentLoaded", () => {
 const supabaseUrl = "https://lworwldpziimhmcavjju.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3b3J3bGRwemlpbWhtY2F2amp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5MTA4ODcsImV4cCI6MjA3NzQ4Njg4N30.Nf0vYb3-DEUgumWNi3hfV1M7Vu6guQE_gzob4Ee-lao";
@@ -26,10 +28,3 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
     );
   });
 });
-setTimeout(() => {
-  console.log("AUTH STATE:", {
-    role: sessionStorage.getItem("ntsh_role"),
-    user: sessionStorage.getItem("ntsh_user"),
-    uid: sessionStorage.getItem("ntsh_uid"),
-  });
-}, 500);
