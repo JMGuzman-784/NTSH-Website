@@ -1,7 +1,9 @@
 // /assets/js/account-ui.js
-document.addEventListener("DOMContentLoaded", () => {
-  const role = sessionStorage.getItem("ntsh_role") || "viewer";
-  const user = sessionStorage.getItem("ntsh_user") || "viewer_001";
+// UI role handling (safe on all pages)
+
+document.addEventListener("ntsh:auth-ready", () => {
+  const role = window.NTSH?.role || "viewer";
+  const user = window.NTSH?.user || "viewer_001";
 
   const nameEl = document.getElementById("accountName");
   const userEl = document.getElementById("accountUser");
@@ -17,10 +19,15 @@ document.addEventListener("DOMContentLoaded", () => {
     admin: "🖥 admin",
   };
 
-  if (roleBadge) roleBadge.textContent = roleMap[role];
-
-  // Hide admin-only or guest-only buttons
-  if (role === "admin") {
-    document.querySelectorAll(".request-guest").forEach(b => b.remove());
+  if (roleBadge) {
+    roleBadge.textContent = roleMap[role] || "👀 viewer";
   }
+
+  // Hide elements by role
+  document.querySelectorAll("[data-role]").forEach(el => {
+    const allowed = el.dataset.role.split(",");
+    if (!allowed.includes(role)) {
+      el.remove();
+    }
+  });
 });
