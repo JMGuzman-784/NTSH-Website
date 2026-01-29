@@ -66,5 +66,33 @@
       dots.forEach(d => d.classList.remove("active"));
       if (dots[index]) dots[index].classList.add("active");
     });
+    // /assets/js/home.js
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const gallery = document.getElementById("artGallery");
+
+async function loadArt() {
+  const { data } = await supabase
+    .from("artworks")
+    .select("*")
+    .eq("status", "approved");
+
+  gallery.innerHTML = "";
+
+  data.forEach(art => {
+    const card = document.createElement("div");
+    card.className = "art-card";
+    card.innerHTML = `
+      <img src="${art.image_url}" />
+      <div class="reaction-counts">${art.reactions || ""}</div>
+    `;
+    card.onclick = () => openModal(art);
+    gallery.appendChild(card);
+  });
+}
+
+loadArt();
+
   });
 })();
