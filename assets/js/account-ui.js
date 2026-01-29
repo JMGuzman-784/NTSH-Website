@@ -1,9 +1,9 @@
 // /assets/js/account-ui.js
-// UI role handling (safe on all pages)
+document.addEventListener("DOMContentLoaded", () => {
+  const role = sessionStorage.getItem("ntsh_role");
+  const user = sessionStorage.getItem("ntsh_user");
 
-document.addEventListener("ntsh:auth-ready", () => {
-  const role = window.NTSH?.role || "viewer";
-  const user = window.NTSH?.user || "viewer_001";
+  if (!role || !user) return;
 
   const nameEl = document.getElementById("accountName");
   const userEl = document.getElementById("accountUser");
@@ -12,22 +12,20 @@ document.addEventListener("ntsh:auth-ready", () => {
   if (nameEl) nameEl.textContent = user;
   if (userEl) userEl.textContent = `@${user}`;
 
-  const roleMap = {
+  const roles = {
     viewer: "👀 viewer",
     guest: "🧍 guest",
-    artist: "🎨 artist",
-    admin: "🖥 admin",
+    admin: "🖥 admin"
   };
 
-  if (roleBadge) {
-    roleBadge.textContent = roleMap[role] || "👀 viewer";
+  if (roleBadge) roleBadge.textContent = roles[role] || role;
+
+  // Admin cleanup
+  if (role === "admin") {
+    document
+      .querySelectorAll("#requestGuest, .request-guest")
+      .forEach(el => el.remove());
   }
 
-  // Hide elements by role
-  document.querySelectorAll("[data-role]").forEach(el => {
-    const allowed = el.dataset.role.split(",");
-    if (!allowed.includes(role)) {
-      el.remove();
-    }
-  });
+  console.log("[NTSH UI]", role, user);
 });
