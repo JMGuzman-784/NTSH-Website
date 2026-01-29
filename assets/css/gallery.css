@@ -266,3 +266,7 @@ body{
 .theme-shift {
   filter: hue-rotate(160deg) saturate(1.2);
 }
+.alt-theme {
+  --accent: #ff6ec7;
+  --bg-glow: #00ffd5;
+}
