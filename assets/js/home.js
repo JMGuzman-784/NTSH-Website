@@ -21,6 +21,19 @@
       track.innerHTML = "<p style='opacity:.6'>No approved art yet.</p>";
       return;
     }
+    let eggClicks = 0;
+const egg = document.getElementById("easterEgg");
+
+if (egg) {
+  egg.addEventListener("click", () => {
+    eggClicks++;
+    if (eggClicks === 10) {
+      document.body.classList.toggle("alt-theme");
+      eggClicks = 0;
+    }
+  });
+}
+
 
     track.innerHTML = "";
     dotsWrap.innerHTML = "";
