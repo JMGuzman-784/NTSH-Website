@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Supabase FIRST -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
   <meta charset="UTF-8" />
-  <!-- Auth SECOND -->
-  <script src="/assets/js/auth.js"></script>
-  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NTSH • Admin Panel</title>
-  
-  <!-- Shared UI -->
+
+  <!-- ✅ Supabase FIRST (UMD, not defer) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- ✅ Auth SECOND (not defer) -->
+  <script src="/assets/js/auth.js"></script>
+
+  <!-- ✅ Shared account UI -->
   <script defer src="/assets/js/account-ui.js"></script>
+
+  <!-- ✅ Admin logic LAST -->
+  <script defer src="/assets/js/admin.js?v=FINAL"></script>
 
   <!-- STYLES -->
   <link rel="stylesheet" href="/assets/css/account-ui.css" />
   <link rel="stylesheet" href="/assets/css/gallery.css" />
- 
 
-
+  <!-- FAVICON -->
   <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
 
@@ -29,7 +32,7 @@
 <header class="account-header">
   <button id="accountBtn">
     <span id="accountAvatar">?</span>
-    <span id="accountName">Loading</span>
+    <span id="accountName">Loading…</span>
     <span id="roleBadge">admin</span>
   </button>
 
@@ -39,20 +42,18 @@
 </header>
 
 <!-- ADMIN PANEL -->
-<section class="profile-card">
- <button class="admin-only" style="display:none">Admin Panel</button>
+<main class="wrap">
+  <section class="profile-card">
+    <h1>Admin Panel</h1>
+    <p>Review and approve submitted artwork</p>
+  </section>
 
-  <p>Review and approve submitted artwork</p>
-</section>
-  <img src="/assets/images/1000016828.png">
-
-
-<!-- PENDING ART -->
-<section class="portfolio-section">
-  <h2>Pending Submissions</h2>
-  <div id="pending-art"></div>
-</section>
-
+  <!-- Pending submissions -->
+  <section class="portfolio-section">
+    <h2>Pending Submissions</h2>
+    <div id="pending-art"></div>
+  </section>
+</main>
 
 </body>
 </html>
