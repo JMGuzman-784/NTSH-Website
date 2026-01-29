@@ -1,5 +1,4 @@
-// /assets/js/home.js
-document.addEventListener("ntsh:auth-ready", async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const supabase = window.supabaseClient;
   if (!supabase) return;
 
@@ -13,21 +12,21 @@ document.addEventListener("ntsh:auth-ready", async () => {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Failed to load approved art:", error.message);
+    console.error("[Home] failed to load art", error);
     return;
   }
 
   container.innerHTML = "";
 
-  data.forEach((art) => {
+  data.forEach(art => {
     const card = document.createElement("div");
     card.className = "art-card";
     card.innerHTML = `
-      <img src="${art.public_url}" alt="${art.title}" />
+      <img src="${art.public_url}" alt="${art.title}">
       <div class="reaction-count">${art.reactions || 0}</div>
       <strong>${art.title}</strong>
     `;
-    card.addEventListener("click", () => openArtModal(art));
+    card.onclick = () => openArtModal(art);
     container.appendChild(card);
   });
 });
