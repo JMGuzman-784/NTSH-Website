@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const supabase = window.supabase.createClient(
     "https://lworwldpziimhmcavjju.supabase.co",
-    "PASTE_YOUR_PUBLISHABLE_KEY_HERE"
+    "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP";
   );
 
   // 🔎 Check real auth session FIRST
