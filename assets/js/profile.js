@@ -1,16 +1,9 @@
-// /assets/js/profile.js
-document.addEventListener("DOMContentLoaded", async () => {
-  
-  const uid = sessionStorage.getItem("ntsh_uid");
-  window.supabase = window.supabaseClient;
+// assets/js/profile.js
 
-  if (!supabase || !uid) return;
+document.addEventListener("DOMContentLoaded", () => {
+  const role = sessionStorage.getItem("ntsh_role");
 
-  if (role === "viewer") {
-    document.querySelectorAll(".upload-btn").forEach(b => b.remove());
-  }
-
-  if (role === "artist") {
-    // allow delete own art
+  if (role === "admin") {
+    document.getElementById("adminLink").style.display = "block";
   }
 });
