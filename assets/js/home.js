@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = window.supabaseClient;
+  window.supabase = window.supabaseClient;
   if (!supabase) return;
 
   const container = document.getElementById("home-gallery");
