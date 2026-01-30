@@ -17,11 +17,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // LOGIN FLOW
-  if (loginBtn) {
-    loginBtn.onclick = () => {
-      window.location.href = "/login.html";
-    };
-  }
+  const loginBtn = document.getElementById("enterLogin");
+
+if (loginBtn) {
+  loginBtn.onclick = () => {
+    window.location.href = "/login.html";
+  };
+}
+
 
   console.log("[Router] Ready");
 });
