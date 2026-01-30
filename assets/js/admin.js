@@ -45,5 +45,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     container.appendChild(card);
+
+    const userBox = document.getElementById("pending-users");
+
+const { data: users } = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("username_approved", false);
+
+users.forEach(u => {
+  const row = document.createElement("div");
+  row.innerHTML = `
+    <span>${u.username}</span>
+    <button>Approve</button>
+  `;
+  row.querySelector("button").onclick = async () => {
+    await supabase.from("profiles")
+      .update({ username_approved: true })
+      .eq("id", u.id);
+    row.remove();
+  };
+  userBox.appendChild(row);
+});
+
   });
 });
