@@ -1,10 +1,25 @@
-// /assets/js/auth-router.js
-document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = window.supabaseClient;
-  if (!supabase) return;
+(() => {
+  if (window.__NTSH_AUTH_ROUTER_LOADED__) return;
+  window.__NTSH_AUTH_ROUTER_LOADED__ = true;
 
-  const viewerBtn = document.getElementById("enterViewer");
+  console.log("[auth-router] loaded");
+
   const loginBtn = document.getElementById("enterLogin");
+  const viewerBtn = document.getElementById("enterViewer");
+
+  if (viewerBtn) {
+    viewerBtn.addEventListener("click", () => {
+      sessionStorage.setItem("ntsh_role", "viewer");
+      window.location.href = "/home.html";
+    });
+  }
+
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "/login.html";
+    });
+  }
+})();
 
   // VIEWER FLOW (no auth)
   if (viewerBtn) {
@@ -15,15 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.location.href = "/home.html";
     };
   }
-
-  // LOGIN FLOW
-  const loginBtn = document.getElementById("enterLogin");
-
-if (loginBtn) {
-  loginBtn.onclick = () => {
-    window.location.href = "/login.html";
-  };
-}
 
 
   console.log("[Router] Ready");
