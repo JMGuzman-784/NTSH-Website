@@ -1,72 +1,55 @@
-// /assets/js/admin.js
+// assets/js/admin.js
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (document.body.dataset.page !== "admin") return;
-  if (window.NTSH_STATE.role !== "admin") return;
+  const role = sessionStorage.getItem("ntsh_role");
+  if (role !== "admin") return;
 
-  const supabase = window.supabaseClient;
-  const container = document.querySelector(".admin-grid");
+  const container = document.getElementById("pending-art");
+  if (!container) return;
 
-  const { data, error } = await supabase
+  const { data, error } = await window.supabase
     .from("artworks")
     .select("*")
-    .eq("status", "pending");
+    .eq("status", "pending")
+    .order("created_at");
 
   if (error) {
     console.error(error);
     return;
   }
 
-  container.innerHTML = "";
+  data.forEach((art) => {
+    const row = document.createElement("div");
+    row.className = "pending-row";
 
-  data.forEach(art => {
-    const card = document.createElement("div");
-    card.className = "art-card";
+    const { data: urlData } = window.supabase
+      .storage
+      .from(art.bucket)
+      .getPublicUrl(art.file_path);
 
-    card.innerHTML = `
-      <img src="${art.image_url}" />
-      <p>${art.title || "Untitled"}</p>
-      <button data-action="approve">Approve</button>
-      <button data-action="reject">Reject</button>
+    row.innerHTML = `
+      <img src="${urlData.publicUrl}" />
+      <button data-id="${art.id}" data-action="approve">Approve</button>
+      <button data-id="${art.id}" data-action="reject">Reject</button>
     `;
 
-    card.querySelector("[data-action='approve']").onclick = async () => {
-      await supabase.from("artworks")
-        .update({ status: "approved" })
-        .eq("id", art.id);
-      card.remove();
-    };
+    row.addEventListener("click", async (e) => {
+      const btn = e.target;
+      if (!btn.dataset.action) return;
 
-    card.querySelector("[data-action='reject']").onclick = async () => {
-      await supabase.from("artworks")
-        .update({ status: "rejected" })
-        .eq("id", art.id);
-      card.remove();
-    };
+      const status = btn.dataset.action === "approve" ? "approved" : "rejected";
 
-    container.appendChild(card);
+      await window.supabase
+        .from("artworks")
+        .update({
+          status,
+          approved_at: status === "approved" ? new Date() : null
+        })
+        .eq("id", btn.dataset.id);
 
-    const userBox = document.getElementById("pending-users");
+      row.remove();
+    });
 
-const { data: users } = await supabase
-  .from("profiles")
-  .select("*")
-  .eq("username_approved", false);
-
-users.forEach(u => {
-  const row = document.createElement("div");
-  row.innerHTML = `
-    <span>${u.username}</span>
-    <button>Approve</button>
-  `;
-  row.querySelector("button").onclick = async () => {
-    await supabase.from("profiles")
-      .update({ username_approved: true })
-      .eq("id", u.id);
-    row.remove();
-  };
-  userBox.appendChild(row);
-});
-
+    container.appendChild(row);
   });
 });
