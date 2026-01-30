@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const role = sessionStorage.getItem("ntsh_role");
   if (role !== "admin") return;
 
-  const supabase = window.supabaseClient;
+  window.supabase = window.supabaseClient;
   const container = document.getElementById("pending-art");
 
   const { data } = await supabase
