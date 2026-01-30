@@ -1,57 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NTSH — Enter</title>
 
-  <!-- Entry styles -->
-  <link rel="stylesheet" href="/assets/css/auth-entry.css" />
+  <!-- Base styles (minimal for now) -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
 
-  <!-- Supabase (UMD) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-  <!-- Supabase client -->
-  <script src="/assets/js/supabase-client.js"></script>
-
-  <!-- Auth Router -->
-  <script src="/assets/js/auth-router.js"></script>
-
-  <link rel="icon" href="/assets/images/Raid'sNTSHLogo.png">
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/images/ntsh-logo.png" />
 </head>
-
 <body>
-  <main class="entry">
 
+  <main class="gate">
     <section class="card">
-      <h1 class="logo">NTSH</h1>
-      <p class="subtitle">Nothing To See Here</p>
-      <p class="tagline">Only Art That Speaks</p>
+
+      <h1 class="brand">NTSH</h1>
+
+      <p class="tagline">
+        Nothing To See Here<br />
+        <span class="subtle">Only Art That Speaks</span>
+      </p>
 
       <div class="actions">
-        <button id="enterViewer">👀 Continue as Viewer</button>
-        <button id="enterLogin">🔐 Log In / Sign Up</button>
+        <button id="viewerBtn" class="btn primary">
+          👁 Continue as Viewer
+        </button>
+
+        <button id="loginBtn" class="btn ghost">
+          🔐 Log In / Sign Up
+        </button>
       </div>
 
       <p class="hint">
-        Viewers browse • Members react & comment • Artists upload
+        Viewers browse only • Accounts unlock interaction
       </p>
+
     </section>
-
-    <!-- LOGIN MODAL -->
-    <section id="loginModal" class="modal hidden">
-      <form id="loginForm" class="login-card">
-        <h2>Log in to NTSH</h2>
-
-        <input type="email" id="email" placeholder="Email" required />
-        <input type="password" id="password" placeholder="Password" required />
-
-        <button type="submit">Log In / Sign Up</button>
-
-        <button type="button" id="closeLogin" class="ghost">Cancel</button>
-      </form>
-    </section>
-
   </main>
+
+  <!-- ENTRY LOGIC ONLY -->
+  <script>
+    const viewerBtn = document.getElementById("viewerBtn");
+    const loginBtn  = document.getElementById("loginBtn");
+
+    viewerBtn.addEventListener("click", () => {
+      // Clear any previous state
+      localStorage.clear();
+
+      // Set viewer intent
+      localStorage.setItem("ntsh_role", "viewer");
+
+      // Go to home
+      window.location.href = "/home.html";
+    });
+
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "/login.html";
+    });
+  </script>
+
 </body>
 </html>
