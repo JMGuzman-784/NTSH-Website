@@ -33,7 +33,7 @@
 
 
   console.log("[Router] Ready");
-});
+);
 
 function generateViewerName() {
   const count = Number(localStorage.getItem("viewer_count") || 0) + 1;
