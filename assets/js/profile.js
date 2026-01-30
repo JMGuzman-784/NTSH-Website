@@ -1,32 +1,23 @@
-// /assets/js/profile.js
-// Profile display logic
+// assets/js/profile.js
 
-document.addEventListener("DOMContentLoaded", () => {
-  const page = document.body.dataset.page;
-  if (page !== "profile") return;
+document.addEventListener("DOMContentLoaded", async () => {
+  const uid = sessionStorage.getItem("ntsh_uid");
+  if (!uid) return;
 
-  const usernameEl = document.getElementById("username");
-  const roleEl = document.getElementById("role");
-  const adminBtn = document.getElementById("adminPanel");
+  const { data, error } = await window.supabase
+    .from("profiles")
+    .select("display_name, role")
+    .eq("id", uid)
+    .single();
 
-  const role = window.NTSH_STATE.role;
-  const user = window.NTSH_STATE.user;
+  if (error) return;
 
-  if (usernameEl) usernameEl.textContent = user;
-  if (roleEl) roleEl.textContent = role;
+  document.getElementById("profileName").textContent = data.display_name;
 
-  // Show admin panel button ONLY for Raid
-  if (role === "admin" && adminBtn) {
-    adminBtn.hidden = false;
-    adminBtn.onclick = () => {
-      window.location.href = "/admin.html";
-
-      if (role === "guest") {
-  const notice = document.createElement("p");
-  notice.textContent = "Username pending approval.";
-  document.querySelector(".profile-card").appendChild(notice);
-}
-
-    };
+  if (data.role === "admin") {
+    const btn = document.createElement("button");
+    btn.textContent = "Admin Panel";
+    btn.onclick = () => window.location.href = "/admin.html";
+    document.getElementById("profileActions").appendChild(btn);
   }
 });
