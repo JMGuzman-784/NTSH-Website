@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   
   const uid = sessionStorage.getItem("ntsh_uid");
-  const supabase = window.supabaseClient;
+  window.supabase = window.supabaseClient;
 
   if (!supabase || !uid) return;
 
