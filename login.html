@@ -1,1 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NTSH — Log In</title>
 
+  <!-- Base styles -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <!-- Login-only styles (minimal for now) -->
+  <link rel="stylesheet" href="/assets/css/login.css" />
+
+  <link rel="icon" href="/assets/images/ntsh-logo.png" />
+</head>
+<body>
+
+<main class="gate">
+  <section class="card wide">
+
+    <h1 class="brand">NTSH</h1>
+    <p class="tagline">
+      Nothing To See Here<br />
+      <span class="subtle">Only Art That Speaks</span>
+    </p>
+
+    <div class="split">
+
+      <!-- LEFT: VIEWER -->
+      <div class="panel">
+        <h2>Viewer</h2>
+        <p class="panel-text">
+          Browse approved artwork with no account.
+        </p>
+        <button id="viewerBtn" class="btn ghost">
+          👁 Continue as Viewer
+        </button>
+      </div>
+
+      <!-- RIGHT: LOGIN / SIGN UP -->
+      <div class="panel">
+        <h2>Member</h2>
+
+        <form id="loginForm">
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="btn primary">
+            Log In / Sign Up
+          </button>
+        </form>
+
+        <p class="panel-text subtle">
+          Guests can react & comment.<br />
+          Artists upload after approval.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+</main>
+
+<!-- INTENT ONLY (NO AUTH HERE) -->
+<script>
+  const viewerBtn = document.getElementById("viewerBtn");
+  const loginForm = document.getElementById("loginForm");
+
+  viewerBtn.addEventListener("click", () => {
+    localStorage.clear();
+    localStorage.setItem("ntsh_role", "viewer");
+    window.location.href = "/home.html";
+  });
+
+  // Auth logic handled in login.js (next step)
+</script>
+
+</body>
+</html>
