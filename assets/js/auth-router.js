@@ -1,42 +1,95 @@
-(() => {
-  if (window.__NTSH_AUTH_ROUTER_LOADED__) return;
-  window.__NTSH_AUTH_ROUTER_LOADED__ = true;
+// assets/js/auth-router.js
+// Central auth + role router for ALL pages
 
-  console.log("[auth-router] loaded");
+(function () {
+  console.log("[Router] Loaded");
 
-  const loginBtn = document.getElementById("enterLogin");
-  const viewerBtn = document.getElementById("enterViewer");
+  const role = sessionStorage.getItem("ntsh_role");
+  const user = sessionStorage.getItem("ntsh_user");
+  const uid = sessionStorage.getItem("ntsh_uid");
 
-  if (viewerBtn) {
-    viewerBtn.addEventListener("click", () => {
-      sessionStorage.setItem("ntsh_role", "viewer");
-      window.location.href = "/home.html";
-    });
+  const path = window.location.pathname;
+
+  console.log("[Router] State:", { role, user, uid, path });
+
+  // ----------------------------------------
+  // INDEX PAGE (ENTRY)
+  // ----------------------------------------
+  if (path.endsWith("/") || path.endsWith("/index.html")) {
+    // If already authenticated, route forward
+    if (role === "admin") {
+      window.location.replace("/admin.html");
+      return;
+    }
+
+    if (role === "guest" || role === "viewer") {
+      window.location.replace("/home.html");
+      return;
+    }
+
+    // Otherwise stay on index
+    return;
   }
 
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      window.location.href = "/login.html";
-    });
+  // ----------------------------------------
+  // LOGIN PAGE
+  // ----------------------------------------
+  if (path.endsWith("/login.html")) {
+    // Logged-in users should not see login
+    if (role === "admin") {
+      window.location.replace("/admin.html");
+      return;
+    }
+
+    if (role === "guest") {
+      window.location.replace("/home.html");
+      return;
+    }
+
+    return;
+  }
+
+  // ----------------------------------------
+  // ADMIN PAGE
+  // ----------------------------------------
+  if (path.endsWith("/admin.html")) {
+    if (role !== "admin") {
+      console.warn("[Router] Admin access denied");
+      sessionStorage.clear();
+      window.location.replace("/index.html");
+      return;
+    }
+    return;
+  }
+
+  // ----------------------------------------
+  // HOME PAGE
+  // ----------------------------------------
+  if (path.endsWith("/home.html")) {
+    // Viewer fallback (no auth but allowed)
+    if (!role) {
+      console.warn("[Router] No role, forcing viewer");
+      sessionStorage.setItem("ntsh_role", "viewer");
+      sessionStorage.setItem("ntsh_user", "viewer_001");
+      return;
+    }
+
+    // Admin should NOT live on home
+    if (role === "admin") {
+      window.location.replace("/admin.html");
+      return;
+    }
+
+    return;
+  }
+
+  // ----------------------------------------
+  // PROFILE / SETTINGS (future-safe)
+  // ----------------------------------------
+  if (path.endsWith("/profile.html") || path.endsWith("/settings.html")) {
+    if (!role) {
+      window.location.replace("/index.html");
+      return;
+    }
   }
 })();
-
-  // VIEWER FLOW (no auth)
-  if (viewerBtn) {
-    viewerBtn.onclick = () => {
-      sessionStorage.clear();
-      sessionStorage.setItem("ntsh_role", "viewer");
-      sessionStorage.setItem("ntsh_user", generateViewerName());
-      window.location.href = "/home.html";
-    };
-  }
-
-
-  console.log("[Router] Ready");
-
-
-function generateViewerName() {
-  const count = Number(localStorage.getItem("viewer_count") || 0) + 1;
-  localStorage.setItem("viewer_count", count);
-  return `viewer_${String(count).padStart(3, "0")}`;
-}
