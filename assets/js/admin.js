@@ -1,26 +1,49 @@
 // /assets/js/admin.js
-// Admin moderation logic
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const page = document.body.dataset.page;
-  if (page !== "admin") return;
-
-  const role = window.NTSH_STATE.role;
-  if (role !== "admin") return;
+  if (document.body.dataset.page !== "admin") return;
+  if (window.NTSH_STATE.role !== "admin") return;
 
   const supabase = window.supabaseClient;
+  const container = document.querySelector(".admin-grid");
 
   const { data, error } = await supabase
     .from("artworks")
     .select("*")
-    .order("created_at", { ascending: false });
+    .eq("status", "pending");
 
   if (error) {
     console.error(error);
     return;
   }
 
-  console.log("[ADMIN] Loaded artworks:", data);
+  container.innerHTML = "";
 
-  // UI hookup comes next phase
+  data.forEach(art => {
+    const card = document.createElement("div");
+    card.className = "art-card";
+
+    card.innerHTML = `
+      <img src="${art.image_url}" />
+      <p>${art.title || "Untitled"}</p>
+      <button data-action="approve">Approve</button>
+      <button data-action="reject">Reject</button>
+    `;
+
+    card.querySelector("[data-action='approve']").onclick = async () => {
+      await supabase.from("artworks")
+        .update({ status: "approved" })
+        .eq("id", art.id);
+      card.remove();
+    };
+
+    card.querySelector("[data-action='reject']").onclick = async () => {
+      await supabase.from("artworks")
+        .update({ status: "rejected" })
+        .eq("id", art.id);
+      card.remove();
+    };
+
+    container.appendChild(card);
+  });
 });
