@@ -48,6 +48,32 @@
         <button class="primary">Log In</button>
         <p class="hint">Artists & Admins log in here</p>
       </div>
+      
+<script>
+const form = document.querySelector("form");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = form.email.value;
+  const password = form.password.value;
+
+  try {
+    const auth = await NTSH.auth.login(email, password);
+
+    if (!auth) return;
+
+    if (auth.role === "admin") {
+      window.location.href = "/admin.html";
+    } else {
+      window.location.href = "/home.html";
+    }
+
+  } catch (err) {
+    alert(err.message);
+  }
+});
+</script>
 
     </section>
 
