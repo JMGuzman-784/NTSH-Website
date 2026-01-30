@@ -2,121 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NTSH — Home</title>
+  <title>NTSH • Home</title>
 
-  <link rel="stylesheet" href="/assets/css/gallery.css" />
-  <link rel="stylesheet" href="/assets/css/account-ui.css" />
-
- 
-
-
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/home.css" />
 </head>
 
-
 <body>
- <script>
-const role = sessionStorage.getItem("ntsh_role");
 
-if (!role) {
-  window.location.href = "/index.html";
-}
-</script>
+<header class="topbar">
+  <div class="logo">NTSH</div>
+  <a href="/profile.html" class="profile-link">Profile</a>
+</header>
 
-
-
-<div id="easterEgg"></div>
-<div id="artModal" class="hidden"></div>
-
-  <!-- HEADER -->
-  <header class="site-header header-row">
-    
-    <div class="header-left site-title">
-
- 
-
-  <!-- TEXT BRAND (kept for identity + accessibility) -->
-  <div class="brand">
-  
-     <!-- NTSH TITLE IMAGE -->
-  <img
-    src="assets/images/NTSH title site logo.png"
-    alt="NTSH Title"
-    class="site-title-logo"
-  />
-  </div>
-
-  <p>Nothing To See Here — Only Art That Speaks</p>
-</div>
-
-
-    <div class="header-right">
-      <button id="accountBtn" class="account-btn" aria-haspopup="menu" aria-expanded="false">
-        <span id="accountAvatar" class="avatar">?</span>
-        <span class="account-meta">
-          <span id="accountName" class="account-name">Loading…</span>
-          <span class="account-sub">
-            <span id="accountUser" class="account-user">@—</span>
-            <span id="roleBadge" class="badge">viewer</span>
-          </span>
-        </span>
-        <span class="chev">▾</span>
-      </button>
-
-      <div id="accountMenu" class="account-menu" role="menu" aria-hidden="true">
-        <a class="menu-item" href="/profile.html">Profile</a>
-        <button class="menu-item" id="settingsBtn">Settings</button>
-        <div class="menu-sep"></div>
-        <button class="menu-item danger" id="logoutBtn">Log out</button>
-      </div>
+<main class="wrap">
+  <section class="gallery">
+    <h2>Featured Art</h2>
+    <div class="grid">
+      <!-- JS will inject art -->
     </div>
-  </header>
+  </section>
+</main>
 
-  <!-- MAIN -->
-  <main class="wrap">
-    <section class="content glass">
+<img
+  src="/assets/images/ntsh-mask-logo.png"
+  class="easter-egg"
+  alt="Easter Egg"
+/>
 
-      <!-- TABS -->
-      <nav class="tabs">
-        <div class="tabs-track">
-          <button class="tab active">Raid’s Reel</button>
-          <button class="tab">Pencil</button>
-          <button class="tab">Pen</button>
-          <button class="tab">Paint</button>
-          <button class="tab">Photography</button>
-
-          <a class="tab tab-link" href="https://jmguzman-784.github.io/portfolio" target="_blank">
-            Portfolio ↗
-          </a>
-          <button class="tab tab-link">View All Art →</button>
-        </div>
-      </nav>
-
-     <div class="viewer glass-deep" id="viewer">
-
-  <img id="display" alt="NTSH Art" style="display:none;" />
-
-  <div class="caption" id="caption">
-    Nothing To See Here — Only Art That Speaks
-  </div>
-
-  <!-- 🔥 APPROVED ART CAROUSEL -->
-  <section class="home-gallery">
-  <div class="gallery-grid" id="home-gallery"></div>
-</section>
-
-
-  <!-- REACTIONS -->
-  <div id="reactions" class="reactions">
-    <button data-react="star">⭐️</button>
-    <button data-react="fire">🔥</button>
-    <button data-react="gem">💎</button>
-    <button data-react="love">😍</button>
-    <button data-react="like">👍</button>
-  </div>
-
-</div>
-<script src="/assets/js/auth-router.js"></script>
-
-
-</div>
+</body>
+</html>
