@@ -1,69 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NTSH — Enter</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NTSH</title>
 
-  <!-- Base styles (minimal for now) -->
   <link rel="stylesheet" href="/assets/css/main.css" />
-
-  <!-- Favicon -->
-  <link rel="icon" href="/assets/images/ntsh-logo.png" />
+  <link rel="icon" href="/assets/images/ntsh-logo.svg" />
 </head>
-<body>
 
-  <main class="gate">
-    <section class="card">
+<body class="centered">
 
-      <h1 class="brand">NTSH</h1>
+  <main class="card">
+    <h1 class="brand">NTSH</h1>
+    <p class="subtitle">Nothing To See Here</p>
+    <p class="tagline">Only Art That Speaks</p>
 
-      <p class="tagline">
-        Nothing To See Here<br />
-        <span class="subtle">Only Art That Speaks</span>
-      </p>
-
-      <div class="actions">
-        <button id="viewerBtn" class="btn primary">
-          👁 Continue as Viewer
-        </button>
-
-        <button id="loginBtn" class="btn ghost">
-          🔐 Log In / Sign Up
-        </button>
-      </div>
-
-      <p class="hint">
-        Viewers browse only • Accounts unlock interaction
-      </p>
-
-    </section>
+    <div class="actions">
+      <a href="/home.html" class="btn ghost">👀 Continue as Viewer</a>
+      <a href="/login.html" class="btn primary">Continue as NTSH Member</a>
+    </div>
   </main>
 
-  <!-- ENTRY LOGIC ONLY -->
-  <script>
-    const viewerBtn = document.getElementById("viewerBtn");
-    const loginBtn  = document.getElementById("loginBtn");
-
-    viewerBtn.addEventListener("click", () => {
-      // Clear any previous state
-      localStorage.clear();
-
-      // Set viewer intent
-      localStorage.setItem("ntsh_role", "viewer");
-
-      // Go to home
-      window.location.href = "/home.html";
-    });
-
-    loginBtn.addEventListener("click", () => {
-      window.location.href = "/login.html";
-    });
-  </script>
-
-  <script src="/assets/js/supabase-client.js"></script>
-  <script src="/assets/js/auth-router.js"></script>
-
-  
 </body>
 </html>
