@@ -1,11 +1,10 @@
 
-// supabase-client.js
-const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP";
+// assets/js/supabase-client.js
+window.NTSH = window.NTSH || {};
 
-window.supabase = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
+NTSH.supabase = supabase.createClient(
+  "https://YOUR_PROJECT_ID.supabase.co",
+  "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP"
 );
 
 console.log("[Supabase] client initialized");
