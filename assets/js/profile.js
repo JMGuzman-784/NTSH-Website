@@ -20,6 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
     adminBtn.hidden = false;
     adminBtn.onclick = () => {
       window.location.href = "/admin.html";
+
+      if (role === "guest") {
+  const notice = document.createElement("p");
+  notice.textContent = "Username pending approval.";
+  document.querySelector(".profile-card").appendChild(notice);
+}
+
     };
   }
 });
