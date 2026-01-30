@@ -5,37 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NTSH — Enter</title>
 
-  <link rel="stylesheet" href="/assets/css/auth-gate.css" />
+  <!-- Entry styles -->
+  <link rel="stylesheet" href="/assets/css/auth-entry.css" />
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="/assets/js/supabase-client.js"></script>
-<script src="/assets/js/auth-core.js"></script>
+  <!-- Supabase (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- Supabase client -->
+  <script src="/assets/js/supabase-client.js"></script>
+
+  <!-- Auth Router -->
+  <script defer src="/assets/js/auth-router.js"></script>
 
   <link rel="icon" href="/assets/images/Raid'sNTSHLogo.png">
 </head>
 
 <body>
-  <main class="gate">
+  <main class="entry">
+
     <section class="card">
       <h1 class="logo">NTSH</h1>
-      <p class="tagline">Nothing To See Here — Only Art That Speaks</p>
+      <p class="subtitle">Nothing To See Here</p>
+      <p class="tagline">Only Art That Speaks</p>
 
-      
-        <div class="choices">
-<button id="enterViewer">👀 Continue as Viewer</button>
-<button id="enterGuest">🧍 Continue as Guest</button>
-<button id="enterLogin">🔐 Log In</button>
-
-    </div>
-
+      <div class="actions">
+        <button id="enterViewer">👀 Continue as Viewer</button>
+        <button id="openLogin">🔐 Log In / Sign Up</button>
       </div>
 
       <p class="hint">
-        Viewers browse • Guests react & comment • Artists upload
+        Viewers browse • Members react & comment • Artists upload
       </p>
     </section>
-  </main>
-  <script src="/assets/js/auth-gate.js"></script>
 
+    <!-- LOGIN MODAL -->
+    <section id="loginModal" class="modal hidden">
+      <form id="loginForm" class="login-card">
+        <h2>Log in to NTSH</h2>
+
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+
+        <button type="submit">Log In / Sign Up</button>
+
+        <button type="button" id="closeLogin" class="ghost">Cancel</button>
+      </form>
+    </section>
+
+  </main>
 </body>
 </html>
