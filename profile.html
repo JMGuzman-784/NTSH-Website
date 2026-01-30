@@ -27,11 +27,30 @@
     </div>
 
     <button id="uploadArt">Upload Art</button>
+    <form id="uploadForm" class="upload-card">
+  <h3>Upload Artwork</h3>
+
+  <input type="file" id="artFile" accept="image/*" required />
+  <input type="text" id="title" placeholder="Artwork title" required />
+
+  <select id="category">
+    <option value="pencil">Pencil</option>
+    <option value="pen">Pen</option>
+    <option value="paint">Paint</option>
+    <option value="photo">Photography</option>
+  </select>
+
+  <button type="submit">Submit for Review</button>
+</form>
+
+<script defer src="/assets/js/upload-art.js"></script>
+
     <button id="adminPanel" hidden>Admin Panel</button>
   </section>
 
 </main>
 
+  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script defer src="/assets/js/auth-guard.js"></script>
