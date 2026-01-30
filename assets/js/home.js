@@ -1,33 +1,13 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  window.supabase = window.supabaseClient;
-  if (!supabase) return;
+// assets/js/home.js
 
-  const container = document.getElementById("home-gallery");
-  if (!container) return;
+document.addEventListener("DOMContentLoaded", () => {
+  const role = sessionStorage.getItem("ntsh_role");
+  const user = sessionStorage.getItem("ntsh_user");
 
-  const { data, error } = await supabase
-    .from("artworks")
-    .select("*")
-    .eq("status", "approved")
-    .order("created_at", { ascending: false });
+  console.log("[HOME]", { role, user });
 
-  if (error) {
-    console.error("[Home] failed to load art", error);
-    return;
-  }
+  const badge = document.getElementById("userBadge");
+  if (!badge) return;
 
-  container.innerHTML = "";
-
-  data.forEach(art => {
-    const card = document.createElement("div");
-    card.className = "art-card";
-    card.innerHTML = `
-      <img src="${art.public_url}" alt="${art.title}">
-      <div class="reaction-count">${art.reactions_count ?? 0}</div>
-
-      <strong>${art.title}</strong>
-    `;
-    card.onclick = () => openArtModal(art);
-    container.appendChild(card);
-  });
+  badge.innerText = `${user} (${role})`;
 });
