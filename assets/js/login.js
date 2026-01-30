@@ -69,11 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("[LOGIN SUCCESS]", { role, displayName });
 
     // 5️⃣ Route
-    if (role === "admin") {
-      window.location.href = "/admin.html";
-    } else {
-      window.location.href = "/home.html";
-    }
+    if (email === "ntshbusiness@gmail.com") {
+  sessionStorage.setItem("ntsh_role", "admin");
+  sessionStorage.setItem("ntsh_user", "Raid");
+} else {
+  sessionStorage.setItem("ntsh_role", "guest");
+  sessionStorage.setItem("ntsh_user", email);
+}
+
+window.location.href = "/home.html";
+
   });
 });
 
