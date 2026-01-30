@@ -1,22 +1,23 @@
-
-// assets/js/viewer.js
-// Anonymous viewer logic
+// /assets/js/viewer.js
+// Viewer identity + numbering
 
 document.addEventListener("DOMContentLoaded", () => {
-  const viewerBtn = document.getElementById("continueViewer");
-  if (!viewerBtn) return;
+  // Only run on index or home
+  const page = document.body.dataset.page;
+  if (!["index", "home"].includes(page)) return;
 
-  viewerBtn.addEventListener("click", () => {
-    let count = Number(localStorage.getItem("viewerCount") || 0);
+  // If already a member, do nothing
+  const existingRole = sessionStorage.getItem("ntsh_role");
+  if (existingRole && existingRole !== "viewer") return;
+
+  // Assign viewer if none exists
+  if (!existingRole) {
+    let count = Number(localStorage.getItem("ntsh_viewer_count") || 0);
     count += 1;
 
-    localStorage.setItem("viewerCount", count);
+    localStorage.setItem("ntsh_viewer_count", count.toString());
 
-    sessionStorage.clear();
     sessionStorage.setItem("ntsh_role", "viewer");
     sessionStorage.setItem("ntsh_user", `viewer_${String(count).padStart(3, "0")}`);
-
-    console.log("[VIEWER]", count);
-    window.location.href = "/home.html";
-  });
+  }
 });
