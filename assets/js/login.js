@@ -1,18 +1,15 @@
 // assets/js/login.js
-// Handles member login + signup only
+// Handles login + signup ONLY
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   if (!form) return;
 
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
     if (!email || !password) {
       alert("Email and password required");
@@ -21,15 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("[LOGIN] Attempt:", email);
 
-    // 1️⃣ Try sign in
+    // Try sign in
     let { data, error } = await window.supabase.auth.signInWithPassword({
       email,
       password
     });
 
-    // 2️⃣ If user doesn't exist → sign up
+    // If user doesn't exist → sign up
     if (error && error.message.includes("Invalid login credentials")) {
-      console.log("[LOGIN] Creating new account");
+      console.log("[LOGIN] Creating account");
 
       const signup = await window.supabase.auth.signUp({
         email,
@@ -45,34 +42,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!data?.user) {
-      alert("Login failed");
+      alert("Authentication failed");
       return;
     }
 
-    // 3️⃣ Resolve role
     const user = data.user;
-    let role = "guest";
-    let displayName = "guest_001";
 
-    // 🔑 ADMIN OVERRIDE (YOU)
+    // Role resolution
+    let role = "guest";
+    let displayName = email;
+
     if (user.email === "ntshbusiness@gmail.com") {
       role = "admin";
       displayName = "Raid";
     }
 
-    // 4️⃣ Persist session identity
     sessionStorage.clear();
     sessionStorage.setItem("ntsh_uid", user.id);
-    sessionStorage.setItem("ntsh_user", displayName);
     sessionStorage.setItem("ntsh_role", role);
+    sessionStorage.setItem("ntsh_user", displayName);
 
     console.log("[LOGIN SUCCESS]", { role, displayName });
 
-    // 5️⃣ Route
-    
-// 5️⃣ Route (EVERYONE goes home)
-window.location.href = "/home.html";
-
+    // ALWAYS go to home
+    window.location.href = "/home.html";
   });
 });
-
