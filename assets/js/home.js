@@ -25,11 +25,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   data.forEach(art => {
     const card = document.createElement("div");
-    card.className = "art-card";
-    card.innerHTML = `
-      <img src="${art.image_url}" alt="${art.title || "Artwork"}" />
-      <p>${art.title || "Untitled"}</p>
-    `;
+    card.onclick = () => openArtModal(art);
+
     grid.appendChild(card);
   });
 });
