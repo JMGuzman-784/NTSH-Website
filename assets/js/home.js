@@ -1,13 +1,35 @@
-// assets/js/home.js
+// /assets/js/home.js
+// Loads approved art (display only)
 
-document.addEventListener("DOMContentLoaded", () => {
-  const role = sessionStorage.getItem("ntsh_role");
-  const user = sessionStorage.getItem("ntsh_user");
+document.addEventListener("DOMContentLoaded", async () => {
+  const page = document.body.dataset.page;
+  if (page !== "home") return;
 
-  console.log("[HOME]", { role, user });
+  const grid = document.querySelector(".grid");
+  if (!grid) return;
 
-  const badge = document.getElementById("userBadge");
-  if (!badge) return;
+  const supabase = window.supabaseClient;
 
-  badge.innerText = `${user} (${role})`;
+  const { data, error } = await supabase
+    .from("artworks")
+    .select("*")
+    .eq("status", "approved")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  grid.innerHTML = "";
+
+  data.forEach(art => {
+    const card = document.createElement("div");
+    card.className = "art-card";
+    card.innerHTML = `
+      <img src="${art.image_url}" alt="${art.title || "Artwork"}" />
+      <p>${art.title || "Untitled"}</p>
+    `;
+    grid.appendChild(card);
+  });
 });
