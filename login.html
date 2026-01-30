@@ -5,74 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NTSH — Login</title>
 
-  <link rel="stylesheet" href="/assets/css/auth-gate.css" />
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="/assets/js/supabase.js"></script>
-<script src="/assets/js/auth.js"></script>
-<script src="/assets/js/login.js"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/login.css" />
 
-<script>
-async function login(e) {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  // 🔐 Role resolution
-  if (email === "raid@ntsh.com") {
-    sessionStorage.setItem("ntsh_role", "admin");
-    sessionStorage.setItem("ntsh_user", "Raid");
-    window.location.href = "/admin.html";
-  } else {
-    sessionStorage.setItem("ntsh_role", "artist");
-    sessionStorage.setItem("ntsh_user", email.split("@")[0]);
-    window.location.href = "/home.html";
-  }
-}
-</script>
-
-  <link rel="icon" href="/assets/images/Raid'sNTSHLogo.png">
+  <!-- Supabase base (already clean) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/assets/js/supabase-client.js"></script>
+  <script src="/assets/js/auth-core.js"></script>
 </head>
 
 <body>
- <main class="gate">
-  <section class="card">
-    <h1 class="logo">NTSH</h1>
+  <main class="login-wrap">
 
-    <form id="loginForm">
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-      />
+    <section class="login-card">
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        required
-      />
+      <header class="brand">
+        <h1 class="logo">NTSH</h1>
+        <p class="subtitle">Nothing To See Here</p>
+        <p class="tagline">Only Art That Speaks</p>
+      </header>
 
-      <button type="submit">Log In</button>
-    </form>
+      <div class="login-columns">
 
-    <p class="hint">
-      New here? <a href="/signup.html">Create an account</a>
-    </p>
-  </section>
-</main>
+        <div class="login-option">
+          <h2>Viewer</h2>
+          <p>Browse approved artwork</p>
+          <button class="ghost">Continue as Viewer</button>
+        </div>
 
+        <div class="login-option accent">
+          <h2>Guest</h2>
+          <p>React, comment, engage</p>
+          <button class="ghost">Sign up as Guest</button>
+        </div>
+
+      </div>
+
+      <div class="login-footer">
+        <button class="primary">Log In</button>
+        <p class="hint">Artists & Admins log in here</p>
+      </div>
+
+    </section>
+
+  </main>
 </body>
 </html>
