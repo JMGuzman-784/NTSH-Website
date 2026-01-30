@@ -1,13 +1,21 @@
- 
+
 // assets/js/supabase-client.js
+// SINGLE SOURCE OF TRUTH — DO NOT REDECLARE ANYWHERE
 
-const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP";
+(function () {
+  if (window.supabase) {
+    console.warn("[Supabase] Client already exists");
+    return;
+  }
 
-// 🔴 THIS MUST BE window.supabase
-window.supabase = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+  const SUPABASE_URL = "https://lworwldpziimhmcavjju.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_fnQZFa3JFPl8EWJBq1emLw_LsqPZYPP";
 
-console.log("[Supabase] Client ready");
+
+  window.supabase = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  console.log("[Supabase] Client initialized");
+})();
