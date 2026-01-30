@@ -1,31 +1,50 @@
-(async () => {
-  const { data, error } = await window.supabase.auth.getSession();
+// assets/js/auth-core.js
+window.NTSH = window.NTSH || {};
+const sb = NTSH.supabase;
 
-  if (error) {
-    console.error("[Auth] session error", error);
-    return;
-  }
+NTSH.auth = {
+  user: null,
+  role: null,
 
-  if (data?.session?.user) {
+  async load() {
+    const { data } = await sb.auth.getSession();
+
+    if (!data.session) {
+      console.log("[Auth] No session");
+      return null;
+    }
+
     const user = data.session.user;
     const email = user.email;
 
-    sessionStorage.setItem("ntsh_uid", user.id);
-    sessionStorage.setItem("ntsh_email", email);
+    let role = user.user_metadata?.role || "guest";
 
+    // 🔒 ADMIN RULE
     if (email === "ntshbusiness@gmail.com") {
-      sessionStorage.setItem("ntsh_role", "admin");
-      sessionStorage.setItem("ntsh_name", "Raid");
-    } else {
-      sessionStorage.setItem("ntsh_role", "artist");
-      sessionStorage.setItem("ntsh_name", email.split("@")[0]);
+      role = "admin";
     }
 
-    console.log("[Auth Core]", {
-      role: sessionStorage.getItem("ntsh_role"),
-      name: sessionStorage.getItem("ntsh_name")
-    });
-  } else {
-    console.log("[Auth Core] no active session");
+    NTSH.auth.user = {
+      id: user.id,
+      email,
+      name: role === "admin" ? "Raid" : email.split("@")[0]
+    };
+
+    NTSH.auth.role = role;
+
+    console.log("[Auth] Loaded", NTSH.auth);
+    return NTSH.auth;
+  },
+
+  async login(email, password) {
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return this.load();
+  },
+
+  async logout() {
+    await sb.auth.signOut();
+    sessionStorage.clear();
+    window.location.href = "/index.html";
   }
-})();
+};
