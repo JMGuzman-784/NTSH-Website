@@ -1,36 +1,26 @@
 // /assets/js/admin.js
+// Admin moderation logic
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const role = sessionStorage.getItem("ntsh_role");
+  const page = document.body.dataset.page;
+  if (page !== "admin") return;
+
+  const role = window.NTSH_STATE.role;
   if (role !== "admin") return;
 
-  window.supabase = window.supabaseClient;
-  const container = document.getElementById("pending-art");
+  const supabase = window.supabaseClient;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("artworks")
     .select("*")
-    .eq("status", "pending");
+    .order("created_at", { ascending: false });
 
-  container.innerHTML = "";
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-  data.forEach(art => {
-    const row = document.createElement("div");
-    row.innerHTML = `
-      <strong>${art.title}</strong>
-      <button onclick="approve('${art.id}')">Approve</button>
-      <button onclick="reject('${art.id}')">Reject</button>
-    `;
-    container.appendChild(row);
-  });
+  console.log("[ADMIN] Loaded artworks:", data);
+
+  // UI hookup comes next phase
 });
-
-async function approve(id) {
-  await window.supabaseClient.from("artworks").update({ status: "approved" }).eq("id", id);
-  location.reload();
-}
-
-async function reject(id) {
-  await window.supabaseClient.from("artworks").update({ status: "denied" }).eq("id", id);
-  location.reload();
-}
