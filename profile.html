@@ -1,112 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-
-
-<script src="/assets/js/auth.js"></script>
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
   <title>NTSH • Profile</title>
 
-  <!-- STYLES -->
-  <link rel="stylesheet" href="/assets/css/account-ui.css" />
-  <link rel="stylesheet" href="/assets/css/gallery.css" />
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="/assets/js/supabase-client.js"></script>
-<script src="/assets/js/auth-core.js"></script>
-
-  <!-- FAVICON -->
-  <link rel="icon" type="image/x-icon" href="/assets/images/Raid'sNTSHLogo.png">
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/profile.css" />
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header class="account-header">
-  <button id="accountBtn">
-    <span id="accountAvatar">?</span>
-    <span id="accountName">Loading</span>
-    <span id="roleBadge">viewer</span>
-  </button>
-
-  <div id="accountMenu" class="menu">
-    <button id="logoutBtn">Logout</button>
-  </div>
+<header class="topbar">
+  <div class="logo">NTSH</div>
+  <a href="/home.html">Home</a>
 </header>
 
-<!-- PROFILE CARD -->
-<section class="profile-card">
-  <span id="accountUser">@user</span>
+<main class="wrap">
 
-  <h1 id="profileName">Loading…</h1>
-  <p id="profileRole">viewer • NTSH</p>
+  <section class="profile-card">
+    <h1 id="username">username_here</h1>
+    <p id="role">guest</p>
 
-  <!-- ARTIST / ADMIN ACTIONS -->
-  <div id="artistActions" style="display:none;">
-    <button id="uploadBtn">Upload Your Art</button>
-    <button id="adminPanelBtn" style="display:none;">Admin Panel</button>
-  </div>
-  <h1 id="profileName"></h1>
-<p id="profileRole"></p>
-<button id="requestGuest">Request Guest Access</button>
-
-<script src="/assets/js/viewer.js"></script>
-
-</section>
-
-<!-- PORTFOLIO -->
-<section class="portfolio-section">
-  <h2>Portfolio</h2>
-  <div id="portfolioGrid"></div>
-</section>
-
-<!-- UPLOAD MODAL (PROFILE ONLY) -->
-<div id="upload-modal" class="modal hidden">
-  <div class="modal-box">
-    <h2>Submit Art</h2>
-
-    <input type="text" id="art-title" placeholder="Title">
-
-    <textarea id="art-description" placeholder="Description"></textarea>
-
-    <select id="art-type">
-      <option value="">Type of art</option>
-      <option value="Pencil">Pencil</option>
-      <option value="Ink">Ink</option>
-      <option value="Digital">Digital</option>
-      <option value="Mixed">Mixed Media</option>
-    </select>
-
-    <select id="stencil-type">
-      <option value="">Stencil (optional)</option>
-      <option value="Tattoo stencil">Tattoo stencil</option>
-      <option value="Graffiti stencil">Graffiti stencil</option>
-      <option value="None">None</option>
-    </select>
-
-    <input type="file" id="art-file" accept="image/*">
-
-    <div class="modal-actions">
-      <button type="button" id="submit-art">Submit</button>
-
-      <button id="close-upload">Cancel</button>
+    <div class="socials">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
     </div>
 
-    <p id="upload-status"></p>
+    <button id="uploadArt">Upload Art</button>
+    <button id="adminPanel" hidden>Admin Panel</button>
+  </section>
 
-    
-  </div>
-</div>
-
-<!-- PROFILE LOGIC -->
-<script defer src="/assets/js/profile.js?v=FINAL"></script>
-<script>
-document.getElementById("profileName").textContent = NTSH.user;
-document.getElementById("profileRole").textContent = NTSH.role;
-</script>
-
+</main>
 
 </body>
 </html>
