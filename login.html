@@ -1,92 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NTSH — Log In</title>
+  <meta charset="utf-8" />
+  <title>NTSH • Login</title>
 
-  <!-- Base styles -->
   <link rel="stylesheet" href="/assets/css/main.css" />
-  <!-- Login-only styles (minimal for now) -->
   <link rel="stylesheet" href="/assets/css/login.css" />
-
-  <link rel="icon" href="/assets/images/ntsh-logo.png" />
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  
-
 </head>
-<body>
 
-<main class="gate">
-  <section class="card wide">
+<body class="centered">
 
+  <main class="card">
     <h1 class="brand">NTSH</h1>
-    <p class="tagline">
-      Nothing To See Here<br />
-      <span class="subtle">Only Art That Speaks</span>
+    <p class="subtitle">Member Access</p>
+
+    <form id="loginForm">
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
+
+      <button class="btn primary" type="submit">Log In</button>
+      <button class="btn ghost" type="button">Create Account</button>
+    </form>
+
+    <p class="hint">
+      Guests are approved by admin • Artists upload after approval
     </p>
-
-    <div class="split">
-
-      <!-- LEFT: VIEWER -->
-      <div class="panel">
-        <h2>Viewer</h2>
-        <p class="panel-text">
-          Browse approved artwork with no account.
-        </p>
-        <button id="viewerBtn" class="btn ghost">
-          👁 Continue as Viewer
-        </button>
-      </div>
-
-      <!-- RIGHT: LOGIN / SIGN UP -->
-      <div class="panel">
-        <h2>Member</h2>
-
-        <form id="loginForm">
-  <input id="email" type="email" required />
-  <input id="password" type="password" required />
-  <button type="submit">Log In / Sign Up</button>
-</form>
-
-
-        <p class="panel-text subtle">
-          Guests can react & comment.<br />
-          Artists upload after approval.
-        </p>
-      </div>
-
-    </div>
-
-  </section>
-</main>
-
-<!-- INTENT ONLY (NO AUTH HERE) -->
-<script>
-  const viewerBtn = document.getElementById("viewerBtn");
-  const loginForm = document.getElementById("loginForm");
-
-  viewerBtn.addEventListener("click", () => {
-    localStorage.clear();
-    localStorage.setItem("ntsh_role", "viewer");
-    window.location.href = "/home.html";
-  });
-
-  // Auth logic handled in login.js (next step)
-</script>
-  
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Supabase client -->
-<script src="/assets/js/supabase-client.js"></script>
-
-<!-- Auth router (optional here, safe) -->
-<script src="/assets/js/auth-router.js"></script>
-
-<!-- Login logic (MUST be last) -->
-<script src="/assets/js/login.js"></script>
+  </main>
 
 </body>
 </html>
