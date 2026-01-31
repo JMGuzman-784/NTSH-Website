@@ -1,8 +1,15 @@
 // assets/js/modal.js
-export function openModal(id) {
-  document.getElementById(id)?.classList.add("open");
-}
 
-export function closeModal(id) {
-  document.getElementById(id)?.classList.remove("open");
-}
+window.openModal = (id) => {
+  document.getElementById(id)?.classList.remove("hidden");
+};
+
+window.closeModal = (id) => {
+  document.getElementById(id)?.classList.add("hidden");
+};
+
+document.addEventListener("click", (e) => {
+  if (e.target.id === "closeUpload") {
+    closeModal("uploadModal");
+  }
+});
