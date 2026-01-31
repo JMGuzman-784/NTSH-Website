@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="/assets/css/profile.css" />
 </head>
 
-<body>
 <body data-page="profile">
+
 <header class="topbar">
   <div class="logo">NTSH</div>
   <a href="/home.html">Home</a>
@@ -17,70 +17,45 @@
 
 <main class="wrap">
 
-  <section class="profile-card">
-    <h1 id="username">username_here</h1>
-    <p id="role">guest</p>
+  <section class="profile-card glass">
+    <h1 id="profileName">username</h1>
+    <p id="profileRole">role</p>
 
     <div class="socials">
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
+      <a href="#" id="igLink">Instagram</a>
+      <a href="#" id="ttLink">TikTok</a>
     </div>
 
-<h2 id="profileName"></h2>
-<p id="profileRole"></p>
+    <div class="profile-actions">
+      <button id="uploadArtBtn" class="hidden">Upload Artwork</button>
+      <button id="adminPanelBtn" class="hidden">Admin Panel</button>
+      <button id="createGuestBtn" class="hidden">Create Guest Account</button>
+    </div>
 
-<div id="profileSocials"></div>
-<div id="profileActions"></div>
-
-<div id="profileGallery"></div>
-
-
-
-    
-   <button id="uploadArtBtn" onclick="openModal('uploadModal')">
-  Upload Artwork
-</button>
-
-<div id="uploadModal" class="modal">
-  <form id="uploadForm">
-    <input id="artTitle" required placeholder="Title">
-    <input id="artFile" type="file" required>
-    <button type="submit">Submit</button>
-  </form>
-</div>
-
-<button data-role="guest artist admin" id="uploadArtBtn">Upload</button>
-<button data-role="admin" id="adminPanelBtn">Admin Panel</button>
-<button data-role="viewer">Create Guest Account</button>
-
-    
+    <div id="profileGallery"></div>
   </section>
 
 </main>
 
-  
-<script src="/assets/js/supabase-client.js"></script>
-<script src="/assets/js/modal.js"></script>
-<!-- index + home -->
-<script defer src="/assets/js/profile.js"></script>
-<script src="/assets/js/easter-egg.js"></script>
-  <script src="/assets/js/upload.js"></script>
-<script src="/assets/js/supabase-client.js"></script>
-
+<!-- Upload modal -->
 <div id="uploadModal" class="modal hidden">
-  <div class="modal-content">
+  <div class="modal-content glass">
     <h3>Upload Artwork</h3>
-
-    <input id="artTitle" type="text" placeholder="Title" />
-    <textarea id="artDesc" placeholder="Description"></textarea>
-
-    <input id="artFile" type="file" accept="image/*" />
-
-    <button id="submitArt">Submit</button>
-    <button id="closeUpload">Cancel</button>
+    <form id="uploadForm">
+      <input id="artTitle" placeholder="Title" required />
+      <textarea id="artDesc" placeholder="Description"></textarea>
+      <input id="artFile" type="file" accept="image/*" required />
+      <button type="submit">Submit</button>
+      <button type="button" id="closeUpload">Cancel</button>
+    </form>
   </div>
 </div>
 
-  
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+<script src="/assets/js/profile.js"></script>
+<script src="/assets/js/upload.js"></script>
+<script src="/assets/js/modal.js"></script>
+
 </body>
 </html>
