@@ -1,7 +1,19 @@
 input {
   width: 100%;
-  padding: 0.75rem;
+  padding: .75rem;
   margin-bottom: 1rem;
-  border-radius: 6px;
-  border: none;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--text-main);
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+.hint {
+  margin-top: 1rem;
+  font-size: .8rem;
+  opacity: .6;
 }
