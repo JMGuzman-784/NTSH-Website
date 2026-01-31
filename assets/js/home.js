@@ -1,32 +1,14 @@
-// /assets/js/home.js
-// Loads approved art (display only)
+// assets/js/home.js
+import { getViewerId } from "./state.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const page = document.body.dataset.page;
-  if (page !== "home") return;
+document.addEventListener("DOMContentLoaded", () => {
+  const role = sessionStorage.getItem("ntsh_role");
 
-  const grid = document.querySelector(".grid");
-  if (!grid) return;
+  if (role === "viewer") {
+    const viewerId = getViewerId();
+    sessionStorage.setItem("ntsh_user", viewerId);
 
-  const supabase = window.supabaseClient;
-
-  const { data, error } = await supabase
-    .from("artworks")
-    .select("*")
-    .eq("status", "approved")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error(error);
-    return;
+    const badge = document.getElementById("userBadge");
+    if (badge) badge.textContent = viewerId;
   }
-
-  grid.innerHTML = "";
-
-  data.forEach(art => {
-    const card = document.createElement("div");
-    card.onclick = () => openArtModal(art);
-
-    grid.appendChild(card);
-  });
 });
