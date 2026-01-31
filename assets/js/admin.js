@@ -1,55 +1,53 @@
 // assets/js/admin.js
-
 document.addEventListener("DOMContentLoaded", async () => {
   const role = sessionStorage.getItem("ntsh_role");
-  if (role !== "admin") return;
 
-  const container = document.getElementById("pending-art");
-  if (!container) return;
+  if (role !== "admin") {
+    window.location.href = "/home.html";
+    return;
+  }
+
+  const list = document.getElementById("pendingArt");
+  if (!list) return;
 
   const { data, error } = await window.supabase
     .from("artworks")
     .select("*")
     .eq("status", "pending")
-    .order("created_at");
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error);
+    console.error("Admin load error:", error.message);
     return;
   }
 
-  data.forEach((art) => {
-    const row = document.createElement("div");
-    row.className = "pending-row";
+  list.innerHTML = "";
 
-    const { data: urlData } = window.supabase
-      .storage
-      .from(art.bucket)
-      .getPublicUrl(art.file_path);
+  data.forEach(art => {
+    const row = document.createElement("div");
+    row.className = "admin-art-row";
 
     row.innerHTML = `
-      <img src="${urlData.publicUrl}" />
+      <span>${art.title}</span>
       <button data-id="${art.id}" data-action="approve">Approve</button>
       <button data-id="${art.id}" data-action="reject">Reject</button>
     `;
 
-    row.addEventListener("click", async (e) => {
-      const btn = e.target;
-      if (!btn.dataset.action) return;
+    list.appendChild(row);
+  });
 
-      const status = btn.dataset.action === "approve" ? "approved" : "rejected";
+  list.addEventListener("click", async (e) => {
+    const btn = e.target;
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
 
-      await window.supabase
-        .from("artworks")
-        .update({
-          status,
-          approved_at: status === "approved" ? new Date() : null
-        })
-        .eq("id", btn.dataset.id);
+    if (!id || !action) return;
 
-      row.remove();
-    });
+    await window.supabase
+      .from("artworks")
+      .update({ status: action === "approve" ? "approved" : "rejected" })
+      .eq("id", id);
 
-    container.appendChild(row);
+    btn.parentElement.remove();
   });
 });
