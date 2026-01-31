@@ -1,93 +1,56 @@
 // assets/js/login.js
-// Clean split: Login vs Create Account (Supabase v2)
+import { supabase } from "./supabase-client.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
+const form = document.getElementById("loginForm");
+const emailInput = document.querySelector('input[type="email"]');
+const passwordInput = document.querySelector('input[type="password"]');
+const createBtn = document.getElementById("createAccountBtn");
 
-  const loginBtn = document.getElementById("loginBtn");
-  const signupBtn = document.getElementById("signupBtn");
+form?.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  if (!window.supabase) {
-    console.error("[LOGIN] Supabase not loaded");
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
     return;
   }
 
-  // ===== LOGIN =====
-  loginBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!email || !password) {
-      alert("Email and password required");
-      return;
-    }
-
-    console.log("[LOGIN] Attempt", email);
-
-    const { data, error } =
-      await window.supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    await finalizeSession(data.user);
-  });
-
-  // ===== SIGN UP =====
-  signupBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!email || !password) {
-      alert("Email and password required");
-      return;
-    }
-
-    console.log("[SIGNUP] Creating account", email);
-
-    const { data, error } = await window.supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    alert("Account created. You can now log in.");
-  });
-
-  // ===== SESSION SETUP =====
-  async function finalizeSession(user) {
-    if (!user) {
-      alert("Auth failed");
-      return;
-    }
-
-    let role = "guest";
-    let displayName = user.email.split("@")[0];
-
-    // Admin override
-    if (user.email === "ntshbusiness@gmail.com") {
-      role = "admin";
-      displayName = "Raid";
-    }
-
-    sessionStorage.clear();
-    sessionStorage.setItem("ntsh_uid", user.id);
-    sessionStorage.setItem("ntsh_email", user.email);
-    sessionStorage.setItem("ntsh_role", role);
-    sessionStorage.setItem("ntsh_user", displayName);
-
-    console.log("[LOGIN SUCCESS]", { role, displayName });
-
-    window.location.href = "/home.html";
-  }
+  routeAfterLogin(data.user);
 });
+
+createBtn?.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  routeAfterLogin(data.user);
+});
+
+function routeAfterLogin(user) {
+  sessionStorage.setItem("uid", user.id);
+  sessionStorage.setItem("email", user.email);
+
+  if (user.email === "ntshbusiness@gmail.com") {
+    sessionStorage.setItem("role", "admin");
+  } else {
+    sessionStorage.setItem("role", "guest");
+  }
+
+  window.location.href = "/home.html";
+}
