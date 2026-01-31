@@ -1,12 +1,27 @@
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
+.gallery h2 {
+  margin-bottom: 1rem;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 1.25rem;
+}
+
+.art-card {
+  background: var(--bg-card);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.art-card img {
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* reactions */
+.reactions button {
+  font-size: 1.2rem;
+  margin: .25rem;
 }
