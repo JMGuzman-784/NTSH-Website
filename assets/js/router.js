@@ -1,17 +1,37 @@
-// assets/js/router.js
-import { getState, setState } from "./state.js";
+// /assets/js/router.js
+import { setState, clearState } from "./state.js";
 
 export function enterAsViewer() {
-  let counter = Number(localStorage.getItem("ntsh_viewer_count") || 0);
-  counter += 1;
-  localStorage.setItem("ntsh_viewer_count", counter);
+  clearState();
 
-  const username = `viewer_${String(counter).padStart(3, "0")}`;
+  const count = Number(sessionStorage.getItem("viewer_count") || 0) + 1;
+  sessionStorage.setItem("viewer_count", count);
 
   setState({
     role: "viewer",
-    username,
+    username: `viewer_${String(count).padStart(3, "0")}`,
     uid: null
+  });
+
+  window.location.href = "/home.html";
+}
+
+export function routeAfterLogin(user) {
+  clearState();
+
+  let role = "guest";
+  let username = user.user_metadata?.username || "guest";
+
+  // 🔑 ADMIN OVERRIDE (YOU)
+  if (user.email === "ntshbusiness@gmail.com") {
+    role = "admin";
+    username = "Raid";
+  }
+
+  setState({
+    role,
+    username,
+    uid: user.id
   });
 
   window.location.href = "/home.html";
