@@ -1,43 +1,41 @@
-// assets/js/upload.js
-import { closeModal } from "./modal.js";
+// upload.js
+import { supabase } from "./supabase-client.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("uploadForm");
-  if (!form) return;
+  const modal = document.getElementById("uploadModal");
+  const openBtn = document.getElementById("uploadArtBtn");
+  const closeBtn = document.getElementById("closeUpload");
+  const submitBtn = document.getElementById("submitArt");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if (!openBtn) return;
 
-    const file = document.getElementById("artFile").files[0];
+  openBtn.onclick = () => modal.classList.remove("hidden");
+  closeBtn.onclick = () => modal.classList.add("hidden");
+
+  submitBtn.onclick = async () => {
     const title = document.getElementById("artTitle").value;
-    const uid = sessionStorage.getItem("ntsh_uid");
+    const file = document.getElementById("artFile").files[0];
 
-    if (!file || !uid) return alert("Missing file or user");
+    if (!file || !title) return alert("Missing fields");
 
-    const path = `${uid}/${Date.now()}_${file.name}`;
+    const user = (await supabase.auth.getUser()).data.user;
 
-    const { error: uploadError } = await window.supabase
-      .storage.from("artworks")
+    const path = `${user.id}/${Date.now()}-${file.name}`;
+
+    const { error: uploadErr } = await supabase.storage
+      .from("artworks")
       .upload(path, file);
 
-    if (uploadError) {
-      alert(uploadError.message);
-      return;
-    }
+    if (uploadErr) return alert(uploadErr.message);
 
-    const { error } = await window.supabase.from("artworks").insert({
-      owner_id: uid,
+    await supabase.from("artworks").insert({
+      owner_id: user.id,
       title,
       file_path: path,
       status: "pending"
     });
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    closeModal("uploadModal");
-    alert("Artwork submitted for review");
-  });
+    modal.classList.add("hidden");
+    alert("Submitted for approval");
+  };
 });
