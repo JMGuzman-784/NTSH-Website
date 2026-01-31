@@ -17,6 +17,15 @@
 
     <div class="actions">
       <button id="viewerBtn" class="btn ghost">👀 Continue as Viewer</button>
+
+<script type="module">
+  document.getElementById("viewerBtn").onclick = () => {
+    sessionStorage.clear();
+    sessionStorage.setItem("role", "viewer");
+    window.location.href = "/home.html";
+  };
+</script>
+
       <a href="/login.html" class="btn primary">Continue as NTSH Member</a>
     </div>
   </main>
