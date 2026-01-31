@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>NTSH • Admin</title>
+  <title>NTSH • Admin Panel</title>
 
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/admin.css" />
 </head>
 
-<body>
 <body data-page="admin">
+
 <header class="topbar">
   <div class="logo">NTSH</div>
   <a href="/profile.html">Profile</a>
@@ -17,44 +17,24 @@
 
 <main class="wrap">
 
-  <section class="admin-grid">
+  <section class="admin-grid glass">
     <div>
       <h3>Approved</h3>
     </div>
     <div>
       <h3>Pending</h3>
+      <div id="pendingArt"></div>
     </div>
     <div>
       <h3>Rejected</h3>
     </div>
   </section>
 
-<section class="admin-panel">
-  <h2>Pending Submissions</h2>
-  <div id="pendingArt"></div>
-</section>
-
-
-
-  
-  
-<section>
-  <h3>Pending Usernames</h3>
-  <div id="pending-users"></div>
-</section>
-
-  
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-
-  
 <script src="/assets/js/supabase-client.js"></script>
-
-<script defer src="/assets/js/auth-guard.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
 <script src="/assets/js/admin.js"></script>
-<script src="/assets/js/easter-egg.js"></script>
-  
+
 </body>
 </html>
