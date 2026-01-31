@@ -8,62 +8,49 @@
   <link rel="stylesheet" href="/assets/css/home.css" />
 </head>
 
-<body>
 <body data-page="home">
+
 <header class="topbar">
   <div class="logo">NTSH</div>
   <a href="/profile.html" class="profile-link">Profile</a>
 </header>
 
 <main class="wrap">
-  <section class="gallery">
+  <section class="gallery glass">
     <h2>Featured Art</h2>
-    <div class="grid">
-      <!-- JS will inject art -->
-    </div>
+    <div id="gallery" class="grid"></div>
+  </section>
+</main>
 
-<section class="gallery">
-  <div id="gallery"></div>
-</section>
-
-<script defer src="/assets/js/gallery.js"></script>
-
-    
-    <div id="artModal" class="modal hidden">
-  <div class="modal-content">
+<!-- Art modal -->
+<div id="artModal" class="modal hidden">
+  <div class="modal-content glass">
     <img id="modalImage" />
     <h3 id="modalTitle"></h3>
 
-   <div class="reactions" data-art-id="ARTWORK_UUID">
-  <button data-emoji="⭐️">⭐️</button>
-  <button data-emoji="🔥">🔥</button>
-  <button data-emoji="💎">💎</button>
-  <button data-emoji="😍">😍</button>
-  <button data-emoji="👍">👍</button>
-</div>
-
-<script defer src="/assets/js/reactions.js"></script>
-
-
+    <div class="reactions">
+      <button data-emoji="⭐️">⭐️</button>
+      <button data-emoji="🔥">🔥</button>
+      <button data-emoji="💎">💎</button>
+      <button data-emoji="😍">😍</button>
+      <button data-emoji="👍">👍</button>
+    </div>
 
     <button id="closeModal">Close</button>
   </div>
 </div>
 
-  </section>
-</main>
-
 <img
   src="/assets/images/ntsh-mask-favicon-logo.png"
   class="easter-egg"
-  alt="Easter Egg"
+  alt="NTSH Easter Egg"
 />
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-  
 <script src="/assets/js/supabase-client.js"></script>
 <script src="/assets/js/auth-guard.js"></script>
-  
+<script src="/assets/js/gallery.js"></script>
+<script src="/assets/js/modal.js"></script>
+<script src="/assets/js/easter-egg.js"></script>
+
 </body>
 </html>
