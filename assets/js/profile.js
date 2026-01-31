@@ -1,3 +1,34 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const role = sessionStorage.getItem("ntsh_role");
+
+  const actions = document.getElementById("profileActions");
+  const gallery = document.getElementById("profileGallery");
+  const socials = document.getElementById("profileSocials");
+
+  if (role === "viewer") {
+    document.getElementById("profileName").textContent = "Viewer";
+    document.getElementById("profileRole").textContent = "Viewer";
+
+    actions.innerHTML = `
+      <p class="muted">
+        You’re browsing as a viewer.
+        Create an NTSH account to react, comment, or upload artwork.
+      </p>
+      <a href="/login.html" class="btn primary">
+        Continue as NTSH Member
+      </a>
+    `;
+
+    socials.style.display = "none";
+    gallery.style.display = "none";
+
+    return; // ⛔ stop here — viewer gets nothing else
+  }
+
+  // ↓ everything below this is for guest / artist / admin only
+});
+
+
 // profile.js
 import { supabase } from "./supabase-client.js";
 
