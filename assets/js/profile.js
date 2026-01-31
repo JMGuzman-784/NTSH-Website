@@ -1,23 +1,33 @@
-// assets/js/profile.js
-document.addEventListener("DOMContentLoaded", () => {
-  const role = sessionStorage.getItem("ntsh_role");
-  const name = sessionStorage.getItem("ntsh_user");
+// profile.js
+import { supabase } from "./supabase-client.js";
 
-  document.getElementById("profileName").textContent = name || "Viewer";
-  document.getElementById("profileRole").textContent = role || "viewer";
+document.addEventListener("DOMContentLoaded", async () => {
+  const usernameEl = document.getElementById("username");
+  const roleEl = document.getElementById("role");
+  const actions = document.getElementById("profileActions");
 
-  // Hide everything by default
-  document.querySelectorAll("[data-role]").forEach(el => {
-    el.style.display = "none";
-  });
+  const { data } = await supabase.auth.getUser();
+  const user = data.user;
 
-  // Role-based reveal
-  document.querySelectorAll(`[data-role~="${role}"]`).forEach(el => {
-    el.style.display = "block";
-  });
+  if (!user) return;
 
-  // Admin hard lock
-  if (role === "admin" && name === "Raid") {
-    document.getElementById("adminPanelBtn")?.style.display = "block";
+  const role = user.user_metadata?.role || "guest";
+  const name = user.user_metadata?.username || user.email;
+
+  usernameEl.textContent = name;
+  roleEl.textContent = role;
+
+  actions.innerHTML = "";
+
+  if (role === "guest") {
+    actions.innerHTML += `<button>Request Artist Access</button>`;
+  }
+
+  if (role === "artist" || role === "admin") {
+    actions.innerHTML += `<button id="uploadArtBtn">Upload Artwork</button>`;
+  }
+
+  if (role === "admin") {
+    actions.innerHTML += `<a href="/admin.html">Admin Panel</a>`;
   }
 });
