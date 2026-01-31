@@ -1,13 +1,15 @@
-// /assets/js/login.js
-import { routeAfterLogin } from "./router.js";
+// assets/js/login.js
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const signupBtn = document.getElementById("signupBtn");
 
-  if (!form) return;
+  if (!form || !window.supabase) {
+    console.error("Supabase not ready");
+    return;
+  }
 
-  let mode = "login"; // default
+  let mode = "login";
 
   signupBtn?.addEventListener("click", () => {
     mode = "signup";
@@ -20,20 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = form.querySelector("input[type='email']").value.trim();
     const password = form.querySelector("input[type='password']").value;
 
-    if (!email || !password) {
-      alert("Email and password required");
-      return;
-    }
-
-    const supabase = window.supabase;
     let result;
 
     if (mode === "signup") {
-      // 🆕 Explicit signup
-      result = await supabase.auth.signUp({ email, password });
+      result = await window.supabase.auth.signUp({ email, password });
     } else {
-      // 🔐 Login
-      result = await supabase.auth.signInWithPassword({ email, password });
+      result = await window.supabase.auth.signInWithPassword({ email, password });
     }
 
     if (result.error) {
@@ -41,11 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!result.data?.user) {
-      alert("Authentication failed");
-      return;
-    }
+    sessionStorage.setItem("ntsh_uid", result.data.user.id);
+    sessionStorage.setItem("ntsh_email", result.data.user.email);
 
-    routeAfterLogin(result.data.user);
+    window.location.href = "/home.html";
   });
 });
