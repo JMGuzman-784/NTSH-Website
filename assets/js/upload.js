@@ -1,41 +1,60 @@
-// upload.js
-import { supabase } from "./supabase-client.js";
+// assets/js/upload.js
 
 document.addEventListener("DOMContentLoaded", () => {
+  const uploadBtn = document.getElementById("uploadArtBtn");
   const modal = document.getElementById("uploadModal");
-  const openBtn = document.getElementById("uploadArtBtn");
-  const closeBtn = document.getElementById("closeUpload");
   const submitBtn = document.getElementById("submitArt");
+  const closeBtn = document.getElementById("closeUpload");
 
-  if (!openBtn) return;
+  if (!uploadBtn || !modal) return;
 
-  openBtn.onclick = () => modal.classList.remove("hidden");
+  uploadBtn.onclick = () => modal.classList.remove("hidden");
   closeBtn.onclick = () => modal.classList.add("hidden");
 
   submitBtn.onclick = async () => {
-    const title = document.getElementById("artTitle").value;
-    const file = document.getElementById("artFile").files[0];
+    const title = document.getElementById("artTitle").value.trim();
+    const desc = document.getElementById("artDesc").value.trim();
+    const fileInput = document.getElementById("artFile");
 
-    if (!file || !title) return alert("Missing fields");
+    if (!title || !fileInput.files.length) {
+      alert("Title and image required");
+      return;
+    }
 
-    const user = (await supabase.auth.getUser()).data.user;
+    const file = fileInput.files[0];
+    const uid = sessionStorage.getItem("ntsh_uid");
 
-    const path = `${user.id}/${Date.now()}-${file.name}`;
+    const filePath = `${uid}/${Date.now()}-${file.name}`;
 
-    const { error: uploadErr } = await supabase.storage
+    // 1️⃣ Upload to storage
+    const { error: uploadError } = await window.supabase
+      .storage
       .from("artworks")
-      .upload(path, file);
+      .upload(filePath, file);
 
-    if (uploadErr) return alert(uploadErr.message);
+    if (uploadError) {
+      alert(uploadError.message);
+      return;
+    }
 
-    await supabase.from("artworks").insert({
-      owner_id: user.id,
-      title,
-      file_path: path,
-      status: "pending"
-    });
+    // 2️⃣ Insert DB record
+    const { error: insertError } = await window.supabase
+      .from("artworks")
+      .insert({
+        owner_id: uid,
+        title,
+        description: desc,
+        bucket: "artworks",
+        file_path: filePath,
+        status: "pending"
+      });
+
+    if (insertError) {
+      alert(insertError.message);
+      return;
+    }
 
     modal.classList.add("hidden");
-    alert("Submitted for approval");
+    alert("Artwork submitted for review");
   };
 });
