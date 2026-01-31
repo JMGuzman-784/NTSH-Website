@@ -1,20 +1,33 @@
 // assets/js/auth-guard.js
-import { getState, clearState } from "./state.js";
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!window.supabase) {
+    console.error("[AuthGuard] Supabase not loaded");
+    return;
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const state = getState();
+  const {
+    data: { session },
+  } = await window.supabase.auth.getSession();
 
-  // If no state at all → send to index
-  if (!state) {
+  const page = document.body.dataset.page;
+
+  console.log("[AuthGuard]", { page, session });
+
+  // Pages that REQUIRE auth
+  const protectedPages = ["home", "profile", "admin"];
+
+  if (protectedPages.includes(page) && !session) {
+    console.warn("[AuthGuard] No session → redirect index");
     window.location.href = "/index.html";
     return;
   }
 
-  const page = document.body.dataset.page;
-
-  // Viewer cannot access admin
-  if (page === "admin" && state.role !== "admin") {
-    alert("Admins only.");
-    window.location.href = "/index.html";
+  // Admin-only protection
+  if (page === "admin") {
+    const email = session?.user?.email;
+    if (email !== "ntshbusiness@gmail.com") {
+      console.warn("[AuthGuard] Not admin");
+      window.location.href = "/home.html";
+    }
   }
 });
