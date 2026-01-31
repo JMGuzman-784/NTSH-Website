@@ -1,30 +1,25 @@
-// assets/js/auth-guard.js
-// Controls access to pages (NO UI, NO SUPABASE)
+// auth-guard.js
+import { supabase } from "./supabase-client.js";
 
-import { loadState } from "./state.js";
+document.addEventListener("DOMContentLoaded", async () => {
+  const page = document.body.dataset.page;
+  const { data } = await supabase.auth.getUser();
+  const user = data.user;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const state = loadState();
-  const path = window.location.pathname;
+  // Viewer-only pages allowed
+  if (!user && page === "home") return;
 
-  console.log("[AUTH GUARD]", { path, state });
-
-  // Public pages
-  if (path === "/" || path.includes("index.html") || path.includes("login.html")) {
-    return;
-  }
-
-  // If no session → kick to index
-  if (!state.uid || !state.role) {
-    console.warn("[AUTH GUARD] No session, redirecting");
+  // No session → redirect
+  if (!user) {
     window.location.href = "/index.html";
     return;
   }
 
-  // Admin page protection
-  if (path.includes("admin.html") && state.role !== "admin") {
-    console.warn("[AUTH GUARD] Admin only");
+  const role = user.user_metadata?.role || "guest";
+
+  // Admin gate
+  if (page === "admin" && role !== "admin") {
+    alert("Admins only.");
     window.location.href = "/home.html";
-    return;
   }
 });
