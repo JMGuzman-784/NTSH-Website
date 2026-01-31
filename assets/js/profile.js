@@ -1,21 +1,23 @@
 // assets/js/profile.js
-document.addEventListener("DOMContentLoaded", async () => {
-  const uid = sessionStorage.getItem("ntsh_uid");
+document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("ntsh_role");
   const name = sessionStorage.getItem("ntsh_user");
 
-  if (!uid) return;
+  document.getElementById("profileName").textContent = name || "Viewer";
+  document.getElementById("profileRole").textContent = role || "viewer";
 
-  document.getElementById("profileName").textContent = name;
-  document.getElementById("profileRole").textContent = role;
+  // Hide everything by default
+  document.querySelectorAll("[data-role]").forEach(el => {
+    el.style.display = "none";
+  });
 
-  // Upload access
-  if (role !== "viewer") {
-    document.getElementById("uploadArtBtn")?.classList.remove("hidden");
-  }
+  // Role-based reveal
+  document.querySelectorAll(`[data-role~="${role}"]`).forEach(el => {
+    el.style.display = "block";
+  });
 
-  // Admin-only
+  // Admin hard lock
   if (role === "admin" && name === "Raid") {
-    document.getElementById("adminPanelBtn")?.classList.remove("hidden");
+    document.getElementById("adminPanelBtn")?.style.display = "block";
   }
 });
