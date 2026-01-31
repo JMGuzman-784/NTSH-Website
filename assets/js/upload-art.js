@@ -1,61 +1,86 @@
 // assets/js/upload-art.js
-// Handles artwork uploads (artists + admin only)
+// Upload artwork → Supabase Storage + artworks table
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("uploadForm");
-  if (!form) return;
+  const openBtn = document.getElementById("openUploadBtn");
+  const submitBtn = document.getElementById("submitArt");
 
-  const role = sessionStorage.getItem("ntsh_role");
-  const uid = sessionStorage.getItem("ntsh_uid");
+  const titleInput = document.getElementById("artTitle");
+  const descInput = document.getElementById("artDesc");
+  const fileInput = document.getElementById("artFile");
 
-  if (!uid || (role !== "artist" && role !== "admin")) {
-    form.style.display = "none";
+  if (!openBtn || !submitBtn) return;
+  if (!window.supabase) {
+    console.error("[UPLOAD] Supabase not ready");
     return;
   }
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // ===== ROLE GATE =====
+  const role = sessionStorage.getItem("ntsh_role");
+  if (role === "viewer") {
+    openBtn.style.display = "none";
+    return;
+  }
 
-    const fileInput = document.getElementById("artFile");
-    const title = document.getElementById("title").value.trim();
-    const category = document.getElementById("category").value;
+  openBtn.addEventListener("click", () => {
+    openModal("uploadModal");
+  });
 
-    if (!fileInput.files.length || !title) {
-      alert("File and title required");
-      return;
-    }
-
+  submitBtn.addEventListener("click", async () => {
     const file = fileInput.files[0];
-    const path = `${uid}/${Date.now()}_${file.name}`;
+    const title = titleInput.value.trim();
+    const description = descInput.value.trim();
 
-    // 1️⃣ Upload to storage
-    const { error: uploadError } = await window.supabase
-      .storage
-      .from("artworks")
-      .upload(path, file);
-
-    if (uploadError) {
-      alert(uploadError.message);
+    if (!file || !title) {
+      alert("Title and image required");
       return;
     }
 
-    // 2️⃣ Insert DB row
-    const { error: dbError } = await window.supabase
-      .from("artworks")
-      .insert({
-        owner_id: uid,
-        title,
-        category,
-        file_path: path,
-        status: "pending"
-      });
+    const {
+      data: { user },
+      error: userErr,
+    } = await window.supabase.auth.getUser();
 
-    if (dbError) {
-      alert(dbError.message);
+    if (userErr || !user) {
+      alert("Not authenticated");
+      return;
+    }
+
+    const fileExt = file.name.split(".").pop();
+    const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
+
+    console.log("[UPLOAD] Uploading file…");
+
+    // ===== STORAGE =====
+    const { error: uploadErr } = await window.supabase.storage
+      .from("artworks")
+      .upload(filePath, file);
+
+    if (uploadErr) {
+      alert(uploadErr.message);
+      return;
+    }
+
+    // ===== DB INSERT =====
+    const { error: dbErr } = await window.supabase.from("artworks").insert({
+      owner_id: user.id,
+      title,
+      description,
+      bucket: "artworks",
+      file_path: filePath,
+      status: "pending",
+    });
+
+    if (dbErr) {
+      alert(dbErr.message);
       return;
     }
 
     alert("Artwork submitted for approval");
-    form.reset();
+    closeModal("uploadModal");
+
+    titleInput.value = "";
+    descInput.value = "";
+    fileInput.value = "";
   });
 });
