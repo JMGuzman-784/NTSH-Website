@@ -1,35 +1,33 @@
-// assets/js/gallery.js
+// gallery.js
+import { supabase } from "./supabase-client.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
-  if (!window.supabase) {
-    console.error("[Gallery] Supabase not available");
-    return;
-  }
+  const grid = document.querySelector(".grid");
+  if (!grid) return;
 
-  const container = document.getElementById("gallery");
-  if (!container) return;
-
-  const { data, error } = await window.supabase
+  const { data, error } = await supabase
     .from("artworks")
-    .select("id, title, file_path")
+    .select("*")
     .eq("status", "approved")
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("[Gallery]", error);
+    console.error(error);
     return;
   }
 
-  container.innerHTML = "";
+  grid.innerHTML = "";
 
-  data.forEach((art) => {
-    const img = document.createElement("img");
-    img.src = window.supabase.storage
-      .from("artworks")
-      .getPublicUrl(art.file_path).data.publicUrl;
+  data.forEach(art => {
+    const card = document.createElement("div");
+    card.className = "art-card";
 
-    img.alt = art.title;
-    img.className = "gallery-item";
+    card.innerHTML = `
+      <img src="${art.file_path}" />
+      <strong>${art.title}</strong>
+    `;
 
-    container.appendChild(img);
+    card.onclick = () => openArtModal(art);
+    grid.appendChild(card);
   });
 });
