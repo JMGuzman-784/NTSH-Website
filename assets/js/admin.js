@@ -1,53 +1,53 @@
 // assets/js/admin.js
 document.addEventListener("DOMContentLoaded", async () => {
   const role = sessionStorage.getItem("ntsh_role");
+  if (role !== "admin") return;
 
-  if (role !== "admin") {
-    window.location.href = "/home.html";
-    return;
-  }
-
-  const list = document.getElementById("pendingArt");
-  if (!list) return;
+  const container = document.getElementById("pendingArt");
+  if (!container) return;
 
   const { data, error } = await window.supabase
     .from("artworks")
-    .select("*")
-    .eq("status", "pending")
-    .order("created_at", { ascending: false });
+    .select("id, title, file_path")
+    .eq("status", "pending");
 
   if (error) {
-    console.error("Admin load error:", error.message);
+    console.error("[Admin]", error);
     return;
   }
 
-  list.innerHTML = "";
+  container.innerHTML = "";
 
-  data.forEach(art => {
-    const row = document.createElement("div");
-    row.className = "admin-art-row";
+  data.forEach((art) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "pending-art";
 
-    row.innerHTML = `
-      <span>${art.title}</span>
-      <button data-id="${art.id}" data-action="approve">Approve</button>
-      <button data-id="${art.id}" data-action="reject">Reject</button>
-    `;
-
-    list.appendChild(row);
-  });
-
-  list.addEventListener("click", async (e) => {
-    const btn = e.target;
-    const id = btn.dataset.id;
-    const action = btn.dataset.action;
-
-    if (!id || !action) return;
-
-    await window.supabase
+    const img = document.createElement("img");
+    img.src = window.supabase.storage
       .from("artworks")
-      .update({ status: action === "approve" ? "approved" : "rejected" })
-      .eq("id", id);
+      .getPublicUrl(art.file_path).data.publicUrl;
 
-    btn.parentElement.remove();
+    const approve = document.createElement("button");
+    approve.textContent = "Approve";
+    approve.onclick = async () => {
+      await window.supabase
+        .from("artworks")
+        .update({ status: "approved" })
+        .eq("id", art.id);
+      wrapper.remove();
+    };
+
+    const reject = document.createElement("button");
+    reject.textContent = "Reject";
+    reject.onclick = async () => {
+      await window.supabase
+        .from("artworks")
+        .update({ status: "rejected" })
+        .eq("id", art.id);
+      wrapper.remove();
+    };
+
+    wrapper.append(img, approve, reject);
+    container.appendChild(wrapper);
   });
 });
