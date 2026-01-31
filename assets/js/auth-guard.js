@@ -15,6 +15,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+// assets/js/auth-guard.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  const role = sessionStorage.getItem("ntsh_role");
+
+  console.log("[AUTH]", role);
+
+  if (!role) {
+    window.location.href = "/index.html";
+    return;
+  }
+
+  // Viewer is allowed on home
+  if (role === "viewer") return;
+
+  // Guests, artists, admin allowed
+});
+
+
+  
   const role = user.user_metadata?.role || "guest";
 
   // Admin gate
