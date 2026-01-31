@@ -1,53 +1,43 @@
 // assets/js/upload.js
+import { closeModal } from "./modal.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("uploadArtForm");
+  const form = document.getElementById("uploadForm");
   if (!form) return;
-
-  const uid = sessionStorage.getItem("ntsh_uid");
-  const role = sessionStorage.getItem("ntsh_role");
-
-  if (!uid || role === "viewer") {
-    form.remove();
-    return;
-  }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const title = form.title.value.trim();
-    const file = form.file.files[0];
+    const file = document.getElementById("artFile").files[0];
+    const title = document.getElementById("artTitle").value;
+    const uid = sessionStorage.getItem("ntsh_uid");
 
-    if (!title || !file) {
-      alert("Title and image required");
-      return;
-    }
+    if (!file || !uid) return alert("Missing file or user");
 
-    const filePath = `${uid}/${Date.now()}_${file.name}`;
+    const path = `${uid}/${Date.now()}_${file.name}`;
 
-    const { error: uploadError } = await window.supabase.storage
-      .from("artworks")
-      .upload(filePath, file);
+    const { error: uploadError } = await window.supabase
+      .storage.from("artworks")
+      .upload(path, file);
 
     if (uploadError) {
       alert(uploadError.message);
       return;
     }
 
-    const { error: insertError } = await window.supabase
-      .from("artworks")
-      .insert({
-        owner_id: uid,
-        title,
-        file_path: filePath,
-        status: "pending"
-      });
+    const { error } = await window.supabase.from("artworks").insert({
+      owner_id: uid,
+      title,
+      file_path: path,
+      status: "pending"
+    });
 
-    if (insertError) {
-      alert(insertError.message);
+    if (error) {
+      alert(error.message);
       return;
     }
 
+    closeModal("uploadModal");
     alert("Artwork submitted for review");
-    form.reset();
   });
 });
