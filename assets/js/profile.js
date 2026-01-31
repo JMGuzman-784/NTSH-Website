@@ -1,117 +1,122 @@
 // assets/js/profile.js
-// Role-aware profile controller (Viewer / Guest / Artist / Admin)
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // ===== SESSION STATE =====
+  if (!window.supabase) return;
+
   const uid = sessionStorage.getItem("ntsh_uid");
-  const email = sessionStorage.getItem("ntsh_email");
   const role = sessionStorage.getItem("ntsh_role") || "viewer";
-  const displayName =
-    sessionStorage.getItem("ntsh_user") ||
-    email?.split("@")[0] ||
-    "Viewer";
+  const username = sessionStorage.getItem("ntsh_user") || "viewer";
 
-  console.log("[PROFILE]", { uid, email, role, displayName });
+  // ===== BASIC UI =====
+  document.getElementById("username").textContent = username;
+  document.getElementById("role").textContent = role;
 
-  // ===== ELEMENTS =====
-  const usernameEl = document.getElementById("username");
-  const roleEl = document.getElementById("role");
-  const socialsEl = document.getElementById("profileSocials");
-  const actionsEl = document.getElementById("profileActions");
-  const galleryEl = document.getElementById("profileGallery");
+  const actions = document.getElementById("profileActions");
+  const socials = document.getElementById("profileSocials");
+  const gallery = document.getElementById("profileGallery");
 
-  const uploadBtn = document.getElementById("uploadArtBtn");
-  const adminBtn = document.getElementById("adminPanelBtn");
+  actions.innerHTML = "";
+  socials.innerHTML = "";
+  gallery.innerHTML = "";
 
-  // ===== BASIC INFO =====
-  if (usernameEl) usernameEl.textContent = displayName;
-  if (roleEl) roleEl.textContent = role;
-
-  // ===== SOCIAL LINKS (STATIC FOR NOW) =====
-  if (socialsEl) {
-    socialsEl.innerHTML = `
-      <a href="https://instagram.com/raidtheofficial" target="_blank">Instagram</a>
-      <a href="https://tiktok.com/@raidtheofficial" target="_blank">TikTok</a>
-    `;
-  }
-
-  // ===== RESET VISIBILITY =====
-  uploadBtn && (uploadBtn.style.display = "none");
-  adminBtn && (adminBtn.style.display = "none");
-  actionsEl && (actionsEl.innerHTML = "");
-
-  // ===== ROLE LOGIC =====
-
-  // VIEWER
+  // ===== VIEWER =====
   if (role === "viewer") {
-    actionsEl.innerHTML = `
-      <button id="createGuestBtn">Create Guest Account</button>
+    actions.innerHTML = `
+      <button onclick="window.location.href='/login.html'">
+        Create Guest Account
+      </button>
     `;
-
-    document
-      .getElementById("createGuestBtn")
-      ?.addEventListener("click", () => {
-        window.location.href = "/login.html";
-      });
+    return;
   }
 
-  // GUEST
-  if (role === "guest") {
-    actionsEl.innerHTML = `
-      <button id="requestArtistBtn">Request Artist Access</button>
+  // ===== LOAD PROFILE DATA (GUEST / ARTIST / ADMIN) =====
+  const { data: profile, error } = await window.supabase
+    .from("profiles")
+    .select("username, instagram, tiktok, approved, role")
+    .eq("id", uid)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  // ===== SOCIAL LINKS =====
+  if (profile.instagram) {
+    socials.innerHTML += `<a href="${profile.instagram}" target="_blank">Instagram</a>`;
+  }
+  if (profile.tiktok) {
+    socials.innerHTML += `<a href="${profile.tiktok}" target="_blank">TikTok</a>`;
+  }
+
+  // ===== GUEST =====
+  if (profile.role === "guest") {
+    actions.innerHTML = `
+      <p class="muted">
+        ${profile.approved ? "Approved" : "Pending artist approval"}
+      </p>
     `;
-
-    document
-      .getElementById("requestArtistBtn")
-      ?.addEventListener("click", async () => {
-        alert("Artist request sent (stub). Admin will review.");
-        // Later: insert into requests table
-      });
+    return;
   }
 
-  // ARTIST
-  if (role === "artist") {
-    uploadBtn && (uploadBtn.style.display = "inline-block");
+  // ===== ARTIST =====
+  if (profile.role === "artist") {
+    actions.innerHTML = `
+      <button onclick="openModal('uploadModal')">
+        Upload Artwork
+      </button>
+    `;
+    loadMyArt(uid);
   }
 
-  // ADMIN (Raid only)
-  if (role === "admin") {
-    uploadBtn && (uploadBtn.style.display = "inline-block");
-    adminBtn && (adminBtn.style.display = "inline-block");
-
-    adminBtn.addEventListener("click", () => {
-      window.location.href = "/admin.html";
-    });
-  }
-
-  // ===== LOAD USER ARTWORK (OPTIONAL / SAFE) =====
-  if (galleryEl && window.supabase && uid) {
-    try {
-      const { data, error } = await window.supabase
-        .from("artworks")
-        .select("*")
-        .eq("owner_id", uid)
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      if (!data || data.length === 0) {
-        galleryEl.innerHTML = `<p class="muted">No artwork yet.</p>`;
-        return;
-      }
-
-      galleryEl.innerHTML = data
-        .map(
-          (art) => `
-          <div class="art-card">
-            <h4>${art.title}</h4>
-            <p class="muted">${art.status}</p>
-          </div>
-        `
-        )
-        .join("");
-    } catch (err) {
-      console.error("[PROFILE] gallery error", err.message);
-    }
+  // ===== ADMIN =====
+  if (profile.role === "admin") {
+    actions.innerHTML = `
+      <button onclick="openModal('uploadModal')">
+        Upload Artwork
+      </button>
+      <button onclick="window.location.href='/admin.html'">
+        Admin Panel
+      </button>
+    `;
+    loadMyArt(uid);
   }
 });
+
+/* ======================
+   LOAD USER ART
+====================== */
+
+async function loadMyArt(uid) {
+  const container = document.getElementById("profileGallery");
+
+  const { data, error } = await window.supabase
+    .from("artworks")
+    .select("id, title, file_path, bucket, status")
+    .eq("owner_id", uid)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach((art) => {
+    const url = window.supabase.storage
+      .from(art.bucket)
+      .getPublicUrl(art.file_path).data.publicUrl;
+
+    const card = document.createElement("div");
+    card.className = "art-card";
+
+    card.innerHTML = `
+      <img src="${url}" />
+      <strong>${art.title}</strong>
+      <small>${art.status}</small>
+    `;
+
+    container.appendChild(card);
+  });
+}
