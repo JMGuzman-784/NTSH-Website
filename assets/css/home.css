@@ -1,27 +1,42 @@
-.gallery h2 {
-  margin-bottom: 1rem;
+.gallery {
+  margin-top: 2rem;
 }
 
-.grid {
+#gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
 }
 
 .art-card {
-  background: var(--bg-card);
-  padding: 1rem;
-  border-radius: var(--radius-md);
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
   cursor: pointer;
+  background: var(--bg-card);
 }
 
 .art-card img {
   width: 100%;
-  border-radius: var(--radius-md);
+  height: 280px;
+  object-fit: cover;
+  transition: transform .3s ease;
 }
 
-/* reactions */
-.reactions button {
-  font-size: 1.2rem;
-  margin: .25rem;
+.art-card:hover img {
+  transform: scale(1.05);
+}
+
+.art-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.75),
+    transparent 60%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  font-size: .9rem;
 }
