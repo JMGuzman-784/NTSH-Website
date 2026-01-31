@@ -15,14 +15,24 @@
     <p class="subtitle">Member Access</p>
 
     <form id="loginForm">
-      <input id="email" type="email" placeholder="Email" required />
-      <input id="password" type="password" placeholder="Password" required />
+  <input id="email" type="email" placeholder="Email" required />
+  <input
+    id="password"
+    type="password"
+    placeholder="Password"
+    autocomplete="current-password"
+    required
+  />
 
-      <button class="btn primary" type="submit" id="loginBtn">Log In</button>
-      
-      <button id="createAccount" class="btn ghost" type="button" id="signupBtn">Create Account</button>
-    
-    </form>
+  <button id="loginBtn" class="btn primary" type="button">
+    Log In
+  </button>
+
+  <button id="signupBtn" class="btn ghost" type="button">
+    Create Account
+  </button>
+</form>
+
 
     <p class="hint">
       Guests are approved by admin • Artists upload after approval
