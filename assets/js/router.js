@@ -12,6 +12,21 @@ export function routeAfterLogin() {
   window.location.href = "/home.html";
 }
 
+// assets/js/router.js
+import { setViewer } from "./state.js";
+
+document.addEventListener("DOMContentLoaded", () => {
+  const viewerBtn = document.getElementById("continueViewer");
+
+  if (viewerBtn) {
+    viewerBtn.addEventListener("click", () => {
+      setViewer();
+      window.location.href = "/home.html";
+    });
+  }
+});
+
+
 export function enterAsViewer() {
   sessionStorage.clear();
 
