@@ -1,35 +1,35 @@
-// /assets/js/login.js
-// Handles member login & signup only
-
+// assets/js/login.js
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   if (!form) return;
 
-  const emailInput = form.querySelector("input[type='email']");
-  const passwordInput = form.querySelector("input[type='password']");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    const password = passwordInput.value.trim();
 
     if (!email || !password) {
-      alert("Email and password required.");
+      alert("Email and password required");
       return;
     }
 
-    const supabase = window.supabaseClient;
+    console.log("[LOGIN] Attempt:", email);
 
-    // Try sign-in
-    let { data, error } = await supabase.auth.signInWithPassword({
+    // Try sign in
+    let { data, error } = await window.supabase.auth.signInWithPassword({
       email,
       password
     });
 
-    // If user not found → create account
+    // If user not found → sign up
     if (error && error.message.includes("Invalid login credentials")) {
-      const signup = await supabase.auth.signUp({
+      console.log("[LOGIN] Creating account");
+
+      const signup = await window.supabase.auth.signUp({
         email,
         password
       });
@@ -43,29 +43,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!data?.user) {
-      alert("Login failed.");
+      alert("Authentication failed");
       return;
     }
 
     const user = data.user;
 
-    // Default role
+    // Admin override
     let role = "guest";
-    let displayName = "guest";
+    let displayName = email;
 
-    // ADMIN OVERRIDE (YOU)
     if (email === "ntshbusiness@gmail.com") {
       role = "admin";
       displayName = "Raid";
     }
 
-    // Persist identity
     sessionStorage.clear();
     sessionStorage.setItem("ntsh_uid", user.id);
     sessionStorage.setItem("ntsh_role", role);
     sessionStorage.setItem("ntsh_user", displayName);
 
-    // Route everyone to home
+    console.log("[LOGIN SUCCESS]", { role, displayName });
+
     window.location.href = "/home.html";
   });
 });
