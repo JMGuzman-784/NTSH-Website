@@ -1,31 +1,17 @@
 // assets/js/admin.js
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", loadPending);
+
+async function loadPending() {
   if (!window.supabase) return;
 
-  const role = sessionStorage.getItem("ntsh_role");
-  if (role !== "admin") {
-    window.location.href = "/home.html";
-    return;
-  }
-
-  loadPendingArt();
-  loadPendingUsers();
-});
-
-/* =======================
-   PENDING ARTWORKS
-======================= */
-
-async function loadPendingArt() {
   const container = document.getElementById("pendingArt");
   if (!container) return;
 
   const { data, error } = await window.supabase
     .from("artworks")
-    .select("id, title, owner_id, file_path, bucket")
-    .eq("status", "pending")
-    .order("created_at", { ascending: true });
+    .select("id, title, owner_id")
+    .eq("status", "pending");
 
   if (error) {
     console.error(error);
@@ -35,104 +21,33 @@ async function loadPendingArt() {
   container.innerHTML = "";
 
   data.forEach((art) => {
-    const url = window.supabase.storage
-      .from(art.bucket)
-      .getPublicUrl(art.file_path).data.publicUrl;
+    const row = document.createElement("div");
+    row.className = "admin-row";
 
-    const card = document.createElement("div");
-    card.className = "art-card";
-
-    card.innerHTML = `
-      <img src="${url}" />
-      <h4>${art.title}</h4>
-      <div class="actions">
-        <button onclick="approveArt('${art.id}')">Approve</button>
-        <button onclick="rejectArt('${art.id}')">Reject</button>
+    row.innerHTML = `
+      <strong>${art.title}</strong>
+      <div>
+        <button data-id="${art.id}" data-action="approve">Approve</button>
+        <button data-id="${art.id}" data-action="reject">Reject</button>
       </div>
     `;
 
-    container.appendChild(card);
+    container.appendChild(row);
   });
 }
 
-window.approveArt = async (id) => {
-  await updateArtStatus(id, "approved");
-};
+document.addEventListener("click", async (e) => {
+  if (!e.target.dataset.action) return;
 
-window.rejectArt = async (id) => {
-  await updateArtStatus(id, "rejected");
-};
+  const id = e.target.dataset.id;
+  const status = e.target.dataset.action === "approve"
+    ? "approved"
+    : "rejected";
 
-async function updateArtStatus(id, status) {
-  const { error } = await window.supabase
+  await window.supabase
     .from("artworks")
-    .update({
-      status,
-      approved_at: status === "approved" ? new Date().toISOString() : null,
-    })
+    .update({ status })
     .eq("id", id);
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  loadPendingArt();
-}
-
-/* =======================
-   PENDING USERS
-======================= */
-
-async function loadPendingUsers() {
-  const container = document.getElementById("pendingUsers");
-  if (!container) return;
-
-  const { data, error } = await window.supabase
-    .from("profiles")
-    .select("id, email, username, role, approved")
-    .eq("approved", false);
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  container.innerHTML = "";
-
-  data.forEach((user) => {
-    const div = document.createElement("div");
-    div.className = "user-card";
-
-    div.innerHTML = `
-      <strong>${user.email}</strong>
-      <p>Username: ${user.username || "—"}</p>
-      <div class="actions">
-        <button onclick="approveUser('${user.id}')">Approve</button>
-        <button onclick="rejectUser('${user.id}')">Reject</button>
-      </div>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-window.approveUser = async (id) => {
-  const { error } = await window.supabase
-    .from("profiles")
-    .update({ approved: true, role: "artist" })
-    .eq("id", id);
-
-  if (error) alert(error.message);
-  loadPendingUsers();
-};
-
-window.rejectUser = async (id) => {
-  const { error } = await window.supabase
-    .from("profiles")
-    .update({ approved: false })
-    .eq("id", id);
-
-  if (error) alert(error.message);
-  loadPendingUsers();
-};
+  loadPending();
+});
