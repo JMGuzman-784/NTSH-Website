@@ -1,13 +1,16 @@
-// gallery.js
-import { supabase } from "./supabase-client.js";
+// assets/js/gallery.js
+import { getState } from "./state.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const grid = document.querySelector(".grid");
   if (!grid) return;
 
+  const supabase = window.supabaseClient;
+  if (!supabase) return;
+
   const { data, error } = await supabase
     .from("artworks")
-    .select("*")
+    .select("id,title,file_path")
     .eq("status", "approved")
     .order("created_at", { ascending: false });
 
@@ -21,13 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   data.forEach(art => {
     const card = document.createElement("div");
     card.className = "art-card";
-
-    card.innerHTML = `
-      <img src="${art.file_path}" />
-      <strong>${art.title}</strong>
-    `;
-
-    card.onclick = () => openArtModal(art);
+    card.innerHTML = `<strong>${art.title}</strong>`;
     grid.appendChild(card);
   });
 });
