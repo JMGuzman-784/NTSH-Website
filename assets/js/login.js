@@ -1,18 +1,22 @@
 // assets/js/login.js
-import { supabase } from "./supabase-client.js";
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  const emailInput = form.querySelector("input[type='email']");
+  const passwordInput = form.querySelector("input[type='password']");
+  const createBtn = document.querySelector(".btn.ghost");
 
-const form = document.getElementById("loginForm");
-const emailInput = document.querySelector('input[type="email"]');
-const passwordInput = document.querySelector('input[type="password"]');
-const createBtn = document.getElementById("createAccountBtn");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await login(emailInput.value, passwordInput.value);
+  });
 
-form?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  createBtn.addEventListener("click", async () => {
+    await signup(emailInput.value, passwordInput.value);
+  });
+});
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  const { data, error } = await supabase.auth.signInWithPassword({
+async function login(email, password) {
+  const { data, error } = await window.supabase.auth.signInWithPassword({
     email,
     password
   });
@@ -22,35 +26,44 @@ form?.addEventListener("submit", async (e) => {
     return;
   }
 
-  routeAfterLogin(data.user);
-});
-
-createBtn?.addEventListener("click", async () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  routeAfterLogin(data.user);
-});
-
-function routeAfterLogin(user) {
-  sessionStorage.setItem("uid", user.id);
-  sessionStorage.setItem("email", user.email);
-
-  if (user.email === "ntshbusiness@gmail.com") {
-    sessionStorage.setItem("role", "admin");
-  } else {
-    sessionStorage.setItem("role", "guest");
-  }
-
+  await loadProfile(data.user.id);
   window.location.href = "/home.html";
+}
+
+async function signup(email, password) {
+  const { data, error } = await window.supabase.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  await createProfile(data.user);
+  window.location.href = "/home.html";
+}
+
+async function loadProfile(userId) {
+  const { data } = await window.supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  window.setState({
+    user: userId,
+    profile: data,
+    role: data?.role || "guest"
+  });
+}
+
+async function createProfile(user) {
+  await window.supabase.from("profiles").insert({
+    id: user.id,
+    email: user.email,
+    role: "guest",
+    approved: false
+  });
 }
