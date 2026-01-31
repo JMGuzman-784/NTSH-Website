@@ -1,14 +1,18 @@
-// /assets/js/state.js
-const KEY = "ntsh_state";
+// assets/js/state.js
+window.NTSH_STATE = {
+  user: null,
+  profile: null,
+  role: "viewer"
+};
 
-export function getState() {
-  return JSON.parse(sessionStorage.getItem(KEY)) || null;
-}
+window.setState = (data) => {
+  Object.assign(window.NTSH_STATE, data);
+};
 
-export function setState(data) {
-  sessionStorage.setItem(KEY, JSON.stringify(data));
-}
-
-export function clearState() {
-  sessionStorage.removeItem(KEY);
-}
+window.clearState = () => {
+  window.NTSH_STATE = {
+    user: null,
+    profile: null,
+    role: "viewer"
+  };
+};
