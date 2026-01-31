@@ -1,53 +1,21 @@
 // assets/js/state.js
-// Global NTSH state manager (single source of truth)
 
-// assets/js/state.js
+const STATE_KEY = "ntsh_state";
 
-export function setViewer() {
-  sessionStorage.clear();
-
-  sessionStorage.setItem("ntsh_role", "viewer");
-  sessionStorage.setItem("ntsh_user", "viewer");
-  sessionStorage.setItem("ntsh_uid", "viewer");
-
-  console.log("[STATE] Viewer session set");
+export function getState() {
+  const raw = sessionStorage.getItem(STATE_KEY);
+  return raw ? JSON.parse(raw) : null;
 }
 
-
-window.NTSH_STATE = {
-  uid: null,
-  role: null,
-  username: null,
-  email: null,
-  ready: false
-};
-
-export function loadState() {
-  const uid = sessionStorage.getItem("ntsh_uid");
-  const role = sessionStorage.getItem("ntsh_role");
-  const username = sessionStorage.getItem("ntsh_user");
-  const email = sessionStorage.getItem("ntsh_email");
-
-  window.NTSH_STATE = {
-    uid,
-    role,
-    username,
-    email,
-    ready: true
-  };
-
-  console.log("[STATE] Loaded", window.NTSH_STATE);
-  return window.NTSH_STATE;
+export function setState(state) {
+  sessionStorage.setItem(STATE_KEY, JSON.stringify(state));
 }
 
 export function clearState() {
-  sessionStorage.clear();
-  window.NTSH_STATE = {
-    uid: null,
-    role: null,
-    username: null,
-    email: null,
-    ready: false
-  };
-  console.log("[STATE] Cleared");
+  sessionStorage.removeItem(STATE_KEY);
+}
+
+export function isViewer() {
+  const s = getState();
+  return s?.role === "viewer";
 }
