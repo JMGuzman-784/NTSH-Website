@@ -17,24 +17,22 @@
 
 <main class="wrap">
 
-  <section class="admin-grid glass">
-    <div>
-      <h3>Approved</h3>
-    </div>
-    <div>
-      <h3>Pending</h3>
-      <div id="pendingArt"></div>
-    </div>
-    <div>
-      <h3>Rejected</h3>
-    </div>
-  </section>
+  <section class="admin-panel">
+  <h2>Pending Artworks</h2>
+  <div id="pendingArt"></div>
+</section>
+
+<section class="admin-panel">
+  <h2>Pending Users</h2>
+  <div id="pendingUsers"></div>
+</section>
+
 
 </main>
 
-<script type="module" src="/assets/js/supabase-client.js"></script>
-<script type="module" src="/assets/js/auth-guard.js"></script>
-<script type="module" src="/assets/js/admin.js"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+<script src="/assets/js/admin.js"></script>
 
 
 
