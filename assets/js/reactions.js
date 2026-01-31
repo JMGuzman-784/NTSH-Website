@@ -1,24 +1,28 @@
 // assets/js/reactions.js
 
 document.addEventListener("DOMContentLoaded", () => {
-  const buttons = document.querySelectorAll("[data-react]");
-  if (!buttons.length) return;
+  const role = sessionStorage.getItem("ntsh_role");
+  const uid = sessionStorage.getItem("ntsh_uid");
 
-  const userId = sessionStorage.getItem("ntsh_uid");
-  if (!userId) return;
+  if (!uid || role === "viewer") return;
 
-  buttons.forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const emoji = btn.dataset.react;
-      const artworkId = btn.closest("[data-art-id]")?.dataset.artId;
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-emoji]");
+    if (!btn) return;
 
-      if (!artworkId) return;
+    const artworkId = btn.closest("[data-art-id]")?.dataset.artId;
+    if (!artworkId) return;
 
-      await window.supabase.from("reactions").insert({
-        user_id: userId,
-        item: artworkId,
-        emoji
-      });
+    const emoji = btn.dataset.emoji;
+
+    const { error } = await window.supabase.from("reactions").insert({
+      item: artworkId,
+      user_id: uid,
+      emoji
     });
+
+    if (error && !error.message.includes("duplicate")) {
+      console.error(error);
+    }
   });
 });
