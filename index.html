@@ -24,5 +24,14 @@
   <script type="module" src="/assets/js/state.js"></script>
   <script type="module" src="/assets/js/router.js"></script>
 
+<script type="module">
+  import { enterAsViewer } from "/assets/js/router.js";
+
+  document.getElementById("viewerBtn")?.addEventListener("click", () => {
+    enterAsViewer();
+  });
+</script>
+
+  
 </body>
 </html>
