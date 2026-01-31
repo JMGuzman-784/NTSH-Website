@@ -18,3 +18,8 @@
 #profileGallery {
   margin-top: 2rem;
 }
+
+.muted {
+  opacity: 0.7;
+  margin: 1rem 0;
+}
