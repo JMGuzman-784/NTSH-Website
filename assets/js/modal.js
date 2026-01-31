@@ -1,15 +1,17 @@
 // assets/js/modal.js
 
-window.openModal = (id) => {
-  document.getElementById(id)?.classList.remove("hidden");
-};
+function openArtModal(art, imageUrl) {
+  const modal = document.getElementById("artModal");
+  modal.classList.remove("hidden");
 
-window.closeModal = (id) => {
-  document.getElementById(id)?.classList.add("hidden");
-};
+  document.getElementById("modalImage").src = imageUrl;
+  document.getElementById("modalTitle").textContent = art.title;
 
-document.addEventListener("click", (e) => {
-  if (e.target.id === "closeUpload") {
-    closeModal("uploadModal");
-  }
+  modal.dataset.artId = art.id;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const close = document.getElementById("closeModal");
+  if (close) close.onclick = () =>
+    document.getElementById("artModal").classList.add("hidden");
 });
