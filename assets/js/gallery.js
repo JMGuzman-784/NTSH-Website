@@ -1,9 +1,12 @@
 // assets/js/gallery.js
-// Loads approved artwork only
-
 document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("gallery");
-  if (!container) return;
+  if (!window.supabase) {
+    console.error("Supabase not initialized");
+    return;
+  }
+
+  const gallery = document.getElementById("gallery");
+  if (!gallery) return;
 
   const { data, error } = await window.supabase
     .from("artworks")
@@ -11,19 +14,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     .eq("status", "approved")
     .order("created_at", { ascending: false });
 
-  if (error || !data.length) {
-    container.innerHTML = "<p>No artwork yet</p>";
+  if (error) {
+    console.error("Gallery load error:", error.message);
     return;
   }
 
-  data.forEach(art => {
-    const img = document.createElement("img");
-    img.className = "gallery-img";
-    img.src = window.supabase.storage
-      .from("artworks")
-      .getPublicUrl(art.file_path).data.publicUrl;
+  gallery.innerHTML = "";
 
-    img.alt = art.title;
-    container.appendChild(img);
+  data.forEach(art => {
+    const card = document.createElement("div");
+    card.className = "art-card";
+
+    card.innerHTML = `
+      <img src="${art.file_path}" alt="${art.title}">
+      <div class="art-meta">
+        <h4>${art.title}</h4>
+        <p>${art.description || ""}</p>
+      </div>
+    `;
+
+    gallery.appendChild(card);
   });
 });
