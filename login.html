@@ -2,24 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>NTSH • Login</title>
+  <title>NTSH • Member Access</title>
 
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/login.css" />
 </head>
 
-<body class="centered">
+<body class="centered" data-page="login">
 
-  <main class="card">
+  <main class="card glass">
     <h1 class="brand">NTSH</h1>
     <p class="subtitle">Member Access</p>
 
     <form id="loginForm">
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Password" required />
+      <input id="email" type="email" placeholder="Email" required />
+      <input id="password" type="password" placeholder="Password" required />
 
       <button class="btn primary" type="submit">Log In</button>
-      <button class="btn ghost" type="button">Create Account</button>
+      <button id="createAccount" class="btn ghost" type="button">
+        Create Account
+      </button>
     </form>
 
     <p class="hint">
@@ -27,16 +29,8 @@
     </p>
   </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-<script src="/assets/js/supabase-client.js"></script>
-
-
-
-<!-- page-specific -->
-<script src="/assets/js/login.js"></script>    <!-- login -->
-
-
-  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/assets/js/supabase-client.js"></script>
+  <script src="/assets/js/login.js"></script>
 </body>
 </html>
