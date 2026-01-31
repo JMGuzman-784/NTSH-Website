@@ -1,6 +1,19 @@
 // assets/js/state.js
 // Global NTSH state manager (single source of truth)
 
+// assets/js/state.js
+
+export function setViewer() {
+  sessionStorage.clear();
+
+  sessionStorage.setItem("ntsh_role", "viewer");
+  sessionStorage.setItem("ntsh_user", "viewer");
+  sessionStorage.setItem("ntsh_uid", "viewer");
+
+  console.log("[STATE] Viewer session set");
+}
+
+
 window.NTSH_STATE = {
   uid: null,
   role: null,
