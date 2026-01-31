@@ -9,27 +9,19 @@
   <link rel="icon" href="/assets/images/ntsh-mask-favicon-logo.png" />
 </head>
 
-<body class="centered">
-<body data-page="index">
-  <main class="card">
+<body class="centered" data-page="index">
+  <main class="card glass">
     <h1 class="brand">NTSH</h1>
     <p class="subtitle">Nothing To See Here</p>
     <p class="tagline">Only Art That Speaks</p>
 
     <div class="actions">
-      <a href="/home.html" class="btn ghost">👀 Continue as Viewer</a>
+      <button id="enterViewer" class="btn ghost">👀 Continue as Viewer</button>
       <a href="/login.html" class="btn primary">Continue as NTSH Member</a>
     </div>
   </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-<script src="/assets/js/supabase-client.js"></script>
-<script src="/assets/js/state.js"></script>
-
-<script src="/assets/js/login.js"></script>    <!-- login -->
-<script src="/assets/js/home.js"></script>     <!-- home -->
-
-  
+  <script src="/assets/js/state.js"></script>
+  <script src="/assets/js/router.js"></script>
 </body>
 </html>
