@@ -1,4 +1,13 @@
 // assets/js/profile.js
+import { supabase } from "./supabase-client.js";
+
+const role = sessionStorage.getItem("role");
+
+if (role === "viewer") {
+  document.getElementById("uploadArtBtn")?.remove();
+  document.getElementById("adminPanelBtn")?.remove();
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("ntsh_role");
