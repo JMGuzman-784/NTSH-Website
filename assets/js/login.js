@@ -3,7 +3,16 @@ import { routeAfterLogin } from "./router.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
+  const signupBtn = document.getElementById("signupBtn");
+
   if (!form) return;
+
+  let mode = "login"; // default
+
+  signupBtn?.addEventListener("click", () => {
+    mode = "signup";
+    form.requestSubmit();
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -17,33 +26,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const supabase = window.supabase;
+    let result;
 
-    // 1️⃣ Try login
-    let { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    // 2️⃣ If not found → sign up
-    if (error && error.message.includes("Invalid login credentials")) {
-      const signup = await supabase.auth.signUp({
-        email,
-        password
-      });
-
-      if (signup.error) {
-        alert(signup.error.message);
-        return;
-      }
-
-      data = signup.data;
+    if (mode === "signup") {
+      // 🆕 Explicit signup
+      result = await supabase.auth.signUp({ email, password });
+    } else {
+      // 🔐 Login
+      result = await supabase.auth.signInWithPassword({ email, password });
     }
 
-    if (!data?.user) {
-      alert("Login failed");
+    if (result.error) {
+      alert(result.error.message);
       return;
     }
 
-    routeAfterLogin(data.user);
+    if (!result.data?.user) {
+      alert("Authentication failed");
+      return;
+    }
+
+    routeAfterLogin(result.data.user);
   });
 });
