@@ -1,5 +1,21 @@
-// assets/js/home.js
-import { getViewerId } from "./state.js";
+import { supabase } from "./supabase-client.js";
+
+const grid = document.querySelector(".grid");
+
+const { data, error } = await supabase
+  .from("artworks")
+  .select("*")
+  .eq("status", "approved")
+  .order("created_at", { ascending: false });
+
+if (!error && data) {
+  grid.innerHTML = data.map(art => `
+    <div class="art-card">
+      <img src="${art.file_path}" />
+      <p>${art.title}</p>
+    </div>
+  `).join("");
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("ntsh_role");
