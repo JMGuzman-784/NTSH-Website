@@ -1,78 +1,28 @@
 // assets/js/profile.js
-
 document.addEventListener("DOMContentLoaded", async () => {
   const uid = sessionStorage.getItem("ntsh_uid");
   const role = sessionStorage.getItem("ntsh_role");
+  const username = sessionStorage.getItem("ntsh_user");
 
-  if (!uid) return;
+  if (!uid || !role) {
+    window.location.href = "/index.html";
+    return;
+  }
 
-  const { data: profile, error } = await window.supabase
-    .from("profiles")
-    .select("username, display_name, role, instagram, tiktok")
-    .eq("id", uid)
-    .single();
+  document.body.classList.add(`role-${role}`);
 
-  if (error || !profile) return;
-
-  // Basic info
   const nameEl = document.getElementById("profileName");
-  const roleEl = document.getElementById("profileRole");
-  if (nameEl) nameEl.textContent = profile.display_name || profile.username;
-  if (roleEl) roleEl.textContent = profile.role;
+  if (nameEl) nameEl.textContent = username;
 
-  // Social links
-  const socials = document.getElementById("profileSocials");
-  if (socials) {
-    if (profile.instagram) {
-      socials.innerHTML += `<a href="${profile.instagram}" target="_blank">Instagram</a>`;
-    }
-    if (profile.tiktok) {
-      socials.innerHTML += `<a href="${profile.tiktok}" target="_blank">TikTok</a>`;
-    }
+  // Admin panel button visibility
+  const adminBtn = document.getElementById("adminPanelBtn");
+  if (adminBtn) {
+    adminBtn.style.display = role === "admin" ? "inline-block" : "none";
   }
 
-  // Upload button visibility
-  const uploadForm = document.getElementById("uploadForm");
-  if (uploadForm && !["artist", "admin"].includes(profile.role)) {
-    uploadForm.style.display = "none";
+  // Viewer-specific UI
+  if (role === "viewer") {
+    const uploadBtn = document.getElementById("uploadArtBtn");
+    if (uploadBtn) uploadBtn.remove();
   }
-
-  // Admin Panel button (Raid only)
-  if (profile.role === "admin") {
-    const adminBtn = document.createElement("button");
-    adminBtn.textContent = "Admin Panel";
-    adminBtn.onclick = () => (window.location.href = "/admin.html");
-    document.getElementById("profileActions")?.appendChild(adminBtn);
-  }
-
-  // Load user's artworks
-  const gallery = document.getElementById("profileGallery");
-  if (!gallery) return;
-
-  const { data: arts } = await window.supabase
-    .from("artworks")
-    .select("*")
-    .eq("owner_id", uid)
-    .order("created_at", { ascending: false });
-
-  arts?.forEach((art) => {
-    const img = document.createElement("img");
-    img.src = window.supabase.storage
-      .from(art.bucket)
-      .getPublicUrl(art.file_path).data.publicUrl;
-
-    img.className = "profile-art";
-
-    // Delete (artist/admin only)
-    if (["artist", "admin"].includes(profile.role)) {
-      img.onclick = async () => {
-        if (!confirm("Delete this artwork?")) return;
-
-        await window.supabase.from("artworks").delete().eq("id", art.id);
-        img.remove();
-      };
-    }
-
-    gallery.appendChild(img);
-  });
 });
