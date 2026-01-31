@@ -1,45 +1,20 @@
-// auth-guard.js
-import { supabase } from "./supabase-client.js";
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const page = document.body.dataset.page;
-  const { data } = await supabase.auth.getUser();
-  const user = data.user;
-
-  // Viewer-only pages allowed
-  if (!user && page === "home") return;
-
-  // No session → redirect
-  if (!user) {
-    window.location.href = "/index.html";
-    return;
-  }
-
 // assets/js/auth-guard.js
+import { getState, clearState } from "./state.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const role = sessionStorage.getItem("ntsh_role");
+  const state = getState();
 
-  console.log("[AUTH]", role);
-
-  if (!role) {
+  // If no state at all → send to index
+  if (!state) {
     window.location.href = "/index.html";
     return;
   }
 
-  // Viewer is allowed on home
-  if (role === "viewer") return;
+  const page = document.body.dataset.page;
 
-  // Guests, artists, admin allowed
-});
-
-
-  
-  const role = user.user_metadata?.role || "guest";
-
-  // Admin gate
-  if (page === "admin" && role !== "admin") {
+  // Viewer cannot access admin
+  if (page === "admin" && state.role !== "admin") {
     alert("Admins only.");
-    window.location.href = "/home.html";
+    window.location.href = "/index.html";
   }
 });
