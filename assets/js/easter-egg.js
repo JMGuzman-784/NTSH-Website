@@ -1,17 +1,9 @@
-// /assets/js/easter-egg.js
-// 10-click color shift easter egg
+let clicks = 0;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const egg = document.querySelector(".easter-egg");
-  if (!egg) return;
-
-  let count = 0;
-
-  egg.addEventListener("click", () => {
-    count++;
-    if (count === 10) {
-      document.body.classList.toggle("alt-theme");
-      count = 0;
-    }
-  });
+document.querySelector(".easter-egg")?.addEventListener("click", () => {
+  clicks++;
+  if (clicks >= 10) {
+    document.body.classList.toggle("alt-theme");
+    clicks = 0;
+  }
 });
