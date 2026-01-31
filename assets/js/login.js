@@ -1,21 +1,21 @@
 // assets/js/login.js
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
-  const emailInput = form.querySelector("input[type='email']");
-  const passwordInput = form.querySelector("input[type='password']");
+  const email = form.querySelector("input[type='email']");
+  const password = form.querySelector("input[type='password']");
   const createBtn = document.querySelector(".btn.ghost");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    await login(emailInput.value, passwordInput.value);
+    await signIn(email.value, password.value);
   });
 
   createBtn.addEventListener("click", async () => {
-    await signup(emailInput.value, passwordInput.value);
+    await signUp(email.value, password.value);
   });
 });
 
-async function login(email, password) {
+async function signIn(email, password) {
   const { data, error } = await window.supabase.auth.signInWithPassword({
     email,
     password
@@ -26,11 +26,10 @@ async function login(email, password) {
     return;
   }
 
-  await loadProfile(data.user.id);
   window.location.href = "/home.html";
 }
 
-async function signup(email, password) {
+async function signUp(email, password) {
   const { data, error } = await window.supabase.auth.signUp({
     email,
     password
@@ -41,29 +40,12 @@ async function signup(email, password) {
     return;
   }
 
-  await createProfile(data.user);
-  window.location.href = "/home.html";
-}
-
-async function loadProfile(userId) {
-  const { data } = await window.supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .single();
-
-  window.setState({
-    user: userId,
-    profile: data,
-    role: data?.role || "guest"
-  });
-}
-
-async function createProfile(user) {
   await window.supabase.from("profiles").insert({
-    id: user.id,
-    email: user.email,
+    id: data.user.id,
+    email,
     role: "guest",
     approved: false
   });
+
+  window.location.href = "/home.html";
 }
