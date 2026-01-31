@@ -1,38 +1,35 @@
 // assets/js/gallery.js
 document.addEventListener("DOMContentLoaded", async () => {
   if (!window.supabase) {
-    console.error("Supabase not initialized");
+    console.error("[Gallery] Supabase not available");
     return;
   }
 
-  const gallery = document.getElementById("gallery");
-  if (!gallery) return;
+  const container = document.getElementById("gallery");
+  if (!container) return;
 
   const { data, error } = await window.supabase
     .from("artworks")
-    .select("*")
+    .select("id, title, file_path")
     .eq("status", "approved")
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Gallery load error:", error.message);
+    console.error("[Gallery]", error);
     return;
   }
 
-  gallery.innerHTML = "";
+  container.innerHTML = "";
 
-  data.forEach(art => {
-    const card = document.createElement("div");
-    card.className = "art-card";
+  data.forEach((art) => {
+    const img = document.createElement("img");
+    img.src = window.supabase.storage
+      .from("artworks")
+      .getPublicUrl(art.file_path).data.publicUrl;
 
-    card.innerHTML = `
-      <img src="${art.file_path}" alt="${art.title}">
-      <div class="art-meta">
-        <h4>${art.title}</h4>
-        <p>${art.description || ""}</p>
-      </div>
-    `;
+    img.alt = art.title;
+    img.className = "gallery-item";
 
-    gallery.appendChild(card);
+    container.appendChild(img);
   });
 });
