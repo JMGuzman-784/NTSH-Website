@@ -1,37 +1,22 @@
-// /assets/js/modal.js
-let currentArtworkId = null;
-
-window.openArtModal = (art) => {
-  currentArtworkId = art.id;
-
-  document.getElementById("modalImage").src = art.image_url;
-  document.getElementById("modalTitle").textContent = art.title || "Untitled";
-
-  document.getElementById("artModal").classList.remove("hidden");
-};
-
+// assets/js/modal.js
 document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("artModal");
-  if (!modal) return;
+  const openBtn = document.getElementById("uploadArtBtn");
+  const modal = document.getElementById("uploadModal");
+  const closeBtn = document.getElementById("closeUploadModal");
 
-  document.getElementById("closeModal").onclick = () => {
-    modal.classList.add("hidden");
-  };
+  if (!openBtn || !modal) return;
 
-  modal.querySelectorAll("[data-emoji]").forEach(btn => {
-    btn.onclick = async () => {
-      const role = window.NTSH_STATE.role;
-      if (role === "viewer") {
-        alert("Members only.");
-        return;
-      }
+  openBtn.addEventListener("click", () => {
+    modal.classList.add("open");
+  });
 
-      const supabase = window.supabaseClient;
-      await supabase.from("reactions").insert({
-        artwork_id: currentArtworkId,
-        user_id: sessionStorage.getItem("ntsh_uid"),
-        emoji: btn.dataset.emoji
-      });
-    };
+  closeBtn?.addEventListener("click", () => {
+    modal.classList.remove("open");
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("open");
+    }
   });
 });
