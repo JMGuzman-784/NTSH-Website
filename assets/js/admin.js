@@ -1,53 +1,35 @@
-// assets/js/admin.js
+// admin.js
+import { supabase } from "./supabase-client.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
-  const role = sessionStorage.getItem("ntsh_role");
-  if (role !== "admin") return;
-
   const container = document.getElementById("pendingArt");
-  if (!container) return;
 
-  const { data, error } = await window.supabase
+  const { data, error } = await supabase
     .from("artworks")
-    .select("id, title, file_path")
+    .select("*")
     .eq("status", "pending");
 
-  if (error) {
-    console.error("[Admin]", error);
-    return;
-  }
+  if (error) return console.error(error);
 
   container.innerHTML = "";
 
-  data.forEach((art) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "pending-art";
-
-    const img = document.createElement("img");
-    img.src = window.supabase.storage
-      .from("artworks")
-      .getPublicUrl(art.file_path).data.publicUrl;
-
-    const approve = document.createElement("button");
-    approve.textContent = "Approve";
-    approve.onclick = async () => {
-      await window.supabase
-        .from("artworks")
-        .update({ status: "approved" })
-        .eq("id", art.id);
-      wrapper.remove();
-    };
-
-    const reject = document.createElement("button");
-    reject.textContent = "Reject";
-    reject.onclick = async () => {
-      await window.supabase
-        .from("artworks")
-        .update({ status: "rejected" })
-        .eq("id", art.id);
-      wrapper.remove();
-    };
-
-    wrapper.append(img, approve, reject);
-    container.appendChild(wrapper);
+  data.forEach(art => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <strong>${art.title}</strong>
+      <button onclick="approve('${art.id}')">Approve</button>
+      <button onclick="reject('${art.id}')">Reject</button>
+    `;
+    container.appendChild(div);
   });
 });
+
+window.approve = async id => {
+  await supabase.from("artworks").update({ status: "approved" }).eq("id", id);
+  location.reload();
+};
+
+window.reject = async id => {
+  await supabase.from("artworks").update({ status: "rejected" }).eq("id", id);
+  location.reload();
+};
